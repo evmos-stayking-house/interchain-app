@@ -19,6 +19,11 @@ import (
 	"github.com/evmos-stayking-house/scheduled-worker-golang/events"
 )
 
+var (
+	flagEthEndpoint = "eth-endpoint"
+	flagContAddr    = "cont-addr"
+)
+
 func ServeCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                        "serve",
@@ -33,29 +38,20 @@ func ServeCommand() *cobra.Command {
 
 func NewSubscribeDelegationCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "send [from_key_or_address] [to_address] [amount]",
-		Short: `Send funds from one account to another. Note, the'--from' flag is
-ignored as it is implied from [from_key_or_address].`,
-		Args: cobra.ExactArgs(3),
+		Use:   "subscribe-delegation",
+		Short: `Subscribes to a delegation event in a specific contract address.`,
+		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-
-			var ethEndpoint string
-			if args[0] == "" {
-				ethEndpoint = "wss://ropsten.infura.io/ws/v3/d0383d521441488fb754735af7fe0c59"
-			} else {
-				ethEndpoint = args[0]
-			}
-
-			var contractAddr string
-			if args[1] == "" {
-				contractAddr = "0x50fCe2E7426FFfEd8762e21bdf7E0Fe9188eD54A"
-			} else {
-				contractAddr = args[1]
-			}
+			ethEndpoint, _ := cmd.Flags().GetString(flagEthEndpoint)
+			contractAddr, _ := cmd.Flags().GetString(flagContAddr)
 
 			return SubscribeDelegation(ethEndpoint, contractAddr)
 		},
 	}
+
+	cmd.Flags().String(flagEthEndpoint, "wss://ropsten.infura.io/ws/v3/d0383d521441488fb754735af7fe0c59", "The ethereum websocket endpoint to subscribe to")
+	cmd.Flags().String(flagContAddr, "0x50fCe2E7426FFfEd8762e21bdf7E0Fe9188eD54A", "The contract address to listen to")
+
 	return cmd
 }
 
@@ -72,7 +68,7 @@ func SubscribeDelegation(ethEndpoint, contAddr string) error {
 
 	// set contract addr and ABI
 	// TODO: make this a parameter
-	contractAddress := common.HexToAddress("0x50fCe2E7426FFfEd8762e21bdf7E0Fe9188eD54A")
+	contractAddress := common.HexToAddress(contAddr)
 
 	// TODO: make this a parameter
 	contractAbi, err := abi.JSON(strings.NewReader(events.EventsMetaData.ABI))
@@ -113,6 +109,9 @@ func SubscribeDelegation(ethEndpoint, contAddr string) error {
 				d.Amount = amt[0].(*big.Int)
 				d.Delegator = common.HexToAddress(vLog.Topics[1].String())
 				fmt.Printf("Delegate detected!: From: %s   Amount: %d\n", d.Delegator, d.Amount)
+				if err = HandleDelegation(d); err != nil {
+					log.Fatal(err)
+				}
 				//
 			case logUndelegateSigHash.Hex():
 				amt, err := contractAbi.Unpack("Undelegate", vLog.Data)
@@ -123,6 +122,9 @@ func SubscribeDelegation(ethEndpoint, contAddr string) error {
 				d.Amount = amt[0].(*big.Int)
 				d.Delegator = common.HexToAddress(vLog.Topics[1].String())
 				fmt.Printf("Undelegated detected!: From: %s   Amount: %d\n", d.Delegator, d.Amount)
+				if err = HandleUndelegation(d); err != nil {
+					log.Fatal(err)
+				}
 				//
 			}
 		}

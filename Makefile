@@ -19,4 +19,4 @@ $(BUILDDIR)/:
 
 clean:
 	rm -rf \
-    $(BUILDDIR)/ \
+    $(BUILDDIR)/
