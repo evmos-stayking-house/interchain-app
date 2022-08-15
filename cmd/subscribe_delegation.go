@@ -19,11 +19,6 @@ import (
 	"github.com/evmos-stayking-house/scheduled-worker-golang/events"
 )
 
-var (
-	flagEthEndpoint = "eth-endpoint"
-	flagContAddr    = "cont-addr"
-)
-
 func ServeCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                        "serve",
