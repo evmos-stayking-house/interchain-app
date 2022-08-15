@@ -7,10 +7,6 @@ import (
 	"os"
 )
 
-type Block struct {
-	Number string
-}
-
 func main() {
 	rootCmd := cmd.NewRootCmd()
 	if err := cmd.Execute(rootCmd, simapp.DefaultNodeHome); err != nil {

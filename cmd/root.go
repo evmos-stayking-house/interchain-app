@@ -41,4 +41,5 @@ func Execute(rootCmd *cobra.Command, defaultHome string) error {
 
 func initRootCmd(command *cobra.Command) {
 	command.AddCommand(ServeCommand())
+	command.AddCommand(ExecuteCommand())
 }

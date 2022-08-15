@@ -27,3 +27,7 @@ Unbonding = Unstaking
    - Batch should happen once every ~2 days or so to avoid hitting the max unbonding entries
      - EVMOS unbonding period = 14 days
      - Max unbonding entries = 7
+
+[Execution]
+
+`sworker serve subscribe-delegation` will subscribe to delegation events at a specific contract address.

@@ -126,6 +126,8 @@ func SubscribeDelegation(ethEndpoint, contAddr string) error {
 					log.Fatal(err)
 				}
 				//
+			default:
+				fmt.Println("Not delegation or undelegation")
 			}
 		}
 	}
