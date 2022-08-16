@@ -2,12 +2,14 @@ package cmd
 
 import (
 	"context"
-	"fmt"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"log"
 	"math/big"
 	"strings"
 
 	"github.com/spf13/cobra"
+	flag "github.com/spf13/pflag"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -38,17 +40,25 @@ func NewSubscribeDelegationCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ethEndpoint, _ := cmd.Flags().GetString(flagEthEndpoint)
-			cosmosEndpoint, _ := cmd.Flags().GetString(flagCosmosEndpoint)
 			contractAddr, _ := cmd.Flags().GetString(flagContAddr)
 
-			return SubscribeDelegation(ethEndpoint, contractAddr, cosmosEndpoint)
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			return SubscribeDelegation(ethEndpoint, contractAddr, clientCtx, cmd.Flags())
 		},
 	}
 
 	cmd.Flags().String(flagEthEndpoint, "wss://ropsten.infura.io/ws/v3/d0383d521441488fb754735af7fe0c59", "The ethereum websocket endpoint to subscribe to")
 	cmd.Flags().String(flagContAddr, "0x50fCe2E7426FFfEd8762e21bdf7E0Fe9188eD54A", "The contract address to listen to")
-	cmd.Flags().String(flagCosmosEndpoint, "http://localhost:26657", "The cosmos RPC endpoint to query/submit tx")
+	cmd.Flags().String(flagValidator, "evmosvaloper10vvd5e9kdezyjtnyrld2nfq7v8482ajlsn57ad", "The validator to delegate to")
 
+	flags.AddTxFlagsToCmd(cmd)
+	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
+	cmd.Flags().Set(flags.FlagBroadcastMode, "block")
+	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
 	return cmd
 }
 
@@ -57,7 +67,7 @@ type DelegationChange struct {
 	Amount    *big.Int
 }
 
-func SubscribeDelegation(ethEndpoint, contAddr, cosmosEndpoint string) error {
+func SubscribeDelegation(ethEndpoint, contAddr string, ctx client.Context, flgs *flag.FlagSet) error {
 	wsclient, err := ethclient.Dial(ethEndpoint)
 	if err != nil {
 		log.Fatal(err)
@@ -105,8 +115,8 @@ func SubscribeDelegation(ethEndpoint, contAddr, cosmosEndpoint string) error {
 				var d DelegationChange
 				d.Amount = amt[0].(*big.Int)
 				d.Delegator = common.HexToAddress(vLog.Topics[1].String())
-				fmt.Printf("Delegate detected!: From: %s   Amount: %d\n", d.Delegator, d.Amount)
-				if err = HandleDelegation(d); err != nil {
+				log.Printf("Delegate detected!: From: %s   Amount: %d\n", d.Delegator, d.Amount)
+				if err = HandleDelegation(ctx, d, flgs); err != nil {
 					log.Fatal(err)
 				}
 			case logUndelegateSigHash.Hex():
@@ -117,13 +127,10 @@ func SubscribeDelegation(ethEndpoint, contAddr, cosmosEndpoint string) error {
 				var d DelegationChange
 				d.Amount = amt[0].(*big.Int)
 				d.Delegator = common.HexToAddress(vLog.Topics[1].String())
-				fmt.Printf("Undelegated detected!: From: %s   Amount: %d\n", d.Delegator, d.Amount)
-				if err = HandleUndelegation(d); err != nil {
-					log.Fatal(err)
-				}
+				log.Printf("Undelegated detected!: From: %s   Amount: %d\n", d.Delegator, d.Amount)
 				//
 			default:
-				fmt.Println("Not delegation or undelegation")
+				log.Println("Not delegation or undelegation")
 			}
 		}
 	}

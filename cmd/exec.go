@@ -74,6 +74,7 @@ func NewExecuteUndelegationCmd() *cobra.Command {
 	flags.AddTxFlagsToCmd(cmd)
 	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
 	cmd.Flags().Set(flags.FlagBroadcastMode, "block")
+	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
 	return cmd
 }
 
