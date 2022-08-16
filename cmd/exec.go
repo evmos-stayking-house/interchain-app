@@ -3,14 +3,22 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/events"
 	"github.com/spf13/cobra"
 	"log"
 	"math"
 	"math/big"
+	"strings"
 )
 
 func ExecuteCommand() *cobra.Command {
@@ -21,22 +29,39 @@ func ExecuteCommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(NewExecuteUndelegationCmd())
-
+	// add cosmos tx related flags to be passed on while generating cosmos txs
 	return cmd
 }
 
 func NewExecuteUndelegationCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "execute-undelegation",
-		Short: `batch queries any unbonding event and initiates an unbonding for the corresponding amount.`,
+		Use:   "process-undelegation",
+		Short: `batch queries any undelegation event and initiates an undelegation for the corresponding amount.`,
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ethEndpoint, _ := cmd.Flags().GetString(flagEthEndpoint)
 			contractAddr, _ := cmd.Flags().GetString(flagContAddr)
 			fromBlock, _ := cmd.Flags().GetInt64(flagFromHeight)
 			toBlock, _ := cmd.Flags().GetInt64(flagToHeight)
+			valString, _ := cmd.Flags().GetString(flagValidator)
+			valAddr, err := sdk.ValAddressFromBech32(valString)
+			udAmt, err := QueryUndelegationAmt(ethEndpoint, contractAddr, fromBlock, toBlock)
+			if err != nil {
+				return err
+			}
+			unbondingAmt := sdk.NewIntFromBigInt(udAmt)
+			// TODO: refer to actual evmos denom
+			denom := "aevmos"
+			unbondingCoin := sdk.NewCoin(denom, unbondingAmt)
 
-			return ExecuteUndelegation(ethEndpoint, contractAddr, fromBlock, toBlock)
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			delAddr := clientCtx.GetFromAddress()
+
+			msg := stakingtypes.NewMsgUndelegate(delAddr, valAddr, unbondingCoin)
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 
@@ -44,32 +69,38 @@ func NewExecuteUndelegationCmd() *cobra.Command {
 	cmd.Flags().String(flagContAddr, "0x50fCe2E7426FFfEd8762e21bdf7E0Fe9188eD54A", "The contract address to query")
 	cmd.Flags().Int64(flagFromHeight, 0, "The earliest height to query")
 	cmd.Flags().Int64(flagToHeight, math.MaxInt64, "The latest height to query")
+	cmd.Flags().String(flagValidator, "evmosvaloper10vvd5e9kdezyjtnyrld2nfq7v8482ajlsn57ad", "The validator to undelegate from")
 
+	flags.AddTxFlagsToCmd(cmd)
+	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
+	cmd.Flags().Set(flags.FlagBroadcastMode, "block")
 	return cmd
 }
 
-func ExecuteUndelegation(ethEndpoint string, contAddr string, fromBlock, toBlock int64) error {
+func QueryUndelegationAmt(ethEndpoint, contAddr string, fromBlock, toBlock int64) (*big.Int, error) {
 	ethclient, err := ethclient.Dial(ethEndpoint)
 	if err != nil {
 		log.Fatal(err)
 	}
+	ctx := context.Background()
 
-	// set contract addr and ABI
-	// TODO: make this a parameter
 	contractAddress := common.HexToAddress(contAddr)
 
 	logUndelegateSig := []byte("Undelegate(address,uint256)")
-
 	logUndelegateSigHash := crypto.Keccak256Hash(logUndelegateSig)
 
 	// TODO: make this a parameter
-	//contractAbi, err := abi.JSON(strings.NewReader(events.EventsMetaData.ABI))
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	contractAbi, err := abi.JSON(strings.NewReader(events.EventsMetaData.ABI))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	ethclient.BlockByNumber(context.Background(), nil)
-
+	block, err := ethclient.BlockByNumber(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	blockHeight := block.Number()
+	fmt.Println(blockHeight)
 	query := ethereum.FilterQuery{
 		FromBlock: big.NewInt(fromBlock),
 		ToBlock:   big.NewInt(toBlock),
@@ -81,10 +112,27 @@ func ExecuteUndelegation(ethEndpoint string, contAddr string, fromBlock, toBlock
 		},
 	}
 
-	logs, err := ethclient.FilterLogs(context.Background(), query)
+	logs, err := ethclient.FilterLogs(ctx, query)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	fmt.Println(logs)
-	return nil
+	var changes []DelegationChange
+	totalUndelegation := big.NewInt(0)
+	for _, log := range logs {
+		amt, err := contractAbi.Unpack("Undelegate", log.Data)
+		if err != nil {
+			return nil, err
+		}
+
+		// TODO: figure out if we need the addresses
+		var d DelegationChange
+		d.Amount = amt[0].(*big.Int)
+		d.Delegator = common.HexToAddress(log.Topics[1].String())
+		changes = append(changes, d)
+
+		totalUndelegation.Add(d.Amount, totalUndelegation)
+	}
+	fmt.Println(changes)
+	fmt.Println(totalUndelegation.String())
+	return totalUndelegation, nil
 }

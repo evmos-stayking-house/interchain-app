@@ -38,14 +38,16 @@ func NewSubscribeDelegationCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ethEndpoint, _ := cmd.Flags().GetString(flagEthEndpoint)
+			cosmosEndpoint, _ := cmd.Flags().GetString(flagCosmosEndpoint)
 			contractAddr, _ := cmd.Flags().GetString(flagContAddr)
 
-			return SubscribeDelegation(ethEndpoint, contractAddr)
+			return SubscribeDelegation(ethEndpoint, contractAddr, cosmosEndpoint)
 		},
 	}
 
 	cmd.Flags().String(flagEthEndpoint, "wss://ropsten.infura.io/ws/v3/d0383d521441488fb754735af7fe0c59", "The ethereum websocket endpoint to subscribe to")
 	cmd.Flags().String(flagContAddr, "0x50fCe2E7426FFfEd8762e21bdf7E0Fe9188eD54A", "The contract address to listen to")
+	cmd.Flags().String(flagCosmosEndpoint, "http://localhost:26657", "The cosmos RPC endpoint to query/submit tx")
 
 	return cmd
 }
@@ -55,7 +57,7 @@ type DelegationChange struct {
 	Amount    *big.Int
 }
 
-func SubscribeDelegation(ethEndpoint, contAddr string) error {
+func SubscribeDelegation(ethEndpoint, contAddr, cosmosEndpoint string) error {
 	wsclient, err := ethclient.Dial(ethEndpoint)
 	if err != nil {
 		log.Fatal(err)
@@ -107,7 +109,6 @@ func SubscribeDelegation(ethEndpoint, contAddr string) error {
 				if err = HandleDelegation(d); err != nil {
 					log.Fatal(err)
 				}
-				//
 			case logUndelegateSigHash.Hex():
 				amt, err := contractAbi.Unpack("Undelegate", vLog.Data)
 				if err != nil {
