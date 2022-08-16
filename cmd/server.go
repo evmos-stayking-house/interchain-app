@@ -116,7 +116,7 @@ func SubscribeDelegation(ethEndpoint, contAddr string, ctx client.Context, flgs 
 				d.Amount = amt[0].(*big.Int)
 				d.Delegator = common.HexToAddress(vLog.Topics[1].String())
 				log.Printf("Delegate detected!: From: %s   Amount: %d\n", d.Delegator, d.Amount)
-				if err = HandleDelegation(ctx, d, flgs); err != nil {
+				if err = HandleDelegation(ctx, flgs, d); err != nil {
 					log.Fatal(err)
 				}
 			case logUndelegateSigHash.Hex():
