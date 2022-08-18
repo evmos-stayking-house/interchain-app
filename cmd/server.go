@@ -2,8 +2,7 @@ package cmd
 
 import (
 	"context"
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
+	"fmt"
 	"log"
 	"math/big"
 	"strings"
@@ -18,6 +17,12 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 
+	tmclient "github.com/tendermint/tendermint/rpc/client/http"
+	tmtypes "github.com/tendermint/tendermint/types"
+
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+
 	"github.com/evmos-stayking-house/scheduled-worker-golang/events"
 )
 
@@ -28,9 +33,72 @@ func ServeCommand() *cobra.Command {
 		SuggestionsMinimumDistance: 2,
 	}
 
-	cmd.AddCommand(NewSubscribeDelegationCmd())
+	cmd.AddCommand(
+		NewSubscribeDelegationCmd(),
+		NewSubscribeEpochCmd(),
+	)
 
 	return cmd
+}
+
+func NewSubscribeEpochCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "subscribe-epoch",
+		Short: `Subscribes to epoch end event and executes staking commands.`,
+		Args:  cobra.ExactArgs(0),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			return SubscribeEpoch(cliCtx, cmd.Flags())
+		},
+	}
+	flags.AddTxFlagsToCmd(cmd)
+	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
+	cmd.Flags().Set(flags.FlagBroadcastMode, "block")
+	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
+	return cmd
+}
+
+func SubscribeEpoch(cliCtx client.Context, set *flag.FlagSet) error {
+	// initialize epochClient
+	epochClient, err := tmclient.New(cliCtx.NodeURI, "/websocket")
+	if err != nil {
+		return err
+	}
+
+	err = epochClient.Start()
+	if err != nil {
+		return err
+	}
+
+	// subscribe to new block events according to the query
+	txChan, err := epochClient.Subscribe(context.Background(), "",
+		"tm.event='NewBlock' AND epoch_end.epoch_number EXISTS", 10000)
+	if err != nil {
+		return err
+	}
+
+	for {
+		select {
+		case tx := <-txChan:
+			// get tendermint transaction data in struct of ResponseDeliverTx
+			txData, ok := tx.Data.(tmtypes.EventDataNewBlock)
+			if !ok {
+				log.Fatal("received non-newblock event")
+			}
+			// epoch starts/ends in beginblocker in evmos
+			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
+			for _, event := range txData.ResultBeginBlock.GetEvents() {
+				if event.Type == "epoch_end" {
+					fmt.Println(event.String())
+				}
+			}
+		}
+	}
+	return nil
 }
 
 func NewSubscribeDelegationCmd() *cobra.Command {
@@ -74,7 +142,6 @@ func SubscribeDelegation(ethEndpoint, contAddr string, ctx client.Context, flgs 
 	}
 
 	// set contract addr and ABI
-	// TODO: make this a parameter
 	contractAddress := common.HexToAddress(contAddr)
 
 	// TODO: make this a parameter

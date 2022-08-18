@@ -28,6 +28,12 @@ Unbonding = Unstaking
      - EVMOS unbonding period = 14 days
      - Max unbonding entries = 7
 
+[Build]
+
+ - Install Golang
+ - make clean && make build
+ - build/scheduled-worker-golang
+
 [Execution]
 
 `sworker serve subscribe-delegation` will subscribe to delegation events at a specific contract address.
