@@ -1,9 +1,16 @@
-[Submodule] scheduled worker (with Golang) of the Stayking finance
+[Submodule] scheduled worker (with Golang) of Stayking finance
 
-A simple process that listens a delegation/undelegation events and makes appropriate handling functions
+A collection of commands/services that are run to accomodate the CosmosSDK side of Stayking Finance.
 
+[Features]
+ - [x] End of epoch auto compound (withdraw rewards & delegate to the same validator
+ - [x] Staking event listener
+ - [x] Unbonding batch handler
+ - [ ] Unbonding event listener
+ - [ ] Total EVMOS asset feeder
+
+[Terminologies]
 Delegating = Staking
-
 Unbonding = Unstaking
 
 [Handlers]
