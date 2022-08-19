@@ -55,14 +55,19 @@ func NewSubscribeEpochCmd() *cobra.Command {
 			return SubscribeEpoch(cliCtx, cmd.Flags())
 		},
 	}
+	cmd.Flags().String(flagValidator, "evmosvaloper10vvd5e9kdezyjtnyrld2nfq7v8482ajlsn57ad", "The validator to undelegate from")
+
 	flags.AddTxFlagsToCmd(cmd)
 	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
 	cmd.Flags().Set(flags.FlagBroadcastMode, "block")
 	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
+	cmd.Flags().Set(flags.FlagGasAdjustment, "1.5")
+	cmd.Flags().Set(flags.FlagGas, "auto")
+	cmd.Flags().Set(flags.FlagGasPrices, "10000000000aevmos")
 	return cmd
 }
 
-func SubscribeEpoch(cliCtx client.Context, set *flag.FlagSet) error {
+func SubscribeEpoch(cliCtx client.Context, flgs *flag.FlagSet) error {
 	// initialize epochClient
 	epochClient, err := tmclient.New(cliCtx.NodeURI, "/websocket")
 	if err != nil {
@@ -93,6 +98,11 @@ func SubscribeEpoch(cliCtx client.Context, set *flag.FlagSet) error {
 			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
 			for _, event := range txData.ResultBeginBlock.GetEvents() {
 				if event.Type == "epoch_end" {
+					err := HandleEpochEnd(cliCtx, flgs, event)
+					if err != nil {
+						panic(err)
+					}
+
 					fmt.Println(event.String())
 				}
 			}
@@ -127,6 +137,10 @@ func NewSubscribeDelegationCmd() *cobra.Command {
 	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
 	cmd.Flags().Set(flags.FlagBroadcastMode, "block")
 	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
+	cmd.Flags().Set(flags.FlagGasAdjustment, "1.5")
+	cmd.Flags().Set(flags.FlagGas, "auto")
+	cmd.Flags().Set(flags.FlagGasPrices, "10000000000000000aevmos")
+
 	return cmd
 }
 
