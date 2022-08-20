@@ -10,7 +10,9 @@ A collection of commands/services that are run to accomodate the CosmosSDK side 
  - [ ] Total EVMOS asset feeder
 
 [Terminologies]
+
 Delegating = Staking
+
 Unbonding = Unstaking
 
 [Handlers]
