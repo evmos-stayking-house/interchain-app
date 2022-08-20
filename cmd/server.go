@@ -36,9 +36,81 @@ func ServeCommand() *cobra.Command {
 	cmd.AddCommand(
 		NewSubscribeDelegationCmd(),
 		NewSubscribeEpochCmd(),
+		NewSubscribeUndelegateCmd(),
 	)
 
 	return cmd
+}
+
+func NewSubscribeUndelegateCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "subscribe-undelegate",
+		Short: `Subscribes to unbonding end event and executes contract call commands.`,
+		Args:  cobra.ExactArgs(0),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cliCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			return SubscribeUndelegate(cliCtx, cmd.Flags())
+		},
+	}
+	flags.AddTxFlagsToCmd(cmd)
+	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
+	cmd.Flags().Set(flags.FlagBroadcastMode, "block")
+	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
+	cmd.Flags().Set(flags.FlagGasAdjustment, "1.5")
+	cmd.Flags().Set(flags.FlagGas, "auto")
+	cmd.Flags().Set(flags.FlagGasPrices, "10000000000"+baseDenom)
+	return cmd
+}
+
+func SubscribeUndelegate(cliCtx client.Context, flgs *flag.FlagSet) error {
+	// initialize epochClient
+	epochClient, err := tmclient.New(cliCtx.NodeURI, "/websocket")
+	if err != nil {
+		return err
+	}
+
+	err = epochClient.Start()
+	if err != nil {
+		return err
+	}
+
+	// subscribe to new block events according to the query
+	txChan, err := epochClient.Subscribe(context.Background(), "",
+		"tm.event='NewBlock' AND complete_unbonding.delegator='evmos10vvd5e9kdezyjtnyrld2nfq7v8482ajlaamwus'", 10000)
+	if err != nil {
+		return err
+	}
+
+	for {
+		select {
+		case tx := <-txChan:
+			// get tendermint transaction data in struct of ResponseDeliverTx
+			txData, ok := tx.Data.(tmtypes.EventDataNewBlock)
+			if !ok {
+				log.Fatal("received non-newblock event")
+			}
+			// undelegate completion in endblocker in vanilla staking
+			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
+			for _, event := range txData.ResultEndBlock.GetEvents() {
+				if event.Type == "complete_unbonding" {
+					err := HandleUndelegateComplete(cliCtx, flgs)
+					if err != nil {
+						panic(err)
+					}
+
+					fmt.Println(event.String())
+					// only execute once per block
+					break
+
+				}
+			}
+		}
+	}
+	return nil
 }
 
 func NewSubscribeEpochCmd() *cobra.Command {
@@ -63,7 +135,7 @@ func NewSubscribeEpochCmd() *cobra.Command {
 	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
 	cmd.Flags().Set(flags.FlagGasAdjustment, "1.5")
 	cmd.Flags().Set(flags.FlagGas, "auto")
-	cmd.Flags().Set(flags.FlagGasPrices, "10000000000aevmos")
+	cmd.Flags().Set(flags.FlagGasPrices, "10000000000"+baseDenom)
 	return cmd
 }
 
@@ -98,12 +170,15 @@ func SubscribeEpoch(cliCtx client.Context, flgs *flag.FlagSet) error {
 			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
 			for _, event := range txData.ResultBeginBlock.GetEvents() {
 				if event.Type == "epoch_end" {
-					err := HandleEpochEnd(cliCtx, flgs, event)
+					err := HandleEpochEnd(cliCtx, flgs)
 					if err != nil {
 						panic(err)
 					}
 
 					fmt.Println(event.String())
+					// only execute once per block
+					break
+
 				}
 			}
 		}
@@ -139,7 +214,7 @@ func NewSubscribeDelegationCmd() *cobra.Command {
 	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
 	cmd.Flags().Set(flags.FlagGasAdjustment, "1.5")
 	cmd.Flags().Set(flags.FlagGas, "auto")
-	cmd.Flags().Set(flags.FlagGasPrices, "10000000000000000aevmos")
+	cmd.Flags().Set(flags.FlagGasPrices, "10000000000"+baseDenom)
 
 	return cmd
 }

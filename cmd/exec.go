@@ -51,8 +51,7 @@ func NewExecuteUndelegationCmd() *cobra.Command {
 			}
 			unbondingAmt := sdk.NewIntFromBigInt(udAmt)
 			// TODO: refer to actual evmos denom
-			denom := "aevmos"
-			unbondingCoin := sdk.NewCoin(denom, unbondingAmt)
+			unbondingCoin := sdk.NewCoin(baseDenom, unbondingAmt)
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -75,6 +74,9 @@ func NewExecuteUndelegationCmd() *cobra.Command {
 	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
 	cmd.Flags().Set(flags.FlagBroadcastMode, "block")
 	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
+	cmd.Flags().Set(flags.FlagGasAdjustment, "1.5")
+	cmd.Flags().Set(flags.FlagGas, "auto")
+	cmd.Flags().Set(flags.FlagGasPrices, "10000000000"+baseDenom)
 	return cmd
 }
 
