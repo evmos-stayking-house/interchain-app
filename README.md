@@ -43,4 +43,8 @@ Unbonding = Unstaking
 
 [Execution]
 
-`sworker serve subscribe-delegation` will subscribe to delegation events at a specific contract address.
+`scheduled-worker-golang serve subscribe-delegation --from <keyname>` will subscribe to delegation events at a specific contract address.
+`scheduled-worker-golang exec process-undelegation` will handle batch unbonding initiation upon requests (closing position etc).
+`scheduled-worker-golang keys` handles evmos key related operations.
+`scheduled-worker-golang serve subscribe-undelegate` listens to undelegation completion event and sends the unlocked funds to unbonding contract.
+`scheduled-worker-golang serve subscribe-epoch` listens to epoch end event on evmos and auto compounds the rewards distributed for the epoch.
