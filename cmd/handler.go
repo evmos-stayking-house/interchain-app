@@ -5,6 +5,7 @@ import (
 	"fmt"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	flag "github.com/spf13/pflag"
+	"github.com/tendermint/tendermint/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -66,6 +67,7 @@ func HandleEpochEnd(cliCtx client.Context, flgs *flag.FlagSet) error {
 	toCompound, _ := res.GetRewards().TruncateDecimal()
 	delegateCoin := sdk.NewCoin(bondDenom, toCompound.AmountOf(bondDenom))
 
+	// construct tx with withdraw & delegate commands
 	withdrawMsg := distrtypes.NewMsgWithdrawDelegatorReward(delAddr, valAddr)
 	msgs := []sdk.Msg{withdrawMsg}
 	delegateMsg := stakingtypes.NewMsgDelegate(delAddr, valAddr, delegateCoin)
@@ -74,6 +76,6 @@ func HandleEpochEnd(cliCtx client.Context, flgs *flag.FlagSet) error {
 }
 
 // HandleUndelegateComplete handles completed unbondings by sending the unlocked coins to unbonding contract
-func HandleUndelegateComplete(ctx client.Context, flgs *flag.FlagSet) interface{} {
+func HandleUndelegateComplete(ctx client.Context, flgs *flag.FlagSet, event types.Event) interface{} {
 	return nil
 }

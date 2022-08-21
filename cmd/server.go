@@ -97,7 +97,7 @@ func SubscribeUndelegate(cliCtx client.Context, flgs *flag.FlagSet) error {
 			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
 			for _, event := range txData.ResultEndBlock.GetEvents() {
 				if event.Type == "complete_unbonding" {
-					err := HandleUndelegateComplete(cliCtx, flgs)
+					err := HandleUndelegateComplete(cliCtx, flgs, event)
 					if err != nil {
 						panic(err)
 					}
