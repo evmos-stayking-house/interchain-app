@@ -3,27 +3,21 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/events"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
+	"github.com/evmos/ethermint/rpc/backend"
+	"github.com/spf13/cobra"
+	flag "github.com/spf13/pflag"
+	tmclient "github.com/tendermint/tendermint/rpc/client/http"
+	tmtypes "github.com/tendermint/tendermint/types"
 	"log"
 	"math/big"
 	"strings"
 
-	"github.com/spf13/cobra"
-	flag "github.com/spf13/pflag"
-
-	"github.com/ethereum/go-ethereum"
-	"github.com/ethereum/go-ethereum/accounts/abi"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
-
-	tmclient "github.com/tendermint/tendermint/rpc/client/http"
-	tmtypes "github.com/tendermint/tendermint/types"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-
-	"github.com/evmos-stayking-house/scheduled-worker-golang/events"
 )
 
 func ServeCommand() *cobra.Command {
@@ -152,7 +146,7 @@ func SubscribeEpoch(cliCtx client.Context, flgs *flag.FlagSet) error {
 	}
 
 	// subscribe to new block events according to the query
-	txChan, err := epochClient.Subscribe(context.Background(), "",
+	blockChan, err := epochClient.Subscribe(context.Background(), "",
 		"tm.event='NewBlock' AND epoch_end.epoch_number EXISTS", 10000)
 	if err != nil {
 		return err
@@ -160,7 +154,7 @@ func SubscribeEpoch(cliCtx client.Context, flgs *flag.FlagSet) error {
 
 	for {
 		select {
-		case tx := <-txChan:
+		case tx := <-blockChan:
 			// get tendermint transaction data in struct of ResponseDeliverTx
 			txData, ok := tx.Data.(tmtypes.EventDataNewBlock)
 			if !ok {
@@ -192,7 +186,6 @@ func NewSubscribeDelegationCmd() *cobra.Command {
 		Short: `Subscribes to a delegation event in a specific contract address.`,
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			ethEndpoint, _ := cmd.Flags().GetString(flagEthEndpoint)
 			contractAddr, _ := cmd.Flags().GetString(flagContAddr)
 
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -200,11 +193,10 @@ func NewSubscribeDelegationCmd() *cobra.Command {
 				return err
 			}
 
-			return SubscribeDelegation(ethEndpoint, contractAddr, clientCtx, cmd.Flags())
+			return SubscribeDelegation(contractAddr, clientCtx, cmd.Flags())
 		},
 	}
 
-	cmd.Flags().String(flagEthEndpoint, "ws://localhost:8546", "The ethereum websocket endpoint to subscribe to")
 	cmd.Flags().String(flagContAddr, "", "The contract address to listen to")
 	cmd.Flags().String(flagValidator, "", "The validator to delegate to")
 
@@ -224,74 +216,83 @@ type DelegationChange struct {
 	Amount    *big.Int
 }
 
-func SubscribeDelegation(ethEndpoint, contAddr string, ctx client.Context, flgs *flag.FlagSet) error {
-	wsclient, err := ethclient.Dial(ethEndpoint)
+func SubscribeDelegation(contAddr string, cliCtx client.Context, flgs *flag.FlagSet) error {
+	// initialize epochClient
+	epochClient, err := tmclient.New(cliCtx.NodeURI, "/websocket")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	log.Println("subscribing to ethereum endpoint: ", ethEndpoint)
 
-	// set contract addr and ABI
-	contractAddress := common.HexToAddress(contAddr)
+	err = epochClient.Start()
+	if err != nil {
+		return err
+	}
 
-	// TODO: make this a parameter
+	// prepare filters and queries
 	contractAbi, err := abi.JSON(strings.NewReader(events.EventsMetaData.ABI))
 	if err != nil {
 		log.Fatal(err)
 	}
+	query := "tm.event='Tx' AND ethereum_tx.recipient='" + contAddr + "'"
+	// query := "tm.event='Tx'"
+	log.Println("constructed query: ", query)
 
-	logDelegateSig := []byte("Delegate(address,uint256)")
-	logUndelegateSig := []byte("Undelegate(address,uint256)")
-
-	logDelegateSigHash := crypto.Keccak256Hash(logDelegateSig)
-	logUndelegateSigHash := crypto.Keccak256Hash(logUndelegateSig)
-	fmt.Println(logDelegateSigHash.String())
-	fmt.Println(logUndelegateSigHash.String())
-
-	// subscribe to the staking contract
-	query := ethereum.FilterQuery{
-		Addresses: []common.Address{contractAddress},
-	}
-
-	logs := make(chan types.Log)
-
-	sub, err := wsclient.SubscribeFilterLogs(context.Background(), query, logs)
+	// subscribe to new block events according to the query
+	txChan, err := epochClient.Subscribe(context.Background(), "",
+		query, 10000)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	// subscribe to new block events according to the query
+	blockChan, err := epochClient.Subscribe(context.Background(), "",
+		"tm.event='NewBlock'", 10000)
+	if err != nil {
+		return err
+	}
+
+	var delegationTracker types.SafeTotal
+	delegationTracker.Amount = big.NewInt(0)
 
 	for {
 		select {
-		case err := <-sub.Err():
-			log.Fatal(err)
-		case vLog := <-logs:
-			fmt.Println(vLog)
-			switch vLog.Topics[0].Hex() {
-			case logDelegateSigHash.Hex():
-				amt, err := contractAbi.Unpack("Delegate", vLog.Data)
-				if err != nil {
-					log.Fatal(err)
-				}
-				var d DelegationChange
-				d.Amount = amt[0].(*big.Int)
-				d.Delegator = common.HexToAddress(vLog.Topics[1].String())
-				log.Printf("Delegate detected!: From: %s   Amount: %d\n", d.Delegator, d.Amount)
-				if err = HandleDelegation(ctx, flgs, d); err != nil {
-					log.Fatal(err)
-				}
-			case logUndelegateSigHash.Hex():
-				amt, err := contractAbi.Unpack("Undelegate", vLog.Data)
-				if err != nil {
-					log.Fatal(err)
-				}
-				var d DelegationChange
-				d.Amount = amt[0].(*big.Int)
-				d.Delegator = common.HexToAddress(vLog.Topics[1].String())
-				log.Printf("Undelegated detected!: From: %s   Amount: %d\n", d.Delegator, d.Amount)
-				//
-			default:
-				log.Println("Not delegation or undelegation")
+		case tx := <-txChan:
+			// get tendermint transaction data in struct of ResponseDeliverTx
+			txData, ok := tx.Data.(tmtypes.EventDataTx)
+			if !ok {
+				log.Fatal("received tx to contract address event")
 			}
+			// undelegate completion in endblocker in vanilla staking
+			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
+			res := txData.GetResult()
+			for _, event := range res.Events {
+				logs, err := backend.ParseTxLogsFromEvent(event)
+				if err != nil {
+					return err
+				}
+				for _, l := range logs {
+					log.Println(l)
+					amt, err := contractAbi.Unpack("Delegate", l.Data)
+					if err != nil {
+						log.Fatal(err)
+					}
+					amtInt := amt[0].(*big.Int)
+					delegationTracker.Add(amtInt)
+				}
+			}
+		case _ = <-blockChan:
+			log.Println("New block detected! Clearing aggregated delegations...")
+			if delegationTracker.Amount.Cmp(big.NewInt(0)) == 0 {
+				log.Println("No delegation to clear out")
+				continue
+			}
+			log.Printf("Total delegation: %s\n", delegationTracker.Amount)
+			toDelegate := delegationTracker.Clear()
+			if err := HandleDelegation(cliCtx, flgs, toDelegate); err != nil {
+				log.Fatal(err)
+			}
+			log.Println(toDelegate.String())
 		}
 	}
+	return nil
 }

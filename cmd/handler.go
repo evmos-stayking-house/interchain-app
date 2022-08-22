@@ -6,6 +6,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	flag "github.com/spf13/pflag"
 	"github.com/tendermint/tendermint/abci/types"
+	"math/big"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -14,8 +15,8 @@ import (
 )
 
 // HandleDelegation unwraps the received EVMOS and delegates it to earn staking rewards.
-func HandleDelegation(cliCtx client.Context, flgs *flag.FlagSet, change DelegationChange) error {
-	amt := sdk.NewIntFromBigInt(change.Amount)
+func HandleDelegation(cliCtx client.Context, flgs *flag.FlagSet, change *big.Int) error {
+	amt := sdk.NewIntFromBigInt(change)
 	coin := sdk.NewCoin(baseDenom, amt)
 
 	delAddr := cliCtx.GetFromAddress()
