@@ -204,9 +204,9 @@ func NewSubscribeDelegationCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String(flagEthEndpoint, "wss://ropsten.infura.io/ws/v3/d0383d521441488fb754735af7fe0c59", "The ethereum websocket endpoint to subscribe to")
-	cmd.Flags().String(flagContAddr, "0x50fCe2E7426FFfEd8762e21bdf7E0Fe9188eD54A", "The contract address to listen to")
-	cmd.Flags().String(flagValidator, "evmosvaloper10vvd5e9kdezyjtnyrld2nfq7v8482ajlsn57ad", "The validator to delegate to")
+	cmd.Flags().String(flagEthEndpoint, "ws://localhost:8546", "The ethereum websocket endpoint to subscribe to")
+	cmd.Flags().String(flagContAddr, "", "The contract address to listen to")
+	cmd.Flags().String(flagValidator, "", "The validator to delegate to")
 
 	flags.AddTxFlagsToCmd(cmd)
 	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
@@ -229,6 +229,7 @@ func SubscribeDelegation(ethEndpoint, contAddr string, ctx client.Context, flgs 
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("subscribing to ethereum endpoint: ", ethEndpoint)
 
 	// set contract addr and ABI
 	contractAddress := common.HexToAddress(contAddr)
@@ -244,6 +245,8 @@ func SubscribeDelegation(ethEndpoint, contAddr string, ctx client.Context, flgs 
 
 	logDelegateSigHash := crypto.Keccak256Hash(logDelegateSig)
 	logUndelegateSigHash := crypto.Keccak256Hash(logUndelegateSig)
+	fmt.Println(logDelegateSigHash.String())
+	fmt.Println(logUndelegateSigHash.String())
 
 	// subscribe to the staking contract
 	query := ethereum.FilterQuery{
@@ -262,6 +265,7 @@ func SubscribeDelegation(ethEndpoint, contAddr string, ctx client.Context, flgs 
 		case err := <-sub.Err():
 			log.Fatal(err)
 		case vLog := <-logs:
+			fmt.Println(vLog)
 			switch vLog.Topics[0].Hex() {
 			case logDelegateSigHash.Hex():
 				amt, err := contractAbi.Unpack("Delegate", vLog.Data)

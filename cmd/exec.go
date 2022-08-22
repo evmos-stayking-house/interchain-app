@@ -64,11 +64,11 @@ func NewExecuteUndelegationCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String(flagEthEndpoint, "https://ropsten.infura.io/v3/d0383d521441488fb754735af7fe0c59", "The ethereum https endpoint to query")
-	cmd.Flags().String(flagContAddr, "0x50fCe2E7426FFfEd8762e21bdf7E0Fe9188eD54A", "The contract address to query")
+	cmd.Flags().String(flagEthEndpoint, "wss://localhost:8546", "The ethereum https endpoint to query")
+	cmd.Flags().String(flagContAddr, "", "The contract address to query")
 	cmd.Flags().Int64(flagFromHeight, 0, "The earliest height to query")
 	cmd.Flags().Int64(flagToHeight, math.MaxInt64, "The latest height to query")
-	cmd.Flags().String(flagValidator, "evmosvaloper10vvd5e9kdezyjtnyrld2nfq7v8482ajlsn57ad", "The validator to undelegate from")
+	cmd.Flags().String(flagValidator, "", "The validator to undelegate from")
 
 	flags.AddTxFlagsToCmd(cmd)
 	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
@@ -81,6 +81,7 @@ func NewExecuteUndelegationCmd() *cobra.Command {
 }
 
 func QueryUndelegationAmt(ethEndpoint, contAddr string, fromBlock, toBlock int64) (*big.Int, error) {
+	log.Println("querying to ethereum endpoint: ", ethEndpoint)
 	ethclient, err := ethclient.Dial(ethEndpoint)
 	if err != nil {
 		log.Fatal(err)
