@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/evmos-stayking-house/scheduled-worker-golang/events"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/abis"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
 	"github.com/evmos/ethermint/rpc/backend"
 	"github.com/spf13/cobra"
@@ -229,7 +229,7 @@ func SubscribeDelegation(contAddr string, cliCtx client.Context, flgs *flag.Flag
 	}
 
 	// prepare filters and queries
-	contractAbi, err := abi.JSON(strings.NewReader(events.EventsMetaData.ABI))
+	contractAbi, err := abi.JSON(strings.NewReader(abis.EventsMetaData.ABI))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -244,7 +244,7 @@ func SubscribeDelegation(contAddr string, cliCtx client.Context, flgs *flag.Flag
 		return err
 	}
 
-	// subscribe to new block events according to the query
+	// subscribe to new block events according to the query for clearing out aggregated delegation
 	blockChan, err := epochClient.Subscribe(context.Background(), "",
 		"tm.event='NewBlock'", 10000)
 	if err != nil {
@@ -281,12 +281,10 @@ func SubscribeDelegation(contAddr string, cliCtx client.Context, flgs *flag.Flag
 				}
 			}
 		case _ = <-blockChan:
-			log.Println("New block detected! Clearing aggregated delegations...")
 			if delegationTracker.Amount.Cmp(big.NewInt(0)) == 0 {
-				log.Println("No delegation to clear out")
 				continue
 			}
-			log.Printf("Total delegation: %s\n", delegationTracker.Amount)
+			log.Printf("New Delegation detected! Total delegation: %s\n", delegationTracker.Amount)
 			toDelegate := delegationTracker.Clear()
 			if err := HandleDelegation(cliCtx, flgs, toDelegate); err != nil {
 				log.Fatal(err)

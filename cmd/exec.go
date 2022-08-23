@@ -13,7 +13,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/evmos-stayking-house/scheduled-worker-golang/events"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/abis"
 	"github.com/spf13/cobra"
 	"log"
 	"math"
@@ -94,7 +94,7 @@ func QueryUndelegationAmt(ethEndpoint, contAddr string, fromBlock, toBlock int64
 	logUndelegateSigHash := crypto.Keccak256Hash(logUndelegateSig)
 
 	// TODO: make this a parameter
-	contractAbi, err := abi.JSON(strings.NewReader(events.EventsMetaData.ABI))
+	contractAbi, err := abi.JSON(strings.NewReader(abis.EventsMetaData.ABI))
 	if err != nil {
 		log.Fatal(err)
 	}
