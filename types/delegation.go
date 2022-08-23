@@ -1,9 +1,15 @@
 package types
 
 import (
+	"github.com/ethereum/go-ethereum/common"
 	"math/big"
 	"sync"
 )
+
+type DelegationChange struct {
+	Delegator common.Address
+	Amount    *big.Int
+}
 
 type SafeTotal struct {
 	sync.Mutex

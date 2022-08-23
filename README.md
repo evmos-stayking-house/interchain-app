@@ -8,6 +8,7 @@ A collection of commands/services that are run to accomodate the CosmosSDK side 
  - [x] Unbonding batch handler
  - [ ] Unbonding event listener
  - [ ] Total EVMOS asset feeder
+ - [ ] Storage for bookkeeping (last undelegation tx, handled blocks etc)
 
 [Terminologies]
 

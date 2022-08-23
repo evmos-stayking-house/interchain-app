@@ -3,6 +3,7 @@ package types
 import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/tendermint/tendermint/libs/json"
+	"math/big"
 	"os"
 	"path/filepath"
 	"time"
@@ -18,13 +19,12 @@ type Storage struct {
 	DelegationProcessed         []string
 	UndelegationProcessed       []string
 
-	// record of last undelegation
+	// record of undelegations
 	LastUndelegationTime time.Time
+	PendingUndelegations *big.Int
 }
 
 func Init(cliCtx client.Context) error {
-	homeDir := cliCtx.HomeDir
-
 	initialStorage := Storage{
 		DelegatorAddress:            "",
 		UndelegationProcessedHeight: 0,
@@ -33,16 +33,10 @@ func Init(cliCtx client.Context) error {
 		UndelegationProcessed:       []string{},
 		LastUndelegationTime:        time.Time{},
 	}
-	initialStorageBz, err := json.Marshal(initialStorage)
-	if err != nil {
-		return err
-	}
-
-	filePath := filepath.Join(homeDir, "sched_worker_data.json")
-	return os.WriteFile(filePath, initialStorageBz, 0644)
+	return WriteStore(cliCtx, initialStorage)
 }
 
-func Store(cliCtx client.Context, s Storage) error {
+func WriteStore(cliCtx client.Context, s Storage) error {
 	homeDir := cliCtx.HomeDir
 
 	sBz, err := json.Marshal(s)
@@ -53,6 +47,18 @@ func Store(cliCtx client.Context, s Storage) error {
 	return os.WriteFile(filePath, sBz, 0644)
 }
 
-func ReadStore(cliCtx client.Context) error {
+func ReadStore(cliCtx client.Context) (Storage, error) {
+	homeDir := cliCtx.HomeDir
+	filePath := filepath.Join(homeDir, "sched_worker_data.json")
+	bz, err := os.ReadFile(filePath)
+	if err != nil {
+		return Storage{}, err
+	}
 
+	var res Storage
+	if err := json.Unmarshal(bz, &res); err != nil {
+		return Storage{}, err
+	}
+
+	return res, nil
 }

@@ -14,6 +14,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/abis"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
 	"github.com/spf13/cobra"
 	"log"
 	"math"
@@ -120,7 +121,7 @@ func QueryUndelegationAmt(ethEndpoint, contAddr string, fromBlock, toBlock int64
 	if err != nil {
 		return nil, err
 	}
-	var changes []DelegationChange
+	var changes []types.DelegationChange
 	totalUndelegation := big.NewInt(0)
 	for _, log := range logs {
 		amt, err := contractAbi.Unpack("Undelegate", log.Data)
@@ -129,7 +130,7 @@ func QueryUndelegationAmt(ethEndpoint, contAddr string, fromBlock, toBlock int64
 		}
 
 		// TODO: figure out if we need the addresses
-		var d DelegationChange
+		var d types.DelegationChange
 		d.Amount = amt[0].(*big.Int)
 		d.Delegator = common.HexToAddress(log.Topics[1].String())
 		changes = append(changes, d)

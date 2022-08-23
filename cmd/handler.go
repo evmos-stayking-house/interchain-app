@@ -6,16 +6,16 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	flag "github.com/spf13/pflag"
 	"github.com/tendermint/tendermint/abci/types"
+	"log"
 	"math/big"
 
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 )
 
-// HandleDelegation unwraps the received EVMOS and delegates it to earn staking rewards.
-func HandleDelegation(cliCtx client.Context, flgs *flag.FlagSet, change *big.Int) error {
+// GetMsgDelegation unwraps the received EVMOS and delegates it to earn staking rewards.
+func GetMsgDelegation(cliCtx client.Context, flgs *flag.FlagSet, change *big.Int) (sdk.Msg, error) {
 	amt := sdk.NewIntFromBigInt(change)
 	coin := sdk.NewCoin(baseDenom, amt)
 
@@ -23,27 +23,51 @@ func HandleDelegation(cliCtx client.Context, flgs *flag.FlagSet, change *big.Int
 	valString, _ := flgs.GetString(flagValidator)
 	valAddr, err := sdk.ValAddressFromBech32(valString)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
-	msg := stakingtypes.NewMsgDelegate(delAddr, valAddr, coin)
-
-	return tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msg)
+	return stakingtypes.NewMsgDelegate(delAddr, valAddr, coin), nil
 }
 
-// HandleEpochEnd handles epoch ending by delegating the newly received coins
-func HandleEpochEnd(cliCtx client.Context, flgs *flag.FlagSet) error {
+func GetMsgNewBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []types.Event) ([]sdk.Msg, error) {
+	msgs := []sdk.Msg{}
+	var epoch_handled bool
+	for _, event := range events {
+		if event.Type == "epoch_end" && !epoch_handled {
+			newMsgs, err := GetMsgsEpochEnd(cliCtx, flgs)
+			if err != nil {
+				panic(err)
+			}
+			msgs = append(msgs, newMsgs...)
+
+			log.Println("Epoch ended. Processing Epoch end handling messages...")
+			// only execute once per block
+			epoch_handled = true
+		} else if event.Type == "complete_unbonding" {
+			newMsgs, err := GetMsgsUndelegateComplete(cliCtx, flgs, event)
+			if err != nil {
+				panic(err)
+			}
+			msgs = append(msgs, newMsgs...)
+
+			log.Println("Unbonding completed. Processing Epoch end handling messages...")
+		}
+	}
+	return []sdk.Msg{}, nil
+}
+
+// GetMsgsEpochEnd handles epoch ending by delegating the newly received coins
+func GetMsgsEpochEnd(cliCtx client.Context, flgs *flag.FlagSet) ([]sdk.Msg, error) {
 	queryClient := distrtypes.NewQueryClient(cliCtx)
 
 	// get delegator address & validator address
 	delAddr := cliCtx.GetFromAddress()
 	valString, err := flgs.GetString(flagValidator)
 	if err != nil {
-		return err
+		return []sdk.Msg{}, err
 	}
 	valAddr, err := sdk.ValAddressFromBech32(valString)
 	if err != nil {
-		return err
+		return []sdk.Msg{}, err
 	}
 
 	// construct delegation rewards query request
@@ -54,16 +78,14 @@ func HandleEpochEnd(cliCtx client.Context, flgs *flag.FlagSet) error {
 
 	res, err := queryClient.DelegationRewards(context.Background(), params)
 	if err != nil {
-		return err
+		return []sdk.Msg{}, err
 	}
 	fmt.Println(res)
 
-	stakingQueryClient := stakingtypes.NewQueryClient(cliCtx)
-	stakingParamsResponse, err := stakingQueryClient.Params(context.Background(), &stakingtypes.QueryParamsRequest{})
+	bondDenom, err := getBondDenom(cliCtx)
 	if err != nil {
-		return err
+		return []sdk.Msg{}, err
 	}
-	bondDenom := stakingParamsResponse.Params.BondDenom
 
 	toCompound, _ := res.GetRewards().TruncateDecimal()
 	delegateCoin := sdk.NewCoin(bondDenom, toCompound.AmountOf(bondDenom))
@@ -73,10 +95,10 @@ func HandleEpochEnd(cliCtx client.Context, flgs *flag.FlagSet) error {
 	msgs := []sdk.Msg{withdrawMsg}
 	delegateMsg := stakingtypes.NewMsgDelegate(delAddr, valAddr, delegateCoin)
 	msgs = append(msgs, delegateMsg)
-	return tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msgs...)
+	return msgs, nil
 }
 
-// HandleUndelegateComplete handles completed unbondings by sending the unlocked coins to unbonding contract
-func HandleUndelegateComplete(ctx client.Context, flgs *flag.FlagSet, event types.Event) interface{} {
-	return nil
+// GetMsgsUndelegateComplete handles completed unbondings by sending the unlocked coins to unbonding contract
+func GetMsgsUndelegateComplete(ctx client.Context, flgs *flag.FlagSet, event types.Event) ([]sdk.Msg, error) {
+	return []sdk.Msg{}, nil
 }
