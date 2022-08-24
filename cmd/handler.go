@@ -1,7 +1,12 @@
 package cmd
 
 import (
+	"context"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
 	flag "github.com/spf13/pflag"
 	"github.com/tendermint/tendermint/abci/types"
 	"log"
@@ -10,6 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	evmtypes "github.com/evmos/ethermint/x/evm/types"
 )
 
 // GetMsgDelegation unwraps the received EVMOS and delegates it to earn staking rewards.
@@ -110,4 +116,67 @@ func GetTotalAsset(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, error)
 
 	total := rewards.Add(balances...).Add(unbonding...).Add(bonded...)
 	return total, nil
+}
+
+// ConstructEthTx constructs ethereum transaction from the context
+func ConstructEthTx(cliCtx client.Context, flgs *flag.FlagSet, contractAddr string, value *big.Int, inputData []byte) (*evmtypes.MsgEthereumTx, error) {
+	//inputData, err := contractABI.Pack(name, args...)
+	//if err != nil {
+	//	return nil, err
+	//}
+	ethEndPoint, err := flgs.GetString(flagEthEndpoint)
+	if err != nil {
+		return nil, err
+	}
+
+	ethClient, err := ethclient.Dial(ethEndPoint)
+	if err != nil {
+		return nil, err
+	}
+
+	fromAddr := cliCtx.GetFromAddress()
+	fromAddrEth := common.BytesToAddress(fromAddr.Bytes())
+
+	contAddr := common.BytesToAddress(common.Hex2Bytes(contractAddr))
+	if err != nil {
+		return nil, err
+	}
+
+	gas, err := ethClient.EstimateGas(context.Background(), ethereum.CallMsg{
+		From:      fromAddrEth,
+		To:        &contAddr,
+		Gas:       0,
+		GasPrice:  nil,
+		GasFeeCap: nil,
+		GasTipCap: nil,
+		Value:     value,
+		Data:      inputData,
+	})
+	if err != nil {
+		return nil, err
+	}
+	//gas, err := flgs.GetString(flags.FlagGas)
+	//if err != nil {
+	//	return nil, err
+	//}
+	gasPriceStr, err := flgs.GetString(flags.FlagGasPrices)
+	if err != nil {
+		return nil, err
+	}
+	gasPriceCoin, err := sdk.ParseCoinNormalized(gasPriceStr)
+	if err != nil {
+		return nil, err
+	}
+	gasPrice := gasPriceCoin.Amount.BigInt()
+
+	// TODO: make this configurable
+	// chainID, err := flgs.GetString(flags.FlagChainID)
+	chainID := big.NewInt(9000)
+	nonce, err := ethClient.NonceAt(context.Background(), fromAddrEth, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	txMsg := evmtypes.NewTx(chainID, nonce, &contAddr, value, gas, gasPrice, nil, nil, inputData, nil)
+	return txMsg, nil
 }

@@ -14,13 +14,13 @@ func ServeCommand() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		NewSubscribeDelegationCmd(),
+		NewSubscribeCmd(),
 	)
 
 	return cmd
 }
 
-func NewSubscribeDelegationCmd() *cobra.Command {
+func NewSubscribeCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "subscribe",
 		Short: `Subscribes to delegation,epoch end, unbonding events.`,
