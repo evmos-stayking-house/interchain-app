@@ -11,7 +11,6 @@ import (
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/abis"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
@@ -91,9 +90,6 @@ func QueryUndelegationAmt(ethEndpoint, contAddr string, fromBlock, toBlock int64
 
 	contractAddress := common.HexToAddress(contAddr)
 
-	logUndelegateSig := []byte("Undelegate(address,uint256)")
-	logUndelegateSigHash := crypto.Keccak256Hash(logUndelegateSig)
-
 	// TODO: make this a parameter
 	contractAbi, err := abi.JSON(strings.NewReader(abis.EventsMetaData.ABI))
 	if err != nil {
@@ -124,7 +120,7 @@ func QueryUndelegationAmt(ethEndpoint, contAddr string, fromBlock, toBlock int64
 	var changes []types.DelegationChange
 	totalUndelegation := big.NewInt(0)
 	for _, log := range logs {
-		amt, err := contractAbi.Unpack("Undelegate", log.Data)
+		amt, err := contractAbi.Unpack("Unstake", log.Data)
 		if err != nil {
 			return nil, err
 		}

@@ -114,13 +114,13 @@ func Subscribe(contAddr string, cliCtx client.Context, flgs *flag.FlagSet) error
 			toDelegate := delegationTracker.Clear()
 			delMsg, err := GetMsgDelegation(cliCtx, flgs, toDelegate)
 			if err != nil {
-				panic(err)
+				log.Fatal(err)
 			}
 			log.Printf("Delegating received tokens: %s\n", toDelegate.String())
 			msgs = append(msgs, delMsg)
 			err = tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msgs...)
 			if err != nil {
-				panic(err)
+				log.Fatal(err)
 			}
 		}
 	}
