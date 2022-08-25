@@ -3,7 +3,7 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 /**
- * @title Storage
+ * @title test
  * @dev Store & retrieve value in a variable
  * @custom:dev-run-script ./scripts/deploy_with_ethers.ts
  */
@@ -12,8 +12,8 @@ contract test {
     uint256 delegated;
     uint256 original_unbonding;
 
-    event Delegate(address indexed delegator, uint256 amount);
-    event Undelegate(address indexed delegator, uint256 amount);
+    event Stake(address indexed delegator, address indexed user, uint256 amount, uint256 share);
+    event Unstake(address indexed delegator, address indexed user, uint256 amount, uint256 share);
 
     /**
      * @dev delegate
@@ -21,7 +21,7 @@ contract test {
      */
     function delegate(uint256 amount) public {
         delegated += amount;
-        emit Delegate(msg.sender, amount);
+        emit Stake(msg.sender, msg.sender, amount, 0);
     }
 
     /**
@@ -30,7 +30,7 @@ contract test {
      */
     function undelegate(uint256 amount) public {
         delegated -= amount;
-        emit Undelegate(msg.sender, amount);
+        emit Unstake(msg.sender, msg.sender, amount, 0);
     }
 
     /**
@@ -41,14 +41,11 @@ contract test {
         return delegated;
     }
 
-    /**
-     * @dev supplyUnbondedToken
-     */
     function supplyUnbondedToken() payable public {
         /**
             @TODO
             maybe use delegate/undelegate tx ORACLE?
          */
-         original_unbonding = 1234;
+         original_unbonding = 123;
     }
 }

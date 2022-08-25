@@ -30,7 +30,7 @@ var (
 
 // AbisMetaData contains all meta data concerning the Abis contract.
 var AbisMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Delegate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Undelegate\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"delegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"retrieve\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"supplyUnbondedToken\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"undelegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Stake\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Unstake\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"delegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"retrieve\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"supplyUnbondedToken\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"undelegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // AbisABI is the input ABI used to generate the binding from.
@@ -273,9 +273,9 @@ func (_Abis *AbisTransactorSession) Undelegate(amount *big.Int) (*types.Transact
 	return _Abis.Contract.Undelegate(&_Abis.TransactOpts, amount)
 }
 
-// AbisDelegateIterator is returned from FilterDelegate and is used to iterate over the raw logs and unpacked data for Delegate events raised by the Abis contract.
-type AbisDelegateIterator struct {
-	Event *AbisDelegate // Event containing the contract specifics and raw log
+// AbisStakeIterator is returned from FilterStake and is used to iterate over the raw logs and unpacked data for Stake events raised by the Abis contract.
+type AbisStakeIterator struct {
+	Event *AbisStake // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -289,7 +289,7 @@ type AbisDelegateIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AbisDelegateIterator) Next() bool {
+func (it *AbisStakeIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -298,7 +298,7 @@ func (it *AbisDelegateIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AbisDelegate)
+			it.Event = new(AbisStake)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -313,7 +313,7 @@ func (it *AbisDelegateIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AbisDelegate)
+		it.Event = new(AbisStake)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -329,52 +329,62 @@ func (it *AbisDelegateIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AbisDelegateIterator) Error() error {
+func (it *AbisStakeIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AbisDelegateIterator) Close() error {
+func (it *AbisStakeIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AbisDelegate represents a Delegate event raised by the Abis contract.
-type AbisDelegate struct {
+// AbisStake represents a Stake event raised by the Abis contract.
+type AbisStake struct {
 	Delegator common.Address
+	User      common.Address
 	Amount    *big.Int
+	Share     *big.Int
 	Raw       types.Log // Blockchain specific contextual infos
 }
 
-// FilterDelegate is a free log retrieval operation binding the contract event 0xb0d234274aef7a61aa5a2eb44c23881ebf46a068cccbd413c978bcbd555fe17f.
+// FilterStake is a free log retrieval operation binding the contract event 0x63602d0ecc7b3a0ef7ff1a116e23056662d64280355ba8031b6d0d767c4b4458.
 //
-// Solidity: event Delegate(address indexed delegator, uint256 amount)
-func (_Abis *AbisFilterer) FilterDelegate(opts *bind.FilterOpts, delegator []common.Address) (*AbisDelegateIterator, error) {
+// Solidity: event Stake(address indexed delegator, address indexed user, uint256 amount, uint256 share)
+func (_Abis *AbisFilterer) FilterStake(opts *bind.FilterOpts, delegator []common.Address, user []common.Address) (*AbisStakeIterator, error) {
 
 	var delegatorRule []interface{}
 	for _, delegatorItem := range delegator {
 		delegatorRule = append(delegatorRule, delegatorItem)
 	}
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
 
-	logs, sub, err := _Abis.contract.FilterLogs(opts, "Delegate", delegatorRule)
+	logs, sub, err := _Abis.contract.FilterLogs(opts, "Stake", delegatorRule, userRule)
 	if err != nil {
 		return nil, err
 	}
-	return &AbisDelegateIterator{contract: _Abis.contract, event: "Delegate", logs: logs, sub: sub}, nil
+	return &AbisStakeIterator{contract: _Abis.contract, event: "Stake", logs: logs, sub: sub}, nil
 }
 
-// WatchDelegate is a free log subscription operation binding the contract event 0xb0d234274aef7a61aa5a2eb44c23881ebf46a068cccbd413c978bcbd555fe17f.
+// WatchStake is a free log subscription operation binding the contract event 0x63602d0ecc7b3a0ef7ff1a116e23056662d64280355ba8031b6d0d767c4b4458.
 //
-// Solidity: event Delegate(address indexed delegator, uint256 amount)
-func (_Abis *AbisFilterer) WatchDelegate(opts *bind.WatchOpts, sink chan<- *AbisDelegate, delegator []common.Address) (event.Subscription, error) {
+// Solidity: event Stake(address indexed delegator, address indexed user, uint256 amount, uint256 share)
+func (_Abis *AbisFilterer) WatchStake(opts *bind.WatchOpts, sink chan<- *AbisStake, delegator []common.Address, user []common.Address) (event.Subscription, error) {
 
 	var delegatorRule []interface{}
 	for _, delegatorItem := range delegator {
 		delegatorRule = append(delegatorRule, delegatorItem)
 	}
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
 
-	logs, sub, err := _Abis.contract.WatchLogs(opts, "Delegate", delegatorRule)
+	logs, sub, err := _Abis.contract.WatchLogs(opts, "Stake", delegatorRule, userRule)
 	if err != nil {
 		return nil, err
 	}
@@ -384,8 +394,8 @@ func (_Abis *AbisFilterer) WatchDelegate(opts *bind.WatchOpts, sink chan<- *Abis
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AbisDelegate)
-				if err := _Abis.contract.UnpackLog(event, "Delegate", log); err != nil {
+				event := new(AbisStake)
+				if err := _Abis.contract.UnpackLog(event, "Stake", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -406,21 +416,21 @@ func (_Abis *AbisFilterer) WatchDelegate(opts *bind.WatchOpts, sink chan<- *Abis
 	}), nil
 }
 
-// ParseDelegate is a log parse operation binding the contract event 0xb0d234274aef7a61aa5a2eb44c23881ebf46a068cccbd413c978bcbd555fe17f.
+// ParseStake is a log parse operation binding the contract event 0x63602d0ecc7b3a0ef7ff1a116e23056662d64280355ba8031b6d0d767c4b4458.
 //
-// Solidity: event Delegate(address indexed delegator, uint256 amount)
-func (_Abis *AbisFilterer) ParseDelegate(log types.Log) (*AbisDelegate, error) {
-	event := new(AbisDelegate)
-	if err := _Abis.contract.UnpackLog(event, "Delegate", log); err != nil {
+// Solidity: event Stake(address indexed delegator, address indexed user, uint256 amount, uint256 share)
+func (_Abis *AbisFilterer) ParseStake(log types.Log) (*AbisStake, error) {
+	event := new(AbisStake)
+	if err := _Abis.contract.UnpackLog(event, "Stake", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// AbisUndelegateIterator is returned from FilterUndelegate and is used to iterate over the raw logs and unpacked data for Undelegate events raised by the Abis contract.
-type AbisUndelegateIterator struct {
-	Event *AbisUndelegate // Event containing the contract specifics and raw log
+// AbisUnstakeIterator is returned from FilterUnstake and is used to iterate over the raw logs and unpacked data for Unstake events raised by the Abis contract.
+type AbisUnstakeIterator struct {
+	Event *AbisUnstake // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -434,7 +444,7 @@ type AbisUndelegateIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AbisUndelegateIterator) Next() bool {
+func (it *AbisUnstakeIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -443,7 +453,7 @@ func (it *AbisUndelegateIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AbisUndelegate)
+			it.Event = new(AbisUnstake)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -458,7 +468,7 @@ func (it *AbisUndelegateIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AbisUndelegate)
+		it.Event = new(AbisUnstake)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -474,52 +484,62 @@ func (it *AbisUndelegateIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AbisUndelegateIterator) Error() error {
+func (it *AbisUnstakeIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AbisUndelegateIterator) Close() error {
+func (it *AbisUnstakeIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AbisUndelegate represents a Undelegate event raised by the Abis contract.
-type AbisUndelegate struct {
+// AbisUnstake represents a Unstake event raised by the Abis contract.
+type AbisUnstake struct {
 	Delegator common.Address
+	User      common.Address
 	Amount    *big.Int
+	Share     *big.Int
 	Raw       types.Log // Blockchain specific contextual infos
 }
 
-// FilterUndelegate is a free log retrieval operation binding the contract event 0x17659a1d1f57d2e58b7063ee8b518b50d00bf3e5c0d8224b68ba865e4725a0b4.
+// FilterUnstake is a free log retrieval operation binding the contract event 0x18edd09e80386cd99df397e2e0d87d2bb259423eae08645e776321a36fe680ef.
 //
-// Solidity: event Undelegate(address indexed delegator, uint256 amount)
-func (_Abis *AbisFilterer) FilterUndelegate(opts *bind.FilterOpts, delegator []common.Address) (*AbisUndelegateIterator, error) {
+// Solidity: event Unstake(address indexed delegator, address indexed user, uint256 amount, uint256 share)
+func (_Abis *AbisFilterer) FilterUnstake(opts *bind.FilterOpts, delegator []common.Address, user []common.Address) (*AbisUnstakeIterator, error) {
 
 	var delegatorRule []interface{}
 	for _, delegatorItem := range delegator {
 		delegatorRule = append(delegatorRule, delegatorItem)
 	}
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
 
-	logs, sub, err := _Abis.contract.FilterLogs(opts, "Undelegate", delegatorRule)
+	logs, sub, err := _Abis.contract.FilterLogs(opts, "Unstake", delegatorRule, userRule)
 	if err != nil {
 		return nil, err
 	}
-	return &AbisUndelegateIterator{contract: _Abis.contract, event: "Undelegate", logs: logs, sub: sub}, nil
+	return &AbisUnstakeIterator{contract: _Abis.contract, event: "Unstake", logs: logs, sub: sub}, nil
 }
 
-// WatchUndelegate is a free log subscription operation binding the contract event 0x17659a1d1f57d2e58b7063ee8b518b50d00bf3e5c0d8224b68ba865e4725a0b4.
+// WatchUnstake is a free log subscription operation binding the contract event 0x18edd09e80386cd99df397e2e0d87d2bb259423eae08645e776321a36fe680ef.
 //
-// Solidity: event Undelegate(address indexed delegator, uint256 amount)
-func (_Abis *AbisFilterer) WatchUndelegate(opts *bind.WatchOpts, sink chan<- *AbisUndelegate, delegator []common.Address) (event.Subscription, error) {
+// Solidity: event Unstake(address indexed delegator, address indexed user, uint256 amount, uint256 share)
+func (_Abis *AbisFilterer) WatchUnstake(opts *bind.WatchOpts, sink chan<- *AbisUnstake, delegator []common.Address, user []common.Address) (event.Subscription, error) {
 
 	var delegatorRule []interface{}
 	for _, delegatorItem := range delegator {
 		delegatorRule = append(delegatorRule, delegatorItem)
 	}
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
 
-	logs, sub, err := _Abis.contract.WatchLogs(opts, "Undelegate", delegatorRule)
+	logs, sub, err := _Abis.contract.WatchLogs(opts, "Unstake", delegatorRule, userRule)
 	if err != nil {
 		return nil, err
 	}
@@ -529,8 +549,8 @@ func (_Abis *AbisFilterer) WatchUndelegate(opts *bind.WatchOpts, sink chan<- *Ab
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AbisUndelegate)
-				if err := _Abis.contract.UnpackLog(event, "Undelegate", log); err != nil {
+				event := new(AbisUnstake)
+				if err := _Abis.contract.UnpackLog(event, "Unstake", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -551,12 +571,12 @@ func (_Abis *AbisFilterer) WatchUndelegate(opts *bind.WatchOpts, sink chan<- *Ab
 	}), nil
 }
 
-// ParseUndelegate is a log parse operation binding the contract event 0x17659a1d1f57d2e58b7063ee8b518b50d00bf3e5c0d8224b68ba865e4725a0b4.
+// ParseUnstake is a log parse operation binding the contract event 0x18edd09e80386cd99df397e2e0d87d2bb259423eae08645e776321a36fe680ef.
 //
-// Solidity: event Undelegate(address indexed delegator, uint256 amount)
-func (_Abis *AbisFilterer) ParseUndelegate(log types.Log) (*AbisUndelegate, error) {
-	event := new(AbisUndelegate)
-	if err := _Abis.contract.UnpackLog(event, "Undelegate", log); err != nil {
+// Solidity: event Unstake(address indexed delegator, address indexed user, uint256 amount, uint256 share)
+func (_Abis *AbisFilterer) ParseUnstake(log types.Log) (*AbisUnstake, error) {
+	event := new(AbisUnstake)
+	if err := _Abis.contract.UnpackLog(event, "Unstake", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

@@ -70,6 +70,10 @@ func GetMsgsEpochEnd(cliCtx client.Context, flgs *flag.FlagSet) ([]sdk.Msg, erro
 	}
 
 	delegateCoin := sdk.NewCoin(bondDenom, toCompound.AmountOf(bondDenom))
+	if delegateCoin.Amount.Equal(sdk.ZeroInt()) {
+		// no delegation
+		return nil, nil
+	}
 
 	// get delegator address & validator address
 	delAddr := cliCtx.GetFromAddress()

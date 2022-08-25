@@ -73,21 +73,21 @@ func Subscribe(contAddr string, cliCtx client.Context, flgs *flag.FlagSet) error
 				}
 				for _, l := range logs {
 					if l.Topics[0].Hex() == logDelegateSigHash.Hex() {
-						amt, err := contractAbi.Unpack("Stake", l.Data)
+						data, err := contractAbi.Unpack("Stake", l.Data)
 						if err != nil {
 							log.Fatal(err)
 						}
-						amtInt := amt[0].(*big.Int)
+						amtInt := data[0].(*big.Int)
 						delegationTracker.Add(amtInt)
 					} else if l.Topics[0].Hex() == logUndelegateSigHash.Hex() {
-						amt, err := contractAbi.Unpack("Unstake", l.Data)
+						data, err := contractAbi.Unpack("Unstake", l.Data)
 						if err != nil {
 							log.Fatal(err)
 						}
-						amtInt := amt[0].(*big.Int)
+						amtInt := data[0].(*big.Int)
 						UndelegationTracker.Add(amtInt)
 					} else {
-						log.Println("received something else! wow")
+						log.Println("received some other tx to the contract. skipping...")
 					}
 				}
 			}
