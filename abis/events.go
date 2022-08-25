@@ -28,113 +28,113 @@ var (
 	_ = event.NewSubscription
 )
 
-// EventsMetaData contains all meta data concerning the Events contract.
-var EventsMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"delegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Delegate\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"undelegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Undelegate\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"retrieve\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+// AbisMetaData contains all meta data concerning the Abis contract.
+var AbisMetaData = &bind.MetaData{
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Delegate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Undelegate\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"delegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"retrieve\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"supplyUnbondedToken\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"undelegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
-// EventsABI is the input ABI used to generate the binding from.
-// Deprecated: Use EventsMetaData.ABI instead.
-var EventsABI = EventsMetaData.ABI
+// AbisABI is the input ABI used to generate the binding from.
+// Deprecated: Use AbisMetaData.ABI instead.
+var AbisABI = AbisMetaData.ABI
 
-// Events is an auto generated Go binding around an Ethereum contract.
-type Events struct {
-	EventsCaller     // Read-only binding to the contract
-	EventsTransactor // Write-only binding to the contract
-	EventsFilterer   // Log filterer for contract events
+// Abis is an auto generated Go binding around an Ethereum contract.
+type Abis struct {
+	AbisCaller     // Read-only binding to the contract
+	AbisTransactor // Write-only binding to the contract
+	AbisFilterer   // Log filterer for contract events
 }
 
-// EventsCaller is an auto generated read-only Go binding around an Ethereum contract.
-type EventsCaller struct {
+// AbisCaller is an auto generated read-only Go binding around an Ethereum contract.
+type AbisCaller struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// EventsTransactor is an auto generated write-only Go binding around an Ethereum contract.
-type EventsTransactor struct {
+// AbisTransactor is an auto generated write-only Go binding around an Ethereum contract.
+type AbisTransactor struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// EventsFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
-type EventsFilterer struct {
+// AbisFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
+type AbisFilterer struct {
 	contract *bind.BoundContract // Generic contract wrapper for the low level calls
 }
 
-// EventsSession is an auto generated Go binding around an Ethereum contract,
+// AbisSession is an auto generated Go binding around an Ethereum contract,
 // with pre-set call and transact options.
-type EventsSession struct {
-	Contract     *Events           // Generic contract binding to set the session for
+type AbisSession struct {
+	Contract     *Abis             // Generic contract binding to set the session for
 	CallOpts     bind.CallOpts     // Call options to use throughout this session
 	TransactOpts bind.TransactOpts // Transaction auth options to use throughout this session
 }
 
-// EventsCallerSession is an auto generated read-only Go binding around an Ethereum contract,
+// AbisCallerSession is an auto generated read-only Go binding around an Ethereum contract,
 // with pre-set call options.
-type EventsCallerSession struct {
-	Contract *EventsCaller // Generic contract caller binding to set the session for
+type AbisCallerSession struct {
+	Contract *AbisCaller   // Generic contract caller binding to set the session for
 	CallOpts bind.CallOpts // Call options to use throughout this session
 }
 
-// EventsTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
+// AbisTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
 // with pre-set transact options.
-type EventsTransactorSession struct {
-	Contract     *EventsTransactor // Generic contract transactor binding to set the session for
+type AbisTransactorSession struct {
+	Contract     *AbisTransactor   // Generic contract transactor binding to set the session for
 	TransactOpts bind.TransactOpts // Transaction auth options to use throughout this session
 }
 
-// EventsRaw is an auto generated low-level Go binding around an Ethereum contract.
-type EventsRaw struct {
-	Contract *Events // Generic contract binding to access the raw methods on
+// AbisRaw is an auto generated low-level Go binding around an Ethereum contract.
+type AbisRaw struct {
+	Contract *Abis // Generic contract binding to access the raw methods on
 }
 
-// EventsCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
-type EventsCallerRaw struct {
-	Contract *EventsCaller // Generic read-only contract binding to access the raw methods on
+// AbisCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
+type AbisCallerRaw struct {
+	Contract *AbisCaller // Generic read-only contract binding to access the raw methods on
 }
 
-// EventsTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
-type EventsTransactorRaw struct {
-	Contract *EventsTransactor // Generic write-only contract binding to access the raw methods on
+// AbisTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
+type AbisTransactorRaw struct {
+	Contract *AbisTransactor // Generic write-only contract binding to access the raw methods on
 }
 
-// NewEvents creates a new instance of Events, bound to a specific deployed contract.
-func NewEvents(address common.Address, backend bind.ContractBackend) (*Events, error) {
-	contract, err := bindEvents(address, backend, backend, backend)
+// NewAbis creates a new instance of Abis, bound to a specific deployed contract.
+func NewAbis(address common.Address, backend bind.ContractBackend) (*Abis, error) {
+	contract, err := bindAbis(address, backend, backend, backend)
 	if err != nil {
 		return nil, err
 	}
-	return &Events{EventsCaller: EventsCaller{contract: contract}, EventsTransactor: EventsTransactor{contract: contract}, EventsFilterer: EventsFilterer{contract: contract}}, nil
+	return &Abis{AbisCaller: AbisCaller{contract: contract}, AbisTransactor: AbisTransactor{contract: contract}, AbisFilterer: AbisFilterer{contract: contract}}, nil
 }
 
-// NewEventsCaller creates a new read-only instance of Events, bound to a specific deployed contract.
-func NewEventsCaller(address common.Address, caller bind.ContractCaller) (*EventsCaller, error) {
-	contract, err := bindEvents(address, caller, nil, nil)
+// NewAbisCaller creates a new read-only instance of Abis, bound to a specific deployed contract.
+func NewAbisCaller(address common.Address, caller bind.ContractCaller) (*AbisCaller, error) {
+	contract, err := bindAbis(address, caller, nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &EventsCaller{contract: contract}, nil
+	return &AbisCaller{contract: contract}, nil
 }
 
-// NewEventsTransactor creates a new write-only instance of Events, bound to a specific deployed contract.
-func NewEventsTransactor(address common.Address, transactor bind.ContractTransactor) (*EventsTransactor, error) {
-	contract, err := bindEvents(address, nil, transactor, nil)
+// NewAbisTransactor creates a new write-only instance of Abis, bound to a specific deployed contract.
+func NewAbisTransactor(address common.Address, transactor bind.ContractTransactor) (*AbisTransactor, error) {
+	contract, err := bindAbis(address, nil, transactor, nil)
 	if err != nil {
 		return nil, err
 	}
-	return &EventsTransactor{contract: contract}, nil
+	return &AbisTransactor{contract: contract}, nil
 }
 
-// NewEventsFilterer creates a new log filterer instance of Events, bound to a specific deployed contract.
-func NewEventsFilterer(address common.Address, filterer bind.ContractFilterer) (*EventsFilterer, error) {
-	contract, err := bindEvents(address, nil, nil, filterer)
+// NewAbisFilterer creates a new log filterer instance of Abis, bound to a specific deployed contract.
+func NewAbisFilterer(address common.Address, filterer bind.ContractFilterer) (*AbisFilterer, error) {
+	contract, err := bindAbis(address, nil, nil, filterer)
 	if err != nil {
 		return nil, err
 	}
-	return &EventsFilterer{contract: contract}, nil
+	return &AbisFilterer{contract: contract}, nil
 }
 
-// bindEvents binds a generic wrapper to an already deployed contract.
-func bindEvents(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := abi.JSON(strings.NewReader(EventsABI))
+// bindAbis binds a generic wrapper to an already deployed contract.
+func bindAbis(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
+	parsed, err := abi.JSON(strings.NewReader(AbisABI))
 	if err != nil {
 		return nil, err
 	}
@@ -145,46 +145,46 @@ func bindEvents(address common.Address, caller bind.ContractCaller, transactor b
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_Events *EventsRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Events.Contract.EventsCaller.contract.Call(opts, result, method, params...)
+func (_Abis *AbisRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _Abis.Contract.AbisCaller.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_Events *EventsRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Events.Contract.EventsTransactor.contract.Transfer(opts)
+func (_Abis *AbisRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _Abis.Contract.AbisTransactor.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_Events *EventsRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Events.Contract.EventsTransactor.contract.Transact(opts, method, params...)
+func (_Abis *AbisRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _Abis.Contract.AbisTransactor.contract.Transact(opts, method, params...)
 }
 
 // Call invokes the (constant) contract method with params as input values and
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_Events *EventsCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Events.Contract.contract.Call(opts, result, method, params...)
+func (_Abis *AbisCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _Abis.Contract.contract.Call(opts, result, method, params...)
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
-func (_Events *EventsTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Events.Contract.contract.Transfer(opts)
+func (_Abis *AbisTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _Abis.Contract.contract.Transfer(opts)
 }
 
 // Transact invokes the (paid) contract method with params as input values.
-func (_Events *EventsTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Events.Contract.contract.Transact(opts, method, params...)
+func (_Abis *AbisTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _Abis.Contract.contract.Transact(opts, method, params...)
 }
 
 // Retrieve is a free data retrieval call binding the contract method 0x2e64cec1.
 //
 // Solidity: function retrieve() view returns(uint256)
-func (_Events *EventsCaller) Retrieve(opts *bind.CallOpts) (*big.Int, error) {
+func (_Abis *AbisCaller) Retrieve(opts *bind.CallOpts) (*big.Int, error) {
 	var out []interface{}
-	err := _Events.contract.Call(opts, &out, "retrieve")
+	err := _Abis.contract.Call(opts, &out, "retrieve")
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -199,62 +199,83 @@ func (_Events *EventsCaller) Retrieve(opts *bind.CallOpts) (*big.Int, error) {
 // Retrieve is a free data retrieval call binding the contract method 0x2e64cec1.
 //
 // Solidity: function retrieve() view returns(uint256)
-func (_Events *EventsSession) Retrieve() (*big.Int, error) {
-	return _Events.Contract.Retrieve(&_Events.CallOpts)
+func (_Abis *AbisSession) Retrieve() (*big.Int, error) {
+	return _Abis.Contract.Retrieve(&_Abis.CallOpts)
 }
 
 // Retrieve is a free data retrieval call binding the contract method 0x2e64cec1.
 //
 // Solidity: function retrieve() view returns(uint256)
-func (_Events *EventsCallerSession) Retrieve() (*big.Int, error) {
-	return _Events.Contract.Retrieve(&_Events.CallOpts)
+func (_Abis *AbisCallerSession) Retrieve() (*big.Int, error) {
+	return _Abis.Contract.Retrieve(&_Abis.CallOpts)
 }
 
 // Delegate is a paid mutator transaction binding the contract method 0x9fa6dd35.
 //
 // Solidity: function delegate(uint256 amount) returns()
-func (_Events *EventsTransactor) Delegate(opts *bind.TransactOpts, amount *big.Int) (*types.Transaction, error) {
-	return _Events.contract.Transact(opts, "delegate", amount)
+func (_Abis *AbisTransactor) Delegate(opts *bind.TransactOpts, amount *big.Int) (*types.Transaction, error) {
+	return _Abis.contract.Transact(opts, "delegate", amount)
 }
 
 // Delegate is a paid mutator transaction binding the contract method 0x9fa6dd35.
 //
 // Solidity: function delegate(uint256 amount) returns()
-func (_Events *EventsSession) Delegate(amount *big.Int) (*types.Transaction, error) {
-	return _Events.Contract.Delegate(&_Events.TransactOpts, amount)
+func (_Abis *AbisSession) Delegate(amount *big.Int) (*types.Transaction, error) {
+	return _Abis.Contract.Delegate(&_Abis.TransactOpts, amount)
 }
 
 // Delegate is a paid mutator transaction binding the contract method 0x9fa6dd35.
 //
 // Solidity: function delegate(uint256 amount) returns()
-func (_Events *EventsTransactorSession) Delegate(amount *big.Int) (*types.Transaction, error) {
-	return _Events.Contract.Delegate(&_Events.TransactOpts, amount)
+func (_Abis *AbisTransactorSession) Delegate(amount *big.Int) (*types.Transaction, error) {
+	return _Abis.Contract.Delegate(&_Abis.TransactOpts, amount)
+}
+
+// SupplyUnbondedToken is a paid mutator transaction binding the contract method 0xe158c1ac.
+//
+// Solidity: function supplyUnbondedToken() payable returns()
+func (_Abis *AbisTransactor) SupplyUnbondedToken(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _Abis.contract.Transact(opts, "supplyUnbondedToken")
+}
+
+// SupplyUnbondedToken is a paid mutator transaction binding the contract method 0xe158c1ac.
+//
+// Solidity: function supplyUnbondedToken() payable returns()
+func (_Abis *AbisSession) SupplyUnbondedToken() (*types.Transaction, error) {
+	return _Abis.Contract.SupplyUnbondedToken(&_Abis.TransactOpts)
+}
+
+// SupplyUnbondedToken is a paid mutator transaction binding the contract method 0xe158c1ac.
+//
+// Solidity: function supplyUnbondedToken() payable returns()
+func (_Abis *AbisTransactorSession) SupplyUnbondedToken() (*types.Transaction, error) {
+	return _Abis.Contract.SupplyUnbondedToken(&_Abis.TransactOpts)
 }
 
 // Undelegate is a paid mutator transaction binding the contract method 0x6c68c0e1.
 //
 // Solidity: function undelegate(uint256 amount) returns()
-func (_Events *EventsTransactor) Undelegate(opts *bind.TransactOpts, amount *big.Int) (*types.Transaction, error) {
-	return _Events.contract.Transact(opts, "undelegate", amount)
+func (_Abis *AbisTransactor) Undelegate(opts *bind.TransactOpts, amount *big.Int) (*types.Transaction, error) {
+	return _Abis.contract.Transact(opts, "undelegate", amount)
 }
 
 // Undelegate is a paid mutator transaction binding the contract method 0x6c68c0e1.
 //
 // Solidity: function undelegate(uint256 amount) returns()
-func (_Events *EventsSession) Undelegate(amount *big.Int) (*types.Transaction, error) {
-	return _Events.Contract.Undelegate(&_Events.TransactOpts, amount)
+func (_Abis *AbisSession) Undelegate(amount *big.Int) (*types.Transaction, error) {
+	return _Abis.Contract.Undelegate(&_Abis.TransactOpts, amount)
 }
 
 // Undelegate is a paid mutator transaction binding the contract method 0x6c68c0e1.
 //
 // Solidity: function undelegate(uint256 amount) returns()
-func (_Events *EventsTransactorSession) Undelegate(amount *big.Int) (*types.Transaction, error) {
-	return _Events.Contract.Undelegate(&_Events.TransactOpts, amount)
+func (_Abis *AbisTransactorSession) Undelegate(amount *big.Int) (*types.Transaction, error) {
+	return _Abis.Contract.Undelegate(&_Abis.TransactOpts, amount)
 }
 
-// EventsDelegateIterator is returned from FilterDelegate and is used to iterate over the raw logs and unpacked data for Delegate events raised by the Events contract.
-type EventsDelegateIterator struct {
-	Event *EventsDelegate // Event containing the contract specifics and raw log
+// AbisDelegateIterator is returned from FilterDelegate and is used to iterate over the raw logs and unpacked data for Delegate events raised by the Abis contract.
+type AbisDelegateIterator struct {
+	Event *AbisDelegate // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -268,7 +289,7 @@ type EventsDelegateIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *EventsDelegateIterator) Next() bool {
+func (it *AbisDelegateIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -277,7 +298,7 @@ func (it *EventsDelegateIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(EventsDelegate)
+			it.Event = new(AbisDelegate)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -292,7 +313,7 @@ func (it *EventsDelegateIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(EventsDelegate)
+		it.Event = new(AbisDelegate)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -308,19 +329,19 @@ func (it *EventsDelegateIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *EventsDelegateIterator) Error() error {
+func (it *AbisDelegateIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *EventsDelegateIterator) Close() error {
+func (it *AbisDelegateIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// EventsDelegate represents a Delegate event raised by the Events contract.
-type EventsDelegate struct {
+// AbisDelegate represents a Delegate event raised by the Abis contract.
+type AbisDelegate struct {
 	Delegator common.Address
 	Amount    *big.Int
 	Raw       types.Log // Blockchain specific contextual infos
@@ -329,31 +350,31 @@ type EventsDelegate struct {
 // FilterDelegate is a free log retrieval operation binding the contract event 0xb0d234274aef7a61aa5a2eb44c23881ebf46a068cccbd413c978bcbd555fe17f.
 //
 // Solidity: event Delegate(address indexed delegator, uint256 amount)
-func (_Events *EventsFilterer) FilterDelegate(opts *bind.FilterOpts, delegator []common.Address) (*EventsDelegateIterator, error) {
+func (_Abis *AbisFilterer) FilterDelegate(opts *bind.FilterOpts, delegator []common.Address) (*AbisDelegateIterator, error) {
 
 	var delegatorRule []interface{}
 	for _, delegatorItem := range delegator {
 		delegatorRule = append(delegatorRule, delegatorItem)
 	}
 
-	logs, sub, err := _Events.contract.FilterLogs(opts, "Delegate", delegatorRule)
+	logs, sub, err := _Abis.contract.FilterLogs(opts, "Delegate", delegatorRule)
 	if err != nil {
 		return nil, err
 	}
-	return &EventsDelegateIterator{contract: _Events.contract, event: "Delegate", logs: logs, sub: sub}, nil
+	return &AbisDelegateIterator{contract: _Abis.contract, event: "Delegate", logs: logs, sub: sub}, nil
 }
 
 // WatchDelegate is a free log subscription operation binding the contract event 0xb0d234274aef7a61aa5a2eb44c23881ebf46a068cccbd413c978bcbd555fe17f.
 //
 // Solidity: event Delegate(address indexed delegator, uint256 amount)
-func (_Events *EventsFilterer) WatchDelegate(opts *bind.WatchOpts, sink chan<- *EventsDelegate, delegator []common.Address) (event.Subscription, error) {
+func (_Abis *AbisFilterer) WatchDelegate(opts *bind.WatchOpts, sink chan<- *AbisDelegate, delegator []common.Address) (event.Subscription, error) {
 
 	var delegatorRule []interface{}
 	for _, delegatorItem := range delegator {
 		delegatorRule = append(delegatorRule, delegatorItem)
 	}
 
-	logs, sub, err := _Events.contract.WatchLogs(opts, "Delegate", delegatorRule)
+	logs, sub, err := _Abis.contract.WatchLogs(opts, "Delegate", delegatorRule)
 	if err != nil {
 		return nil, err
 	}
@@ -363,8 +384,8 @@ func (_Events *EventsFilterer) WatchDelegate(opts *bind.WatchOpts, sink chan<- *
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(EventsDelegate)
-				if err := _Events.contract.UnpackLog(event, "Delegate", log); err != nil {
+				event := new(AbisDelegate)
+				if err := _Abis.contract.UnpackLog(event, "Delegate", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -388,18 +409,18 @@ func (_Events *EventsFilterer) WatchDelegate(opts *bind.WatchOpts, sink chan<- *
 // ParseDelegate is a log parse operation binding the contract event 0xb0d234274aef7a61aa5a2eb44c23881ebf46a068cccbd413c978bcbd555fe17f.
 //
 // Solidity: event Delegate(address indexed delegator, uint256 amount)
-func (_Events *EventsFilterer) ParseDelegate(log types.Log) (*EventsDelegate, error) {
-	event := new(EventsDelegate)
-	if err := _Events.contract.UnpackLog(event, "Delegate", log); err != nil {
+func (_Abis *AbisFilterer) ParseDelegate(log types.Log) (*AbisDelegate, error) {
+	event := new(AbisDelegate)
+	if err := _Abis.contract.UnpackLog(event, "Delegate", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
 }
 
-// EventsUndelegateIterator is returned from FilterUndelegate and is used to iterate over the raw logs and unpacked data for Undelegate events raised by the Events contract.
-type EventsUndelegateIterator struct {
-	Event *EventsUndelegate // Event containing the contract specifics and raw log
+// AbisUndelegateIterator is returned from FilterUndelegate and is used to iterate over the raw logs and unpacked data for Undelegate events raised by the Abis contract.
+type AbisUndelegateIterator struct {
+	Event *AbisUndelegate // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -413,7 +434,7 @@ type EventsUndelegateIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *EventsUndelegateIterator) Next() bool {
+func (it *AbisUndelegateIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -422,7 +443,7 @@ func (it *EventsUndelegateIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(EventsUndelegate)
+			it.Event = new(AbisUndelegate)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -437,7 +458,7 @@ func (it *EventsUndelegateIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(EventsUndelegate)
+		it.Event = new(AbisUndelegate)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -453,19 +474,19 @@ func (it *EventsUndelegateIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *EventsUndelegateIterator) Error() error {
+func (it *AbisUndelegateIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *EventsUndelegateIterator) Close() error {
+func (it *AbisUndelegateIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// EventsUndelegate represents a Undelegate event raised by the Events contract.
-type EventsUndelegate struct {
+// AbisUndelegate represents a Undelegate event raised by the Abis contract.
+type AbisUndelegate struct {
 	Delegator common.Address
 	Amount    *big.Int
 	Raw       types.Log // Blockchain specific contextual infos
@@ -474,31 +495,31 @@ type EventsUndelegate struct {
 // FilterUndelegate is a free log retrieval operation binding the contract event 0x17659a1d1f57d2e58b7063ee8b518b50d00bf3e5c0d8224b68ba865e4725a0b4.
 //
 // Solidity: event Undelegate(address indexed delegator, uint256 amount)
-func (_Events *EventsFilterer) FilterUndelegate(opts *bind.FilterOpts, delegator []common.Address) (*EventsUndelegateIterator, error) {
+func (_Abis *AbisFilterer) FilterUndelegate(opts *bind.FilterOpts, delegator []common.Address) (*AbisUndelegateIterator, error) {
 
 	var delegatorRule []interface{}
 	for _, delegatorItem := range delegator {
 		delegatorRule = append(delegatorRule, delegatorItem)
 	}
 
-	logs, sub, err := _Events.contract.FilterLogs(opts, "Undelegate", delegatorRule)
+	logs, sub, err := _Abis.contract.FilterLogs(opts, "Undelegate", delegatorRule)
 	if err != nil {
 		return nil, err
 	}
-	return &EventsUndelegateIterator{contract: _Events.contract, event: "Undelegate", logs: logs, sub: sub}, nil
+	return &AbisUndelegateIterator{contract: _Abis.contract, event: "Undelegate", logs: logs, sub: sub}, nil
 }
 
 // WatchUndelegate is a free log subscription operation binding the contract event 0x17659a1d1f57d2e58b7063ee8b518b50d00bf3e5c0d8224b68ba865e4725a0b4.
 //
 // Solidity: event Undelegate(address indexed delegator, uint256 amount)
-func (_Events *EventsFilterer) WatchUndelegate(opts *bind.WatchOpts, sink chan<- *EventsUndelegate, delegator []common.Address) (event.Subscription, error) {
+func (_Abis *AbisFilterer) WatchUndelegate(opts *bind.WatchOpts, sink chan<- *AbisUndelegate, delegator []common.Address) (event.Subscription, error) {
 
 	var delegatorRule []interface{}
 	for _, delegatorItem := range delegator {
 		delegatorRule = append(delegatorRule, delegatorItem)
 	}
 
-	logs, sub, err := _Events.contract.WatchLogs(opts, "Undelegate", delegatorRule)
+	logs, sub, err := _Abis.contract.WatchLogs(opts, "Undelegate", delegatorRule)
 	if err != nil {
 		return nil, err
 	}
@@ -508,8 +529,8 @@ func (_Events *EventsFilterer) WatchUndelegate(opts *bind.WatchOpts, sink chan<-
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(EventsUndelegate)
-				if err := _Events.contract.UnpackLog(event, "Undelegate", log); err != nil {
+				event := new(AbisUndelegate)
+				if err := _Abis.contract.UnpackLog(event, "Undelegate", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -533,9 +554,9 @@ func (_Events *EventsFilterer) WatchUndelegate(opts *bind.WatchOpts, sink chan<-
 // ParseUndelegate is a log parse operation binding the contract event 0x17659a1d1f57d2e58b7063ee8b518b50d00bf3e5c0d8224b68ba865e4725a0b4.
 //
 // Solidity: event Undelegate(address indexed delegator, uint256 amount)
-func (_Events *EventsFilterer) ParseUndelegate(log types.Log) (*EventsUndelegate, error) {
-	event := new(EventsUndelegate)
-	if err := _Events.contract.UnpackLog(event, "Undelegate", log); err != nil {
+func (_Abis *AbisFilterer) ParseUndelegate(log types.Log) (*AbisUndelegate, error) {
+	event := new(AbisUndelegate)
+	if err := _Abis.contract.UnpackLog(event, "Undelegate", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

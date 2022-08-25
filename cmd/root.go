@@ -74,6 +74,7 @@ func NewRootCmd() *cobra.Command {
 	}
 	initRootCmd(rootCmd)
 	rootCmd.AddCommand(keys.Commands(app.DefaultNodeHome))
+
 	return rootCmd
 }
 

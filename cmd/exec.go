@@ -40,7 +40,7 @@ func NewExecuteUndelegationCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ethEndpoint, _ := cmd.Flags().GetString(flagEthEndpoint)
-			contractAddr, _ := cmd.Flags().GetString(flagContAddr)
+			contractAddr, _ := cmd.Flags().GetString(flagStaykingContAddr)
 			fromBlock, _ := cmd.Flags().GetInt64(flagFromHeight)
 			toBlock, _ := cmd.Flags().GetInt64(flagToHeight)
 			valString, _ := cmd.Flags().GetString(flagValidator)
@@ -65,10 +65,11 @@ func NewExecuteUndelegationCmd() *cobra.Command {
 	}
 
 	cmd.Flags().String(flagEthEndpoint, "wss://localhost:8546", "The ethereum https endpoint to query")
-	cmd.Flags().String(flagContAddr, "", "The contract address to query")
+	cmd.Flags().String(flagStaykingContAddr, "", "The contract address to query")
 	cmd.Flags().Int64(flagFromHeight, 0, "The earliest height to query")
 	cmd.Flags().Int64(flagToHeight, math.MaxInt64, "The latest height to query")
 	cmd.Flags().String(flagValidator, "", "The validator to undelegate from")
+	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
 	flags.AddTxFlagsToCmd(cmd)
 	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
@@ -91,7 +92,7 @@ func QueryUndelegationAmt(ethEndpoint, contAddr string, fromBlock, toBlock int64
 	contractAddress := common.HexToAddress(contAddr)
 
 	// TODO: make this a parameter
-	contractAbi, err := abi.JSON(strings.NewReader(abis.EventsMetaData.ABI))
+	contractAbi, err := abi.JSON(strings.NewReader(abis.AbisMetaData.ABI))
 	if err != nil {
 		log.Fatal(err)
 	}

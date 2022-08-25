@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/abis/stayking"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
 	"github.com/evmos/ethermint/rpc/backend"
@@ -13,7 +12,6 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 	"log"
 	"math/big"
-	"strings"
 )
 
 // Subscribe handles listeners for delegation, unbonding completion, and epoch ending events.
@@ -30,7 +28,7 @@ func Subscribe(contAddr string, cliCtx client.Context, flgs *flag.FlagSet) error
 	}
 
 	// prepare filters and queries
-	contractAbi, err := abi.JSON(strings.NewReader(stayking.StaykingMetaData.ABI))
+	contractAbi, err := stayking.StaykingMetaData.GetAbi()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,11 +57,11 @@ func Subscribe(contAddr string, cliCtx client.Context, flgs *flag.FlagSet) error
 
 	for {
 		select {
-		case tx := <-txChan:
+		case txn := <-txChan:
 			// get tendermint transaction data in struct of ResponseDeliverTx
-			txData, ok := tx.Data.(tmtypes.EventDataTx)
+			txData, ok := txn.Data.(tmtypes.EventDataTx)
 			if !ok {
-				log.Fatal("couldn't cast tx event data")
+				log.Fatal("couldn't cast txn event data")
 			}
 			// undelegate completion in endblocker in vanilla staking
 			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
@@ -88,6 +86,8 @@ func Subscribe(contAddr string, cliCtx client.Context, flgs *flag.FlagSet) error
 						}
 						amtInt := amt[0].(*big.Int)
 						UndelegationTracker.Add(amtInt)
+					} else {
+						log.Println("received something else! wow")
 					}
 				}
 			}
@@ -97,8 +97,13 @@ func Subscribe(contAddr string, cliCtx client.Context, flgs *flag.FlagSet) error
 			if !ok {
 				log.Fatal("couldn't cast block event data")
 			}
-			events := blockData.ResultBeginBlock.GetEvents()
-			msgs, err := GetMsgNewBlockEvents(cliCtx, flgs, events)
+			eventsBB := blockData.ResultBeginBlock.GetEvents()
+			msgsNewBlock, err := GetMsgNewBlockEvents(cliCtx, flgs, eventsBB)
+			if err != nil {
+				log.Fatal(err)
+			}
+			eventsEB := blockData.ResultEndBlock.GetEvents()
+			msgsEndBlock, err := GetMsgEndBlockEvents(cliCtx, flgs, eventsEB)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -106,8 +111,16 @@ func Subscribe(contAddr string, cliCtx client.Context, flgs *flag.FlagSet) error
 			// epoch starts/ends in beginblocker in evmos
 			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
 
-			// handle aggregated delegations
+			msgs := append(msgsNewBlock, msgsEndBlock...)
+			// if no delegation, wrap up tx construction here
 			if delegationTracker.Amount.Cmp(big.NewInt(0)) == 0 {
+				if len(msgs) == 0 {
+					continue
+				}
+				err = tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msgs...)
+				if err != nil {
+					log.Fatal(err)
+				}
 				continue
 			}
 			log.Printf("New Delegation detected! Total delegation: %s\n", delegationTracker.Amount)

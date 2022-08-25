@@ -26,7 +26,7 @@ func NewSubscribeCmd() *cobra.Command {
 		Short: `Subscribes to delegation,epoch end, unbonding events.`,
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			contractAddr, _ := cmd.Flags().GetString(flagContAddr)
+			contractAddr, _ := cmd.Flags().GetString(flagStaykingContAddr)
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -37,8 +37,11 @@ func NewSubscribeCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().String(flagContAddr, "", "The contract address to listen to")
+	cmd.Flags().String(flagStaykingContAddr, "", "The stayking contract address to listen to")
+	cmd.Flags().String(flagUnbondingEvmosContAddr, "", "The uEVMOS contract address to listen to")
 	cmd.Flags().String(flagValidator, "", "The validator to delegate to")
+	cmd.Flags().String(flagEthEndpoint, "http://localhost:8545", "The ethereum endpoint to connect to")
+	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
 
 	flags.AddTxFlagsToCmd(cmd)
 	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")

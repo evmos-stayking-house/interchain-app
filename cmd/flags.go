@@ -1,10 +1,11 @@
 package cmd
 
 var (
-	flagEthEndpoint    = "eth-endpoint"
-	flagCosmosEndpoint = "cosmos-endpoint"
-	flagContAddr       = "cont-addr"
-	flagFromHeight     = "from-height"
-	flagToHeight       = "to-height"
-	flagValidator      = "validator"
+	flagEthEndpoint            = "eth-endpoint"
+	flagCosmosEndpoint         = "cosmos-endpoint"
+	flagStaykingContAddr       = "cont-addr"
+	flagUnbondingEvmosContAddr = "uevmos-cont-addr"
+	flagFromHeight             = "from-height"
+	flagToHeight               = "to-height"
+	flagValidator              = "validator"
 )
