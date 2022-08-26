@@ -5,8 +5,8 @@ A collection of commands/services that are run to accomodate the CosmosSDK side 
 [Features]
  - [x] End of epoch auto compound (withdraw rewards & delegate to the same validator
  - [x] Staking event listener
- - [x] Unbonding batch handler
- - [ ] Unbonding event listener
+ - [x] Unbonding event listener & unbonded coins handler
+ - [ ] Unbonding batch handler
  - [ ] Total EVMOS asset feeder
  - [ ] Storage for bookkeeping (last undelegation tx, handled blocks etc)
 
@@ -52,3 +52,7 @@ Unbonding = Unstaking
 
 `scheduled-worker-golang serve subscribe --from <keyname> --cont-addr <stayking contract addr> --validator <validator addr>` will subscribe to delegation, unbonding, epoch end events.
 
+example (testnet):
+```bash
+make clean && make build && build/scheduled-worker-golang serve subscribe --from bob --cont-addr 0xd8A9159c111D0597AD1b475b8d7e5A217a1d1d05 --uevmos-cont-addr 0x8b9d5A75328b5F3167b04B42AD00092E7d6c485c --validator evmosvaloper1qvc6jej73armfs5fadn9lprx768f46d9wpd7d7 --broadcast-mode async  --eth-endpoint http://eth.bd.evmos.dev:8545 --node http://bd-evmos-testnet-state-sync-node-01.bdnodes.net:26657
+```
