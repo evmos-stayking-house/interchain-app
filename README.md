@@ -3,12 +3,13 @@
 A collection of commands/services that are run to accomodate the CosmosSDK side of Stayking Finance.
 
 [Features]
- - [x] End of epoch auto compound (withdraw rewards & delegate to the same validator
+ - [x] End of epoch auto compound (withdraw rewards & delegate to the same validator)
+   - [ ] distribute lender rewards & etc
  - [x] Staking event listener
- - [x] Unbonding event listener & unbonded coins handler
- - [ ] Unbonding batch handler
+ - [x] Unbonding event listener & unbonded coins handler (debug)
  - [ ] Total EVMOS asset feeder
  - [ ] Storage for bookkeeping (last undelegation tx, handled blocks etc)
+ - [ ] Unbonding batch handler (blocked by storage)
 
 [Terminologies]
 
