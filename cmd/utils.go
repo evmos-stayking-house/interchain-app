@@ -140,10 +140,6 @@ func getTotalBonded(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, error
 
 // ConstructEthTx constructs ethereum transaction from the context
 func ConstructEthTx(cliCtx client.Context, flgs *flag.FlagSet, contractAddr string, value *big.Int, inputData []byte) (signing.Tx, error) {
-	//inputData, err := contractABI.Pack(name, args...)
-	//if err != nil {
-	//	return nil, err
-	//}
 	ethEndPoint, err := flgs.GetString(flagEthEndpoint)
 	if err != nil {
 		return nil, err
@@ -155,9 +151,9 @@ func ConstructEthTx(cliCtx client.Context, flgs *flag.FlagSet, contractAddr stri
 	}
 
 	fromAddr := cliCtx.GetFromAddress()
-	fromAddrEth := common.BytesToAddress(fromAddr.Bytes())
+	fromAddrEth := common.BytesToAddress(fromAddr)
 
-	contAddr := common.BytesToAddress(common.Hex2Bytes(contractAddr))
+	contAddr := common.HexToAddress(contractAddr)
 	if err != nil {
 		return nil, err
 	}

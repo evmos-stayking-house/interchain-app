@@ -110,7 +110,7 @@ func QueryUndelegationAmt(ethEndpoint, contAddr string, fromBlock, toBlock int64
 			contractAddress,
 		},
 		Topics: [][]common.Hash{
-			{logUndelegateSigHash},
+			{LogUndelegateSigHash},
 		},
 	}
 

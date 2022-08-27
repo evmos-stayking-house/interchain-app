@@ -11,6 +11,7 @@ contract test {
 
     uint256 delegated;
     uint256 original_unbonding;
+    uint256 reserveratio_bps;
 
     event Stake(address indexed delegator, address indexed user, uint256 amount, uint256 share);
     event Unstake(address indexed delegator, address indexed user, uint256 amount, uint256 share);
@@ -41,11 +42,23 @@ contract test {
         return delegated;
     }
 
+        /**
+     * @dev Return value
+     * @return value of 'number'
+     */
+    function unbonded() public view returns (uint256){
+        return original_unbonding;
+    }
+
     function supplyUnbondedToken() payable public {
         /**
             @TODO
             maybe use delegate/undelegate tx ORACLE?
          */
-         original_unbonding = 123;
+         original_unbonding = msg.value;
+    }
+
+    function getAccruedValue(uint256 amount) public view returns (uint256) {
+        return amount / 2 * delegated;
     }
 }

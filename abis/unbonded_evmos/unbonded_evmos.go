@@ -30,7 +30,7 @@ var (
 
 // UnbondedEvmosMetaData contains all meta data concerning the UnbondedEvmos contract.
 var UnbondedEvmosMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockedIndex\",\"type\":\"uint256\"}],\"name\":\"Lock\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Supply\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"returned\",\"type\":\"uint256\"}],\"name\":\"Unlock\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"unbondingInterval\",\"type\":\"uint256\"}],\"name\":\"UpdateConfigs\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\"}],\"name\":\"UpdateMinterStatus\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"unbondingInterval_\",\"type\":\"uint256\"}],\"name\":\"__UnbondedEvmos_init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"getUnlockable\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"unlockable\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"lockedId\",\"type\":\"uint256\"}],\"name\":\"isKillable\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isMinter\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"lockedId\",\"type\":\"uint256\"}],\"name\":\"kill\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastUnbondedAt\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"lockedOf\",\"outputs\":[{\"internalType\":\"uint128\",\"name\":\"front\",\"type\":\"uint128\"},{\"internalType\":\"uint128\",\"name\":\"rear\",\"type\":\"uint128\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"locks\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"received\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"unlockedAt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"locksLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mintLockedToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"supplyUnbondedToken\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unbondLimit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unbondingInterval\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"minRepaid\",\"type\":\"uint256\"}],\"name\":\"unlock\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_unbondingInterval\",\"type\":\"uint256\"}],\"name\":\"updateConfigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\"}],\"name\":\"updateMinterStatus\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockedIndex\",\"type\":\"uint256\"}],\"name\":\"Lock\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Supply\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"returned\",\"type\":\"uint256\"}],\"name\":\"Unlock\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"unbondingInterval\",\"type\":\"uint256\"}],\"name\":\"UpdateConfigs\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\"}],\"name\":\"UpdateMinterStatus\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"unbondingInterval_\",\"type\":\"uint256\"}],\"name\":\"__UnbondedEvmos_init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"getUnlockable\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"unlockable\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"lockedId\",\"type\":\"uint256\"}],\"name\":\"isKillable\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isMinter\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"lockedId\",\"type\":\"uint256\"}],\"name\":\"kill\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastUnbondedAt\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"lockedOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"lastUnlocked\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"locks\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"received\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtShare\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"unlockedAt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"locksLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtShare\",\"type\":\"uint256\"}],\"name\":\"mintLockedToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"supplyUnbondedToken\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalShare\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unbondingInterval\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"minRepaid\",\"type\":\"uint256\"}],\"name\":\"unlock\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_unbondingInterval\",\"type\":\"uint256\"}],\"name\":\"updateConfigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\"}],\"name\":\"updateMinterStatus\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
 }
 
 // UnbondedEvmosABI is the input ABI used to generate the binding from.
@@ -381,57 +381,44 @@ func (_UnbondedEvmos *UnbondedEvmosCallerSession) LastUnbondedAt() (*big.Int, er
 
 // LockedOf is a free data retrieval call binding the contract method 0xa5f1e282.
 //
-// Solidity: function lockedOf(address ) view returns(uint128 front, uint128 rear)
-func (_UnbondedEvmos *UnbondedEvmosCaller) LockedOf(opts *bind.CallOpts, arg0 common.Address) (struct {
-	Front *big.Int
-	Rear  *big.Int
-}, error) {
+// Solidity: function lockedOf(address ) view returns(uint256 lastUnlocked)
+func (_UnbondedEvmos *UnbondedEvmosCaller) LockedOf(opts *bind.CallOpts, arg0 common.Address) (*big.Int, error) {
 	var out []interface{}
 	err := _UnbondedEvmos.contract.Call(opts, &out, "lockedOf", arg0)
 
-	outstruct := new(struct {
-		Front *big.Int
-		Rear  *big.Int
-	})
 	if err != nil {
-		return *outstruct, err
+		return *new(*big.Int), err
 	}
 
-	outstruct.Front = *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-	outstruct.Rear = *abi.ConvertType(out[1], new(*big.Int)).(**big.Int)
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
 
-	return *outstruct, err
+	return out0, err
 
 }
 
 // LockedOf is a free data retrieval call binding the contract method 0xa5f1e282.
 //
-// Solidity: function lockedOf(address ) view returns(uint128 front, uint128 rear)
-func (_UnbondedEvmos *UnbondedEvmosSession) LockedOf(arg0 common.Address) (struct {
-	Front *big.Int
-	Rear  *big.Int
-}, error) {
+// Solidity: function lockedOf(address ) view returns(uint256 lastUnlocked)
+func (_UnbondedEvmos *UnbondedEvmosSession) LockedOf(arg0 common.Address) (*big.Int, error) {
 	return _UnbondedEvmos.Contract.LockedOf(&_UnbondedEvmos.CallOpts, arg0)
 }
 
 // LockedOf is a free data retrieval call binding the contract method 0xa5f1e282.
 //
-// Solidity: function lockedOf(address ) view returns(uint128 front, uint128 rear)
-func (_UnbondedEvmos *UnbondedEvmosCallerSession) LockedOf(arg0 common.Address) (struct {
-	Front *big.Int
-	Rear  *big.Int
-}, error) {
+// Solidity: function lockedOf(address ) view returns(uint256 lastUnlocked)
+func (_UnbondedEvmos *UnbondedEvmosCallerSession) LockedOf(arg0 common.Address) (*big.Int, error) {
 	return _UnbondedEvmos.Contract.LockedOf(&_UnbondedEvmos.CallOpts, arg0)
 }
 
 // Locks is a free data retrieval call binding the contract method 0xf4dadc61.
 //
-// Solidity: function locks(uint256 ) view returns(bool received, address account, address vault, uint256 amount, uint256 unlockedAt)
+// Solidity: function locks(uint256 ) view returns(bool received, address account, address vault, uint256 amount, uint256 debtShare, uint256 unlockedAt)
 func (_UnbondedEvmos *UnbondedEvmosCaller) Locks(opts *bind.CallOpts, arg0 *big.Int) (struct {
 	Received   bool
 	Account    common.Address
 	Vault      common.Address
 	Amount     *big.Int
+	DebtShare  *big.Int
 	UnlockedAt *big.Int
 }, error) {
 	var out []interface{}
@@ -442,6 +429,7 @@ func (_UnbondedEvmos *UnbondedEvmosCaller) Locks(opts *bind.CallOpts, arg0 *big.
 		Account    common.Address
 		Vault      common.Address
 		Amount     *big.Int
+		DebtShare  *big.Int
 		UnlockedAt *big.Int
 	})
 	if err != nil {
@@ -452,7 +440,8 @@ func (_UnbondedEvmos *UnbondedEvmosCaller) Locks(opts *bind.CallOpts, arg0 *big.
 	outstruct.Account = *abi.ConvertType(out[1], new(common.Address)).(*common.Address)
 	outstruct.Vault = *abi.ConvertType(out[2], new(common.Address)).(*common.Address)
 	outstruct.Amount = *abi.ConvertType(out[3], new(*big.Int)).(**big.Int)
-	outstruct.UnlockedAt = *abi.ConvertType(out[4], new(*big.Int)).(**big.Int)
+	outstruct.DebtShare = *abi.ConvertType(out[4], new(*big.Int)).(**big.Int)
+	outstruct.UnlockedAt = *abi.ConvertType(out[5], new(*big.Int)).(**big.Int)
 
 	return *outstruct, err
 
@@ -460,12 +449,13 @@ func (_UnbondedEvmos *UnbondedEvmosCaller) Locks(opts *bind.CallOpts, arg0 *big.
 
 // Locks is a free data retrieval call binding the contract method 0xf4dadc61.
 //
-// Solidity: function locks(uint256 ) view returns(bool received, address account, address vault, uint256 amount, uint256 unlockedAt)
+// Solidity: function locks(uint256 ) view returns(bool received, address account, address vault, uint256 amount, uint256 debtShare, uint256 unlockedAt)
 func (_UnbondedEvmos *UnbondedEvmosSession) Locks(arg0 *big.Int) (struct {
 	Received   bool
 	Account    common.Address
 	Vault      common.Address
 	Amount     *big.Int
+	DebtShare  *big.Int
 	UnlockedAt *big.Int
 }, error) {
 	return _UnbondedEvmos.Contract.Locks(&_UnbondedEvmos.CallOpts, arg0)
@@ -473,12 +463,13 @@ func (_UnbondedEvmos *UnbondedEvmosSession) Locks(arg0 *big.Int) (struct {
 
 // Locks is a free data retrieval call binding the contract method 0xf4dadc61.
 //
-// Solidity: function locks(uint256 ) view returns(bool received, address account, address vault, uint256 amount, uint256 unlockedAt)
+// Solidity: function locks(uint256 ) view returns(bool received, address account, address vault, uint256 amount, uint256 debtShare, uint256 unlockedAt)
 func (_UnbondedEvmos *UnbondedEvmosCallerSession) Locks(arg0 *big.Int) (struct {
 	Received   bool
 	Account    common.Address
 	Vault      common.Address
 	Amount     *big.Int
+	DebtShare  *big.Int
 	UnlockedAt *big.Int
 }, error) {
 	return _UnbondedEvmos.Contract.Locks(&_UnbondedEvmos.CallOpts, arg0)
@@ -608,6 +599,68 @@ func (_UnbondedEvmos *UnbondedEvmosCallerSession) Symbol() (string, error) {
 	return _UnbondedEvmos.Contract.Symbol(&_UnbondedEvmos.CallOpts)
 }
 
+// TotalAmount is a free data retrieval call binding the contract method 0x1a39d8ef.
+//
+// Solidity: function totalAmount() view returns(uint256)
+func (_UnbondedEvmos *UnbondedEvmosCaller) TotalAmount(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _UnbondedEvmos.contract.Call(opts, &out, "totalAmount")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// TotalAmount is a free data retrieval call binding the contract method 0x1a39d8ef.
+//
+// Solidity: function totalAmount() view returns(uint256)
+func (_UnbondedEvmos *UnbondedEvmosSession) TotalAmount() (*big.Int, error) {
+	return _UnbondedEvmos.Contract.TotalAmount(&_UnbondedEvmos.CallOpts)
+}
+
+// TotalAmount is a free data retrieval call binding the contract method 0x1a39d8ef.
+//
+// Solidity: function totalAmount() view returns(uint256)
+func (_UnbondedEvmos *UnbondedEvmosCallerSession) TotalAmount() (*big.Int, error) {
+	return _UnbondedEvmos.Contract.TotalAmount(&_UnbondedEvmos.CallOpts)
+}
+
+// TotalShare is a free data retrieval call binding the contract method 0x026c4207.
+//
+// Solidity: function totalShare() view returns(uint256)
+func (_UnbondedEvmos *UnbondedEvmosCaller) TotalShare(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _UnbondedEvmos.contract.Call(opts, &out, "totalShare")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// TotalShare is a free data retrieval call binding the contract method 0x026c4207.
+//
+// Solidity: function totalShare() view returns(uint256)
+func (_UnbondedEvmos *UnbondedEvmosSession) TotalShare() (*big.Int, error) {
+	return _UnbondedEvmos.Contract.TotalShare(&_UnbondedEvmos.CallOpts)
+}
+
+// TotalShare is a free data retrieval call binding the contract method 0x026c4207.
+//
+// Solidity: function totalShare() view returns(uint256)
+func (_UnbondedEvmos *UnbondedEvmosCallerSession) TotalShare() (*big.Int, error) {
+	return _UnbondedEvmos.Contract.TotalShare(&_UnbondedEvmos.CallOpts)
+}
+
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
@@ -637,37 +690,6 @@ func (_UnbondedEvmos *UnbondedEvmosSession) TotalSupply() (*big.Int, error) {
 // Solidity: function totalSupply() view returns(uint256)
 func (_UnbondedEvmos *UnbondedEvmosCallerSession) TotalSupply() (*big.Int, error) {
 	return _UnbondedEvmos.Contract.TotalSupply(&_UnbondedEvmos.CallOpts)
-}
-
-// UnbondLimit is a free data retrieval call binding the contract method 0xf4209982.
-//
-// Solidity: function unbondLimit() view returns(uint256)
-func (_UnbondedEvmos *UnbondedEvmosCaller) UnbondLimit(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _UnbondedEvmos.contract.Call(opts, &out, "unbondLimit")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// UnbondLimit is a free data retrieval call binding the contract method 0xf4209982.
-//
-// Solidity: function unbondLimit() view returns(uint256)
-func (_UnbondedEvmos *UnbondedEvmosSession) UnbondLimit() (*big.Int, error) {
-	return _UnbondedEvmos.Contract.UnbondLimit(&_UnbondedEvmos.CallOpts)
-}
-
-// UnbondLimit is a free data retrieval call binding the contract method 0xf4209982.
-//
-// Solidity: function unbondLimit() view returns(uint256)
-func (_UnbondedEvmos *UnbondedEvmosCallerSession) UnbondLimit() (*big.Int, error) {
-	return _UnbondedEvmos.Contract.UnbondLimit(&_UnbondedEvmos.CallOpts)
 }
 
 // UnbondingInterval is a free data retrieval call binding the contract method 0xa4086a8f.
@@ -743,25 +765,25 @@ func (_UnbondedEvmos *UnbondedEvmosTransactorSession) Kill(lockedId *big.Int) (*
 	return _UnbondedEvmos.Contract.Kill(&_UnbondedEvmos.TransactOpts, lockedId)
 }
 
-// MintLockedToken is a paid mutator transaction binding the contract method 0x14e7a579.
+// MintLockedToken is a paid mutator transaction binding the contract method 0x633235d0.
 //
-// Solidity: function mintLockedToken(address to, address vault, uint256 amount) returns()
-func (_UnbondedEvmos *UnbondedEvmosTransactor) MintLockedToken(opts *bind.TransactOpts, to common.Address, vault common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _UnbondedEvmos.contract.Transact(opts, "mintLockedToken", to, vault, amount)
+// Solidity: function mintLockedToken(address to, address vault, uint256 amount, uint256 debtShare) returns()
+func (_UnbondedEvmos *UnbondedEvmosTransactor) MintLockedToken(opts *bind.TransactOpts, to common.Address, vault common.Address, amount *big.Int, debtShare *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.contract.Transact(opts, "mintLockedToken", to, vault, amount, debtShare)
 }
 
-// MintLockedToken is a paid mutator transaction binding the contract method 0x14e7a579.
+// MintLockedToken is a paid mutator transaction binding the contract method 0x633235d0.
 //
-// Solidity: function mintLockedToken(address to, address vault, uint256 amount) returns()
-func (_UnbondedEvmos *UnbondedEvmosSession) MintLockedToken(to common.Address, vault common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _UnbondedEvmos.Contract.MintLockedToken(&_UnbondedEvmos.TransactOpts, to, vault, amount)
+// Solidity: function mintLockedToken(address to, address vault, uint256 amount, uint256 debtShare) returns()
+func (_UnbondedEvmos *UnbondedEvmosSession) MintLockedToken(to common.Address, vault common.Address, amount *big.Int, debtShare *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.MintLockedToken(&_UnbondedEvmos.TransactOpts, to, vault, amount, debtShare)
 }
 
-// MintLockedToken is a paid mutator transaction binding the contract method 0x14e7a579.
+// MintLockedToken is a paid mutator transaction binding the contract method 0x633235d0.
 //
-// Solidity: function mintLockedToken(address to, address vault, uint256 amount) returns()
-func (_UnbondedEvmos *UnbondedEvmosTransactorSession) MintLockedToken(to common.Address, vault common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _UnbondedEvmos.Contract.MintLockedToken(&_UnbondedEvmos.TransactOpts, to, vault, amount)
+// Solidity: function mintLockedToken(address to, address vault, uint256 amount, uint256 debtShare) returns()
+func (_UnbondedEvmos *UnbondedEvmosTransactorSession) MintLockedToken(to common.Address, vault common.Address, amount *big.Int, debtShare *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.MintLockedToken(&_UnbondedEvmos.TransactOpts, to, vault, amount, debtShare)
 }
 
 // RenounceOwnership is a paid mutator transaction binding the contract method 0x715018a6.

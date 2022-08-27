@@ -26,14 +26,12 @@ func NewSubscribeCmd() *cobra.Command {
 		Short: `Subscribes to delegation,epoch end, unbonding events.`,
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			contractAddr, _ := cmd.Flags().GetString(flagStaykingContAddr)
-
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			return Subscribe(contractAddr, clientCtx, cmd.Flags())
+			return Subscribe(clientCtx, cmd.Flags())
 		},
 	}
 
@@ -50,6 +48,7 @@ func NewSubscribeCmd() *cobra.Command {
 	cmd.Flags().Set(flags.FlagGasAdjustment, "1.5")
 	cmd.Flags().Set(flags.FlagGas, "auto")
 	cmd.Flags().Set(flags.FlagGasPrices, "10000000000"+baseDenom)
+	cmd.Flags().Set(flags.FlagBroadcastMode, "sync")
 
 	return cmd
 }

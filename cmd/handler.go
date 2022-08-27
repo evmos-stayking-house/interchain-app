@@ -1,8 +1,14 @@
 package cmd
 
 import (
+	"context"
+	"fmt"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/abis"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/abis/stayking"
 	flag "github.com/spf13/pflag"
 	"github.com/tendermint/tendermint/abci/types"
 	"log"
@@ -33,7 +39,7 @@ func GetMsgNewBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []ty
 		if event.Type == "epoch_end" {
 			newMsgs, err := GetMsgsEpochEnd(cliCtx, flgs)
 			if err != nil {
-				return []sdk.Msg{}, nil
+				return nil, err
 			}
 			msgs = append(msgs, newMsgs...)
 
@@ -63,13 +69,34 @@ func GetMsgEndBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []ty
 
 // GetMsgsEpochEnd handles epoch ending by delegating the newly received coins
 func GetMsgsEpochEnd(cliCtx client.Context, flgs *flag.FlagSet) ([]sdk.Msg, error) {
-	toCompound, err := getStakingRewards(cliCtx, flgs)
+	rewardsEarned, err := getStakingRewards(cliCtx, flgs)
 	bondDenom, err := getBondDenom(cliCtx)
 	if err != nil {
-		return []sdk.Msg{}, err
+		return nil, err
 	}
 
-	delegateCoin := sdk.NewCoin(bondDenom, toCompound.AmountOf(bondDenom))
+	// calculate delegation and distribution amounts.
+	rewardAmt := rewardsEarned.AmountOf(bondDenom)
+	totalAmt, err := GetTotalAsset(cliCtx, flgs)
+	if err != nil {
+		return nil, err
+	}
+	distributionInt, err := getDistributionAmt(cliCtx, flgs, totalAmt.AmountOf(bondDenom))
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("Calculated distribution amount: %s\n", distributionInt.String())
+	delegateAmt := rewardAmt.Sub(sdk.NewIntFromBigInt(distributionInt))
+	var delegateCoin sdk.Coin
+	if !delegateAmt.IsNegative() {
+		delegateCoin = sdk.NewCoin(bondDenom, delegateAmt)
+	} else {
+		delegateCoin = sdk.NewCoin(bondDenom, sdk.ZeroInt())
+	}
+
+	// TODO: add Ethereum Tx to feed the total asset
+	err = accrueAsset(cliCtx, flgs, distributionInt)
+
 	if delegateCoin.Amount.Equal(sdk.ZeroInt()) {
 		// no delegation
 		return nil, nil
@@ -92,14 +119,99 @@ func GetMsgsEpochEnd(cliCtx client.Context, flgs *flag.FlagSet) ([]sdk.Msg, erro
 	delegateMsg := stakingtypes.NewMsgDelegate(delAddr, valAddr, delegateCoin)
 	msgs = append(msgs, delegateMsg)
 
-	// TODO: add Ethereum Tx to feed the total asset
-	// res, err := GetTotalAsset(cliCtx, flgs)
+	return msgs, err
+}
 
-	return msgs, nil
+func getDistributionAmt(cliCtx client.Context, flgs *flag.FlagSet, amt sdk.Int) (*big.Int, error) {
+	ethEndPoint, err := flgs.GetString(flagEthEndpoint)
+	if err != nil {
+		return nil, err
+	}
+	ethClient, err := ethclient.Dial(ethEndPoint)
+	if err != nil {
+		return nil, err
+	}
+	contAddrStr, err := flgs.GetString(flagStaykingContAddr)
+	if err != nil {
+		return nil, err
+	}
+	contAddr := common.HexToAddress(contAddrStr)
+	from := common.HexToAddress(cliCtx.From)
+	contractABI, err := stayking.StaykingMetaData.GetAbi()
+	if err != nil {
+		return nil, err
+	}
+	inputData, err := contractABI.Pack(getAccruedValueFuncName, amt.BigInt())
+	callMsg := ethereum.CallMsg{
+		From:      from,
+		To:        &contAddr,
+		Gas:       0,
+		GasPrice:  nil,
+		GasFeeCap: nil,
+		GasTipCap: nil,
+		Value:     nil,
+		Data:      inputData,
+	}
+
+	res, err := ethClient.CallContract(context.Background(), callMsg, nil)
+	if err != nil {
+		return nil, err
+	}
+	unpacked, err := contractABI.Unpack(getAccruedValueFuncName, res)
+	if err != nil {
+		return nil, err
+	}
+	return unpacked[0].(*big.Int), nil
+}
+
+func accrueAsset(cliCtx client.Context, flgs *flag.FlagSet, amt *big.Int) error {
+	totalAsset, err := GetTotalAsset(cliCtx, flgs)
+	if err != nil {
+		return err
+	}
+	totalAssetInt := totalAsset.AmountOf(baseDenom)
+	args := totalAssetInt.BigInt()
+
+	contractABI, err := stayking.StaykingMetaData.GetAbi()
+	if err != nil {
+		return err
+	}
+	inputData, err := contractABI.Pack(accrueFuncName, args)
+	if err != nil {
+		return err
+	}
+
+	contractAddr, err := flgs.GetString(flagStaykingContAddr)
+	if err != nil {
+		return err
+	}
+	res, err := ConstructEthTx(cliCtx, flgs, contractAddr, amt, inputData)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(res.GetMsgs())
+	return err
 }
 
 // GetMsgsUndelegateComplete handles completed unbondings by sending the unlocked coins to unbonding contract
 func GetMsgsUndelegateComplete(cliCtx client.Context, flgs *flag.FlagSet, event types.Event) ([]sdk.Msg, error) {
+	var unbondedCoin sdk.Coin
+	args := event.GetAttributes()
+	for _, a := range args {
+		if string(a.Key) == "amount" {
+			v := string(a.Value)
+			log.Println(string(a.Key))
+			log.Println(v)
+
+			var err error
+			unbondedCoin, err = sdk.ParseCoinNormalized(v)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	value := unbondedCoin.Amount.BigInt()
+
 	uEVMOSContAddr, err := flgs.GetString(flagUnbondingEvmosContAddr)
 	if err != nil {
 		return nil, err
@@ -108,24 +220,11 @@ func GetMsgsUndelegateComplete(cliCtx client.Context, flgs *flag.FlagSet, event 
 	if err != nil {
 		return nil, err
 	}
-	var unbondedCoin sdk.Coin
-	args := event.GetAttributes()
-	for _, a := range args {
-		if string(a.Key) == "amount" {
-			v := string(a.Value)
-			log.Println(string(a.Key))
-			log.Println(v)
-			unbondedCoin, err = sdk.ParseCoinNormalized(v)
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
-	value := unbondedCoin.Amount.BigInt()
-	inputData, err := contractABI.Pack("supplyUnbondedToken")
+	inputData, err := contractABI.Pack(supplyUnbondedTokenFuncName)
 	if err != nil {
 		return nil, err
 	}
+
 	_, err = ConstructEthTx(cliCtx, flgs, uEVMOSContAddr, value, inputData)
 	if err != nil {
 		return nil, err

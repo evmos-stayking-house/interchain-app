@@ -30,7 +30,7 @@ var (
 
 // AbisMetaData contains all meta data concerning the Abis contract.
 var AbisMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Stake\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Unstake\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"delegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"retrieve\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"supplyUnbondedToken\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"undelegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Stake\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Unstake\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"delegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"getAccruedValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"retrieve\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"supplyUnbondedToken\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unbonded\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"undelegate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // AbisABI is the input ABI used to generate the binding from.
@@ -179,6 +179,37 @@ func (_Abis *AbisTransactorRaw) Transact(opts *bind.TransactOpts, method string,
 	return _Abis.Contract.contract.Transact(opts, method, params...)
 }
 
+// GetAccruedValue is a free data retrieval call binding the contract method 0xe4175aee.
+//
+// Solidity: function getAccruedValue(uint256 amount) view returns(uint256)
+func (_Abis *AbisCaller) GetAccruedValue(opts *bind.CallOpts, amount *big.Int) (*big.Int, error) {
+	var out []interface{}
+	err := _Abis.contract.Call(opts, &out, "getAccruedValue", amount)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// GetAccruedValue is a free data retrieval call binding the contract method 0xe4175aee.
+//
+// Solidity: function getAccruedValue(uint256 amount) view returns(uint256)
+func (_Abis *AbisSession) GetAccruedValue(amount *big.Int) (*big.Int, error) {
+	return _Abis.Contract.GetAccruedValue(&_Abis.CallOpts, amount)
+}
+
+// GetAccruedValue is a free data retrieval call binding the contract method 0xe4175aee.
+//
+// Solidity: function getAccruedValue(uint256 amount) view returns(uint256)
+func (_Abis *AbisCallerSession) GetAccruedValue(amount *big.Int) (*big.Int, error) {
+	return _Abis.Contract.GetAccruedValue(&_Abis.CallOpts, amount)
+}
+
 // Retrieve is a free data retrieval call binding the contract method 0x2e64cec1.
 //
 // Solidity: function retrieve() view returns(uint256)
@@ -208,6 +239,37 @@ func (_Abis *AbisSession) Retrieve() (*big.Int, error) {
 // Solidity: function retrieve() view returns(uint256)
 func (_Abis *AbisCallerSession) Retrieve() (*big.Int, error) {
 	return _Abis.Contract.Retrieve(&_Abis.CallOpts)
+}
+
+// Unbonded is a free data retrieval call binding the contract method 0xc144cd11.
+//
+// Solidity: function unbonded() view returns(uint256)
+func (_Abis *AbisCaller) Unbonded(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _Abis.contract.Call(opts, &out, "unbonded")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// Unbonded is a free data retrieval call binding the contract method 0xc144cd11.
+//
+// Solidity: function unbonded() view returns(uint256)
+func (_Abis *AbisSession) Unbonded() (*big.Int, error) {
+	return _Abis.Contract.Unbonded(&_Abis.CallOpts)
+}
+
+// Unbonded is a free data retrieval call binding the contract method 0xc144cd11.
+//
+// Solidity: function unbonded() view returns(uint256)
+func (_Abis *AbisCallerSession) Unbonded() (*big.Int, error) {
+	return _Abis.Contract.Unbonded(&_Abis.CallOpts)
 }
 
 // Delegate is a paid mutator transaction binding the contract method 0x9fa6dd35.
