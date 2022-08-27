@@ -14,9 +14,6 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 	"log"
 	"math/big"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 // Subscribe handles listeners for delegation, unbonding completion, and epoch ending events.
@@ -32,12 +29,11 @@ func Subscribe(cliCtx client.Context, flgs *flag.FlagSet) error {
 		return err
 	}
 
+	// construct tx event websocket query
 	contractAddr, _ := flgs.GetString(flagStaykingContAddr)
 	query := "tm.event='Tx' AND ethereum_tx.recipient='" + contractAddr + "'"
-	// query := "tm.event='Tx'"
-	log.Println("constructed query: ", query)
 
-	// subscribe to new block events according to the query
+	// subscribe to tx events according to the query
 	txChan, err := epochClient.Subscribe(context.Background(), "",
 		query, 10000)
 	if err != nil {
@@ -56,16 +52,10 @@ func Subscribe(cliCtx client.Context, flgs *flag.FlagSet) error {
 		_ = types.Init(cliCtx)
 		storage, _ = types.ReadStore(cliCtx)
 	}
-	fmt.Println(storage)
+	fmt.Printf("Loaded stored status: %s\n", storage)
 
-	signals := make(chan os.Signal, 1)
-	done := make(chan bool)
-	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
-
-	var delegationTracker types.SafeTotal
-	delegationTracker.Amount = big.NewInt(0)
-	var undelegationTracker types.SafeTotal
-	undelegationTracker.Amount = big.NewInt(0)
+	pendingDelegations := storage.PendingDelegations
+	pendingUndelegations := storage.PendingUndelegations
 
 	for {
 		select {
@@ -79,11 +69,14 @@ func Subscribe(cliCtx client.Context, flgs *flag.FlagSet) error {
 			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
 			res := txData.GetResult()
 			for _, event := range res.Events {
-				err := handleContractEvent(event, &delegationTracker, &undelegationTracker)
-				if err != nil {
+				if err := handleContractEvent(event, pendingDelegations, pendingUndelegations); err != nil {
+					log.Fatal(err)
+				}
+				if err := types.WriteStore(cliCtx, storage); err != nil {
 					log.Fatal(err)
 				}
 			}
+			log.Printf("Storing updated status... %s\n", storage)
 		case nb := <-blockChan:
 			// get tendermint transaction data in struct of ResponseDeliverTx
 			blockData, ok := nb.Data.(tmtypes.EventDataNewBlock)
@@ -92,24 +85,27 @@ func Subscribe(cliCtx client.Context, flgs *flag.FlagSet) error {
 			}
 
 			eventsBB := blockData.ResultBeginBlock.GetEvents()
-			msgsNewBlock, err := GetMsgNewBlockEvents(cliCtx, flgs, eventsBB)
+			msgsNewBlock, err := GetMsgNewBlockEvents(cliCtx, flgs, eventsBB, &storage)
 			if err != nil {
 				log.Fatal(err)
 			}
 			eventsEB := blockData.ResultEndBlock.GetEvents()
-			msgsEndBlock, err := GetMsgEndBlockEvents(cliCtx, flgs, eventsEB)
+			msgsEndBlock, err := GetMsgEndBlockEvents(cliCtx, flgs, eventsEB, &storage)
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			// epoch starts/ends in beginblocker in evmos
 			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
-			log.Printf("detected new block! current delegation pending: %s\n", delegationTracker.Amount.String())
+			log.Printf("detected new block! current delegation pending: %s\n", pendingDelegations.String())
 			msgs := append(msgsNewBlock, msgsEndBlock...)
 			// if no delegation, wrap up tx construction here
-			if delegationTracker.Amount.Cmp(big.NewInt(0)) == 0 {
+			if pendingDelegations.Cmp(big.NewInt(0)) == 0 {
 				if len(msgs) == 0 {
 					continue
+				}
+				for _, m := range msgs {
+					fmt.Println(m.String())
 				}
 				err = tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msgs...)
 				if err != nil {
@@ -117,8 +113,8 @@ func Subscribe(cliCtx client.Context, flgs *flag.FlagSet) error {
 				}
 				continue
 			}
-			log.Printf("New Delegation detected! Total delegation: %s\n", delegationTracker.Amount)
-			toDelegate := delegationTracker.Clear()
+			log.Printf("New Delegation detected! Total delegation: %s\n", pendingDelegations.String())
+			toDelegate := pendingDelegations
 			delMsg, err := GetMsgDelegation(cliCtx, flgs, toDelegate)
 			if err != nil {
 				log.Fatal(err)
@@ -129,14 +125,17 @@ func Subscribe(cliCtx client.Context, flgs *flag.FlagSet) error {
 			if err != nil {
 				log.Fatal(err)
 			}
-		case _ = <-done:
-			log.Println("Program interrupted. Exiting...")
+			pendingDelegations = big.NewInt(0)
+			err = types.WriteStore(cliCtx, storage)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 	return nil
 }
 
-func handleContractEvent(event abcitypes.Event, delegationTrack, undelegationTrack *types.SafeTotal) error {
+func handleContractEvent(event abcitypes.Event, delegationTrack, undelegationTrack *big.Int) error {
 	// prepare filters and queries
 	contractAbi, err := stayking.StaykingMetaData.GetAbi()
 	if err != nil {
@@ -154,7 +153,7 @@ func handleContractEvent(event abcitypes.Event, delegationTrack, undelegationTra
 				log.Fatal(err)
 			}
 			amtInt := data[0].(*big.Int)
-			delegationTrack.Add(amtInt)
+			delegationTrack.Add(undelegationTrack, amtInt)
 			log.Printf("Detected delegation... %s\n", amtInt.String())
 		} else if l.Topics[0].Hex() == LogUndelegateSigHash.Hex() {
 			data, err := contractAbi.Unpack("Unstake", l.Data)
@@ -162,7 +161,7 @@ func handleContractEvent(event abcitypes.Event, delegationTrack, undelegationTra
 				log.Fatal(err)
 			}
 			amtInt := data[0].(*big.Int)
-			undelegationTrack.Add(amtInt)
+			undelegationTrack.Add(undelegationTrack, amtInt)
 			log.Printf("Detected undelegation... %s\n", amtInt.String())
 		} else {
 			log.Println("received some other tx to the contract. skipping...")

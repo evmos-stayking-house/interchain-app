@@ -57,6 +57,18 @@ func getStakingRewards(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, er
 	return res, nil
 }
 
+func getStakingParams(cliCtx client.Context, flgs *flag.FlagSet) (stakingtypes.Params, error) {
+	stakingQC := stakingtypes.NewQueryClient(cliCtx)
+
+	// construct delegation rewards query request
+	params := &stakingtypes.QueryParamsRequest{}
+	resp, err := stakingQC.Params(context.Background(), params)
+	if err != nil {
+		return stakingtypes.Params{}, err
+	}
+	return resp.GetParams(), nil
+}
+
 func getAccountBalances(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, error) {
 	fromAddr := cliCtx.GetFromAddress()
 	bankQC := banktypes.NewQueryClient(cliCtx)
@@ -65,7 +77,7 @@ func getAccountBalances(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, e
 	}
 	resp, err := bankQC.AllBalances(context.Background(), &req)
 	if err != nil {
-		return sdk.Coins{}, err
+		return nil, err
 	}
 	return resp.Balances, nil
 }
@@ -92,7 +104,7 @@ func getTotalUnbonding(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, er
 	}
 	resp, err := stakingQC.UnbondingDelegation(context.Background(), &req)
 	if err != nil {
-		return sdk.Coins{}, err
+		return nil, err
 	}
 	entries := resp.Unbond.Entries
 	total := sdk.ZeroInt()
@@ -103,7 +115,7 @@ func getTotalUnbonding(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, er
 	// construct coins
 	bondDenom, err := getBondDenom(cliCtx)
 	if err != nil {
-		return sdk.Coins{}, err
+		return nil, err
 	}
 	res := sdk.NewCoins(sdk.NewCoin(bondDenom, total))
 
@@ -218,7 +230,7 @@ func ConstructEthTx(cliCtx client.Context, flgs *flag.FlagSet, contractAddr stri
 	if err != nil {
 		return nil, err
 	}
-	log.Println(res)
+	log.Printf("successfully broadcasted EthTx: %s\n", res.TxHash)
 
 	return tx, nil
 }

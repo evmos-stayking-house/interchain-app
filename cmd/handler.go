@@ -2,17 +2,18 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/abis"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/abis/stayking"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
 	flag "github.com/spf13/pflag"
-	"github.com/tendermint/tendermint/abci/types"
+	tmtypes "github.com/tendermint/tendermint/abci/types"
 	"log"
 	"math/big"
+	"time"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -33,7 +34,7 @@ func GetMsgDelegation(cliCtx client.Context, flgs *flag.FlagSet, change *big.Int
 	return stakingtypes.NewMsgDelegate(delAddr, valAddr, coin), nil
 }
 
-func GetMsgNewBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []types.Event) ([]sdk.Msg, error) {
+func GetMsgNewBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []tmtypes.Event, store *types.Storage) ([]sdk.Msg, error) {
 	msgs := []sdk.Msg{}
 	for _, event := range events {
 		if event.Type == "epoch_end" {
@@ -51,7 +52,7 @@ func GetMsgNewBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []ty
 	return msgs, nil
 }
 
-func GetMsgEndBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []types.Event) ([]sdk.Msg, error) {
+func GetMsgEndBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []tmtypes.Event, store *types.Storage) ([]sdk.Msg, error) {
 	msgs := []sdk.Msg{}
 	for _, event := range events {
 		if event.Type == "complete_unbonding" {
@@ -64,7 +65,38 @@ func GetMsgEndBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []ty
 			log.Println("Unbonding completed. Processing Epoch end handling messages...")
 		}
 	}
-	return msgs, nil
+
+	// handle batch unbonding initiator at endblock message generator
+	msg, err := issueBatchUnbonding(cliCtx, flgs, store)
+	msgs = append(msgs, msg...)
+	return msgs, err
+}
+
+func issueBatchUnbonding(cliCtx client.Context, flgs *flag.FlagSet, store *types.Storage) ([]sdk.Msg, error) {
+	params, err := getStakingParams(cliCtx, flgs)
+	if err != nil {
+		return nil, err
+	}
+	intervalNano := params.UnbondingTime.Nanoseconds() / int64(params.MaxEntries)
+
+	durationSinceLast := time.Now().Sub(store.LastUndelegationTime)
+
+	if store.PendingUndelegations.Cmp(big.NewInt(0)) == 0 || durationSinceLast.Nanoseconds() <= intervalNano {
+		return nil, nil
+	}
+	from := cliCtx.GetFromAddress()
+	val, err := flgs.GetString(flagValidator)
+	if err != nil {
+		return nil, err
+	}
+	delCoins := sdk.NewCoin(params.BondDenom, sdk.NewIntFromBigInt(store.PendingUndelegations))
+	valAddr, err := sdk.ValAddressFromBech32(val)
+	if err != nil {
+		return nil, err
+	}
+	store.PendingUndelegations = big.NewInt(0)
+
+	return []sdk.Msg{stakingtypes.NewMsgUndelegate(from, valAddr, delCoins)}, nil
 }
 
 // GetMsgsEpochEnd handles epoch ending by delegating the newly received coins
@@ -136,14 +168,13 @@ func getDistributionAmt(cliCtx client.Context, flgs *flag.FlagSet, amt sdk.Int) 
 		return nil, err
 	}
 	contAddr := common.HexToAddress(contAddrStr)
-	from := common.HexToAddress(cliCtx.From)
 	contractABI, err := stayking.StaykingMetaData.GetAbi()
 	if err != nil {
 		return nil, err
 	}
 	inputData, err := contractABI.Pack(getAccruedValueFuncName, amt.BigInt())
 	callMsg := ethereum.CallMsg{
-		From:      from,
+		From:      common.Address{},
 		To:        &contAddr,
 		Gas:       0,
 		GasPrice:  nil,
@@ -185,16 +216,12 @@ func accrueAsset(cliCtx client.Context, flgs *flag.FlagSet, amt *big.Int) error 
 	if err != nil {
 		return err
 	}
-	res, err := ConstructEthTx(cliCtx, flgs, contractAddr, amt, inputData)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(res.GetMsgs())
+	_, err = ConstructEthTx(cliCtx, flgs, contractAddr, amt, inputData)
 	return err
 }
 
 // GetMsgsUndelegateComplete handles completed unbondings by sending the unlocked coins to unbonding contract
-func GetMsgsUndelegateComplete(cliCtx client.Context, flgs *flag.FlagSet, event types.Event) ([]sdk.Msg, error) {
+func GetMsgsUndelegateComplete(cliCtx client.Context, flgs *flag.FlagSet, event tmtypes.Event) ([]sdk.Msg, error) {
 	var unbondedCoin sdk.Coin
 	args := event.GetAttributes()
 	for _, a := range args {
@@ -237,22 +264,28 @@ func GetMsgsUndelegateComplete(cliCtx client.Context, flgs *flag.FlagSet, event 
 // which consists of coins on account + staked amount + unbonding amount + rewards
 func GetTotalAsset(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, error) {
 	ch1 := make(chan sdk.Coins, 4)
+	ch2 := make(chan error, 4)
 	go func() {
-		rewards, _ := getStakingRewards(cliCtx, flgs)
+		rewards, err := getStakingRewards(cliCtx, flgs)
 		ch1 <- rewards
+		ch2 <- err
 	}()
 	go func() {
-		balances, _ := getAccountBalances(cliCtx, flgs)
+		balances, err := getAccountBalances(cliCtx, flgs)
 		ch1 <- balances
+		ch2 <- err
 	}()
 	go func() {
-		unbonding, _ := getTotalUnbonding(cliCtx, flgs)
+		unbonding, err := getTotalUnbonding(cliCtx, flgs)
 		ch1 <- unbonding
+		ch2 <- err
 	}()
 	go func() {
-		bonded, _ := getTotalBonded(cliCtx, flgs)
+		bonded, err := getTotalBonded(cliCtx, flgs)
 		ch1 <- bonded
+		ch2 <- err
 	}()
+
 	var total sdk.Coins
 	for i := 0; i < 4; i++ {
 		total = total.Add(<-ch1...)

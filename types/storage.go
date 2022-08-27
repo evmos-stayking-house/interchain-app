@@ -22,6 +22,7 @@ type Storage struct {
 	// record of undelegations
 	LastUndelegationTime time.Time
 	PendingUndelegations *big.Int
+	PendingDelegations   *big.Int
 }
 
 func Init(cliCtx client.Context) error {
@@ -32,6 +33,8 @@ func Init(cliCtx client.Context) error {
 		DelegationProcessed:         []string{},
 		UndelegationProcessed:       []string{},
 		LastUndelegationTime:        time.Time{},
+		PendingUndelegations:        big.NewInt(0),
+		PendingDelegations:          big.NewInt(0),
 	}
 	return WriteStore(cliCtx, initialStorage)
 }
