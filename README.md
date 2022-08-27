@@ -4,12 +4,12 @@ A collection of commands/services that are run to accomodate the CosmosSDK side 
 
 [Features]
  - [x] End of epoch auto compound (withdraw rewards & delegate to the same validator)
-   - [ ] distribute lender rewards & etc
+   - [x] distribute lender rewards & etc
  - [x] Staking event listener
  - [x] Unbonding event listener & unbonded coins handler (debug)
- - [ ] Total EVMOS asset feeder
- - [ ] Storage for bookkeeping (last undelegation tx, handled blocks etc)
- - [ ] Unbonding batch handler (blocked by storage)
+ - [x] Total EVMOS asset feeder
+ - [x] Storage for bookkeeping (last undelegation tx, handled blocks etc)
+ - [x] Unbonding batch handler (blocked by storage)
 
 [Terminologies]
 
