@@ -31,3 +31,9 @@ $(BUILDDIR)/:
 clean:
 	rm -rf \
     $(BUILDDIR)/
+
+go.sum: go.mod
+	@echo "--> Ensure dependencies have not been modified"
+	go mod verify
+
+.PHONY: clean build release abi test
