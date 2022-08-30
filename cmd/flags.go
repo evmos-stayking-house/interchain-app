@@ -8,4 +8,5 @@ var (
 	flagFromHeight             = "from-height"
 	flagToHeight               = "to-height"
 	flagValidator              = "validator"
+	flagMaxRetry               = "retry"
 )

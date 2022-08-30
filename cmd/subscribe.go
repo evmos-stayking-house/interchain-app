@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/abis/stayking"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
 	"github.com/evmos/ethermint/rpc/backend"
@@ -54,8 +53,10 @@ func Subscribe(cliCtx client.Context, flgs *flag.FlagSet) error {
 	}
 	fmt.Printf("Loaded stored status: %s\n", storage)
 
-	pendingDelegations := storage.PendingDelegations
-	pendingUndelegations := storage.PendingUndelegations
+	numRetry, err := flgs.GetUint64(flagMaxRetry)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	for {
 		select {
@@ -69,7 +70,7 @@ func Subscribe(cliCtx client.Context, flgs *flag.FlagSet) error {
 			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
 			res := txData.GetResult()
 			for _, event := range res.Events {
-				if err := handleContractEvent(event, pendingDelegations, pendingUndelegations); err != nil {
+				if err := handleContractEvent(event, storage.PendingDelegations, storage.PendingDelegations); err != nil {
 					log.Fatal(err)
 				}
 				if err := types.WriteStore(cliCtx, storage); err != nil {
@@ -97,35 +98,32 @@ func Subscribe(cliCtx client.Context, flgs *flag.FlagSet) error {
 
 			// epoch starts/ends in beginblocker in evmos
 			// https://github.com/evmos/evmos/blob/9aba6f4fd4c3bc6772c503a2c459111065aba3d8/x/epochs/keeper/abci.go#L14-L14
-			log.Printf("detected new block! current delegation pending: %s\n", pendingDelegations.String())
+			log.Printf("detected new block! current delegation pending: %s\n", storage.PendingDelegations.String())
 			msgs := append(msgsNewBlock, msgsEndBlock...)
 			// if no delegation, wrap up tx construction here
-			if pendingDelegations.Cmp(big.NewInt(0)) == 0 {
+			if storage.PendingDelegations.Cmp(big.NewInt(0)) == 0 {
 				if len(msgs) == 0 {
 					continue
 				}
-				for _, m := range msgs {
-					fmt.Println(m.String())
-				}
-				err = tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msgs...)
+				err = TrySubmitTxMaxRetry(numRetry, cliCtx, flgs, msgs...)
 				if err != nil {
 					log.Fatal(err)
 				}
 				continue
 			}
-			log.Printf("New Delegation detected! Total delegation: %s\n", pendingDelegations.String())
-			toDelegate := pendingDelegations
+			log.Printf("New Delegation detected! Total delegation: %s\n", storage.PendingDelegations.String())
+			toDelegate := storage.PendingDelegations
 			delMsg, err := GetMsgDelegation(cliCtx, flgs, toDelegate)
 			if err != nil {
 				log.Fatal(err)
 			}
 			log.Printf("Delegating received tokens: %s\n", toDelegate.String())
 			msgs = append(msgs, delMsg)
-			err = tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msgs...)
+			err = TrySubmitTxMaxRetry(numRetry, cliCtx, flgs, msgs...)
 			if err != nil {
 				log.Fatal(err)
 			}
-			pendingDelegations = big.NewInt(0)
+			storage.PendingDelegations = big.NewInt(0)
 			err = types.WriteStore(cliCtx, storage)
 			if err != nil {
 				log.Fatal(err)

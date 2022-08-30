@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/signing"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -18,6 +19,7 @@ import (
 	flag "github.com/spf13/pflag"
 	"log"
 	"math/big"
+	"time"
 )
 
 func getBondDenom(cliCtx client.Context) (string, error) {
@@ -226,11 +228,22 @@ func ConstructEthTx(cliCtx client.Context, flgs *flag.FlagSet, contractAddr stri
 	}
 
 	// broadcast to a Tendermint node right away, since ethereum Txs have to be in its own tx
-	res, err := cliCtx.BroadcastTxSync(txBytes)
+	res, err := cliCtx.BroadcastTxCommit(txBytes)
 	if err != nil {
 		return nil, err
 	}
 	log.Printf("successfully broadcasted EthTx: %s\n", res.TxHash)
 
 	return tx, nil
+}
+
+func TrySubmitTxMaxRetry(numRetry uint64, cliCtx client.Context, flgs *flag.FlagSet, msgs ...sdk.Msg) (err error) {
+	var i uint64
+	for i = 0; i < numRetry; i++ {
+		time.Sleep(time.Second)
+		if err = tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msgs...); err == nil {
+			return
+		}
+	}
+	return err
 }

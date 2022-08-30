@@ -68,8 +68,13 @@ func GetMsgEndBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []tm
 
 	// handle batch unbonding initiator at endblock message generator
 	msg, err := issueBatchUnbonding(cliCtx, flgs, store)
+	if err != nil {
+		return []sdk.Msg{}, err
+	}
 	msgs = append(msgs, msg...)
-	return msgs, err
+	store.LastUndelegationTime = time.Now()
+
+	return msgs, types.WriteStore(cliCtx, *store)
 }
 
 func issueBatchUnbonding(cliCtx client.Context, flgs *flag.FlagSet, store *types.Storage) ([]sdk.Msg, error) {
@@ -95,8 +100,9 @@ func issueBatchUnbonding(cliCtx client.Context, flgs *flag.FlagSet, store *types
 		return nil, err
 	}
 	store.PendingUndelegations = big.NewInt(0)
+	err = types.WriteStore(cliCtx, *store)
 
-	return []sdk.Msg{stakingtypes.NewMsgUndelegate(from, valAddr, delCoins)}, nil
+	return []sdk.Msg{stakingtypes.NewMsgUndelegate(from, valAddr, delCoins)}, err
 }
 
 // GetMsgsEpochEnd handles epoch ending by delegating the newly received coins

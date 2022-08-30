@@ -40,15 +40,15 @@ func NewSubscribeCmd() *cobra.Command {
 	cmd.Flags().String(flagValidator, "", "The validator to delegate to")
 	cmd.Flags().String(flagEthEndpoint, "http://localhost:8545", "The ethereum endpoint to connect to")
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
+	cmd.Flags().Uint64P(flagMaxRetry, "r", 5, "The number of retries to broadcast a tx")
 
 	flags.AddTxFlagsToCmd(cmd)
 	cmd.Flags().Set(flags.FlagSkipConfirmation, "true")
 	cmd.Flags().Set(flags.FlagBroadcastMode, "block")
 	cmd.Flags().Set(flags.FlagKeyringBackend, "test")
-	cmd.Flags().Set(flags.FlagGasAdjustment, "1.5")
-	cmd.Flags().Set(flags.FlagGas, "auto")
-	cmd.Flags().Set(flags.FlagGasPrices, "10000000000"+baseDenom)
-	cmd.Flags().Set(flags.FlagBroadcastMode, "sync")
+	//cmd.Flags().Set(flags.FlagGasAdjustment, "1.5")
+	//cmd.Flags().Set(flags.FlagGas, "auto")
+	//cmd.Flags().Set(flags.FlagGasPrices, "100000000"+baseDenom)
 
 	return cmd
 }
