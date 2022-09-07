@@ -229,7 +229,7 @@ func ConstructEthTx(cliCtx client.Context, flgs *flag.FlagSet, contractAddr stri
 func TrySubmitTxMaxRetry(numRetry uint64, cliCtx client.Context, flgs *flag.FlagSet, msgs ...sdk.Msg) (err error) {
 	var i uint64
 	for i = 0; i < numRetry; i++ {
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 1)
 		if err = tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msgs...); err == nil {
 			return
 		}
@@ -241,7 +241,7 @@ func TrySubmitTxMaxRetry(numRetry uint64, cliCtx client.Context, flgs *flag.Flag
 func TrySubmitEthTxMaxRetry(numRetry uint64, cliCtx client.Context, txBytes []byte) (res *sdk.TxResponse, err error) {
 	var i uint64
 	for i = 0; i < numRetry; i++ {
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 1)
 		if res, err = cliCtx.BroadcastTxCommit(txBytes); err == nil {
 			return
 		}

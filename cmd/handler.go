@@ -3,8 +3,11 @@ package cmd
 import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/abis"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/abis/stayking"
 	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
+	"github.com/evmos/ethermint/rpc/backend"
 	flag "github.com/spf13/pflag"
+	abcitypes "github.com/tendermint/tendermint/abci/types"
 	tmtypes "github.com/tendermint/tendermint/abci/types"
 	"log"
 	"math/big"
@@ -13,6 +16,49 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
+
+func handleContractEvent(event abcitypes.Event, store *types.Storage) error {
+	// prepare filters and queries
+	contractAbi, err := stayking.StaykingMetaData.GetAbi()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	logs, err := backend.ParseTxLogsFromEvent(event)
+	if err != nil {
+		return err
+	}
+	for _, l := range logs {
+		if l.Topics[0].Hex() == LogDelegateSigHash.Hex() {
+			data, err := contractAbi.Unpack("Stake", l.Data)
+			if err != nil {
+				log.Fatal(err)
+			}
+			amtInt := data[0].(*big.Int)
+			store.PendingDelegations = store.PendingDelegations.Add(store.PendingDelegations, amtInt)
+			log.Printf("Detected delegation... %s\n", amtInt.String())
+		} else if l.Topics[0].Hex() == LogUndelegateSigHash.Hex() {
+			data, err := contractAbi.Unpack("Unstake", l.Data)
+			if err != nil {
+				log.Fatal(err)
+			}
+			amtInt := data[0].(*big.Int)
+			store.PendingUndelegations = store.PendingUndelegations.Add(store.PendingUndelegations, amtInt)
+			log.Printf("Detected undelegation... %s\n", amtInt.String())
+		} else if l.Topics[0].Hex() == LogAccrueSigHash.Hex() {
+			data, err := contractAbi.Unpack("Accrue", l.Data)
+			if err != nil {
+				log.Fatal(err)
+			}
+			amtInt := data[0].(*big.Int)
+			store.PendingDelegations = store.PendingDelegations.Add(store.PendingDelegations, amtInt)
+			log.Printf("Detected compound... %s\n", amtInt.String())
+		} else {
+			log.Println("received some other event from the contract. skipping...")
+		}
+	}
+	return nil
+}
 
 // GetMsgDelegation unwraps the received EVMOS and delegates it to earn staking rewards.
 func GetMsgDelegation(cliCtx client.Context, flgs *flag.FlagSet, change *big.Int) (sdk.Msg, error) {
@@ -50,13 +96,12 @@ func GetMsgEndBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []tm
 	msgs := []sdk.Msg{}
 	for _, event := range events {
 		if event.Type == "complete_unbonding" {
+			log.Println("Unbonding completed. Processing complete unbonding handling messages...")
 			newMsgs, err := GetMsgsUndelegateComplete(cliCtx, flgs, event)
 			if err != nil {
 				return []sdk.Msg{}, err
 			}
 			msgs = append(msgs, newMsgs...)
-
-			log.Println("Unbonding completed. Processing complete unbonding handling messages...")
 		}
 	}
 
@@ -66,8 +111,6 @@ func GetMsgEndBlockEvents(cliCtx client.Context, flgs *flag.FlagSet, events []tm
 		return []sdk.Msg{}, err
 	}
 	msgs = append(msgs, msg...)
-	store.LastUndelegationTime = time.Now()
-	store.PendingUndelegations = big.NewInt(0)
 
 	return msgs, types.WriteStore(cliCtx, *store)
 }
@@ -82,8 +125,9 @@ func issueBatchUnbonding(cliCtx client.Context, flgs *flag.FlagSet, store *types
 	durationSinceLast := time.Now().Sub(store.LastUndelegationTime)
 
 	if store.PendingUndelegations.Cmp(big.NewInt(0)) == 0 || durationSinceLast.Nanoseconds() <= intervalNano {
-		return nil, nil
+		return []sdk.Msg{}, nil
 	}
+	log.Println("issuing batch unbonding...")
 	from := cliCtx.GetFromAddress()
 	val, err := flgs.GetString(flagValidator)
 	if err != nil {
@@ -95,6 +139,7 @@ func issueBatchUnbonding(cliCtx client.Context, flgs *flag.FlagSet, store *types
 		return nil, err
 	}
 	store.PendingUndelegations = big.NewInt(0)
+	store.LastUndelegationTime = time.Now()
 	err = types.WriteStore(cliCtx, *store)
 
 	return []sdk.Msg{stakingtypes.NewMsgUndelegate(from, valAddr, delCoins)}, err

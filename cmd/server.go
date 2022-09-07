@@ -40,8 +40,8 @@ func NewSubscribeCmd() *cobra.Command {
 	cmd.Flags().String(flagValidator, "", "The validator to delegate to")
 	cmd.Flags().String(flagEthEndpoint, "http://localhost:8545", "The ethereum endpoint to connect to")
 	cmd.PersistentFlags().String(flags.FlagChainID, "", "The network chain ID")
-	// usually 2 is enough to recover from not-updated state reference, but leave 1 more for buffer.
-	cmd.Flags().Uint64P(flagMaxRetry, "r", 3, "The number of retries to broadcast a tx")
+	// usually 2 is enough to recover from not-updated state reference, but leave some more for buffer.
+	cmd.Flags().Uint64P(flagMaxRetry, "r", 10, "The number of retries to broadcast a tx")
 	cmd.Flags().Uint64P(flagEthGasPrice, "g", 10000000000, "The ethereum gas price to input")
 
 	flags.AddTxFlagsToCmd(cmd)
