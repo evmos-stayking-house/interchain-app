@@ -28,9 +28,19 @@ var (
 	_ = event.NewSubscription
 )
 
+// UnbondedEvmosLocked is an auto generated low-level Go binding around an user-defined struct.
+type UnbondedEvmosLocked struct {
+	Received   bool
+	Account    common.Address
+	Vault      common.Address
+	Amount     *big.Int
+	DebtShare  *big.Int
+	UnlockedAt *big.Int
+}
+
 // UnbondedEvmosMetaData contains all meta data concerning the UnbondedEvmos contract.
 var UnbondedEvmosMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockedIndex\",\"type\":\"uint256\"}],\"name\":\"Lock\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Supply\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"returned\",\"type\":\"uint256\"}],\"name\":\"Unlock\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"unbondingInterval\",\"type\":\"uint256\"}],\"name\":\"UpdateConfigs\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\"}],\"name\":\"UpdateMinterStatus\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"unbondingInterval_\",\"type\":\"uint256\"}],\"name\":\"__UnbondedEvmos_init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"getUnlockable\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"unlockable\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"lockedId\",\"type\":\"uint256\"}],\"name\":\"isKillable\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isMinter\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"lockedId\",\"type\":\"uint256\"}],\"name\":\"kill\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastUnbondedAt\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"lockedOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"lastUnlocked\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"locks\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"received\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtShare\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"unlockedAt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"locksLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtShare\",\"type\":\"uint256\"}],\"name\":\"mintLockedToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"supplyUnbondedToken\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalShare\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unbondingInterval\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"minRepaid\",\"type\":\"uint256\"}],\"name\":\"unlock\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_unbondingInterval\",\"type\":\"uint256\"}],\"name\":\"updateConfigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\"}],\"name\":\"updateMinterStatus\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockedIndex\",\"type\":\"uint256\"}],\"name\":\"Lock\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Supply\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"returned\",\"type\":\"uint256\"}],\"name\":\"Unlock\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"unbondingInterval\",\"type\":\"uint256\"}],\"name\":\"UpdateConfigs\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\"}],\"name\":\"UpdateMinterStatus\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"unbondingInterval_\",\"type\":\"uint256\"}],\"name\":\"__UnbondedEvmos_init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"subtractedValue\",\"type\":\"uint256\"}],\"name\":\"decreaseAllowance\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"getUnlockable\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"unlockable\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"addedValue\",\"type\":\"uint256\"}],\"name\":\"increaseAllowance\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"lockedId\",\"type\":\"uint256\"}],\"name\":\"isKillable\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"isMinter\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"lockedId\",\"type\":\"uint256\"}],\"name\":\"kill\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastUnbondedAt\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"lockedList\",\"outputs\":[{\"components\":[{\"internalType\":\"bool\",\"name\":\"received\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtShare\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"unlockedAt\",\"type\":\"uint256\"}],\"internalType\":\"structUnbondedEvmos.Locked[]\",\"name\":\"accountLocks\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"lockedOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"nextUnlocked\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"locks\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"received\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtShare\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"unlockedAt\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"locksLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtShare\",\"type\":\"uint256\"}],\"name\":\"mintLockedToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"supplyUnbondedToken\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unbondingInterval\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"unlock\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_unbondingInterval\",\"type\":\"uint256\"}],\"name\":\"updateConfigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\"}],\"name\":\"updateMinterStatus\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
 }
 
 // UnbondedEvmosABI is the input ABI used to generate the binding from.
@@ -177,6 +187,37 @@ func (_UnbondedEvmos *UnbondedEvmosTransactorRaw) Transfer(opts *bind.TransactOp
 // Transact invokes the (paid) contract method with params as input values.
 func (_UnbondedEvmos *UnbondedEvmosTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
 	return _UnbondedEvmos.Contract.contract.Transact(opts, method, params...)
+}
+
+// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
+//
+// Solidity: function allowance(address owner, address spender) view returns(uint256)
+func (_UnbondedEvmos *UnbondedEvmosCaller) Allowance(opts *bind.CallOpts, owner common.Address, spender common.Address) (*big.Int, error) {
+	var out []interface{}
+	err := _UnbondedEvmos.contract.Call(opts, &out, "allowance", owner, spender)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
+//
+// Solidity: function allowance(address owner, address spender) view returns(uint256)
+func (_UnbondedEvmos *UnbondedEvmosSession) Allowance(owner common.Address, spender common.Address) (*big.Int, error) {
+	return _UnbondedEvmos.Contract.Allowance(&_UnbondedEvmos.CallOpts, owner, spender)
+}
+
+// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
+//
+// Solidity: function allowance(address owner, address spender) view returns(uint256)
+func (_UnbondedEvmos *UnbondedEvmosCallerSession) Allowance(owner common.Address, spender common.Address) (*big.Int, error) {
+	return _UnbondedEvmos.Contract.Allowance(&_UnbondedEvmos.CallOpts, owner, spender)
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
@@ -379,9 +420,40 @@ func (_UnbondedEvmos *UnbondedEvmosCallerSession) LastUnbondedAt() (*big.Int, er
 	return _UnbondedEvmos.Contract.LastUnbondedAt(&_UnbondedEvmos.CallOpts)
 }
 
+// LockedList is a free data retrieval call binding the contract method 0x1a921b3e.
+//
+// Solidity: function lockedList(address account) view returns((bool,address,address,uint256,uint256,uint256)[] accountLocks)
+func (_UnbondedEvmos *UnbondedEvmosCaller) LockedList(opts *bind.CallOpts, account common.Address) ([]UnbondedEvmosLocked, error) {
+	var out []interface{}
+	err := _UnbondedEvmos.contract.Call(opts, &out, "lockedList", account)
+
+	if err != nil {
+		return *new([]UnbondedEvmosLocked), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([]UnbondedEvmosLocked)).(*[]UnbondedEvmosLocked)
+
+	return out0, err
+
+}
+
+// LockedList is a free data retrieval call binding the contract method 0x1a921b3e.
+//
+// Solidity: function lockedList(address account) view returns((bool,address,address,uint256,uint256,uint256)[] accountLocks)
+func (_UnbondedEvmos *UnbondedEvmosSession) LockedList(account common.Address) ([]UnbondedEvmosLocked, error) {
+	return _UnbondedEvmos.Contract.LockedList(&_UnbondedEvmos.CallOpts, account)
+}
+
+// LockedList is a free data retrieval call binding the contract method 0x1a921b3e.
+//
+// Solidity: function lockedList(address account) view returns((bool,address,address,uint256,uint256,uint256)[] accountLocks)
+func (_UnbondedEvmos *UnbondedEvmosCallerSession) LockedList(account common.Address) ([]UnbondedEvmosLocked, error) {
+	return _UnbondedEvmos.Contract.LockedList(&_UnbondedEvmos.CallOpts, account)
+}
+
 // LockedOf is a free data retrieval call binding the contract method 0xa5f1e282.
 //
-// Solidity: function lockedOf(address ) view returns(uint256 lastUnlocked)
+// Solidity: function lockedOf(address ) view returns(uint256 nextUnlocked)
 func (_UnbondedEvmos *UnbondedEvmosCaller) LockedOf(opts *bind.CallOpts, arg0 common.Address) (*big.Int, error) {
 	var out []interface{}
 	err := _UnbondedEvmos.contract.Call(opts, &out, "lockedOf", arg0)
@@ -398,14 +470,14 @@ func (_UnbondedEvmos *UnbondedEvmosCaller) LockedOf(opts *bind.CallOpts, arg0 co
 
 // LockedOf is a free data retrieval call binding the contract method 0xa5f1e282.
 //
-// Solidity: function lockedOf(address ) view returns(uint256 lastUnlocked)
+// Solidity: function lockedOf(address ) view returns(uint256 nextUnlocked)
 func (_UnbondedEvmos *UnbondedEvmosSession) LockedOf(arg0 common.Address) (*big.Int, error) {
 	return _UnbondedEvmos.Contract.LockedOf(&_UnbondedEvmos.CallOpts, arg0)
 }
 
 // LockedOf is a free data retrieval call binding the contract method 0xa5f1e282.
 //
-// Solidity: function lockedOf(address ) view returns(uint256 lastUnlocked)
+// Solidity: function lockedOf(address ) view returns(uint256 nextUnlocked)
 func (_UnbondedEvmos *UnbondedEvmosCallerSession) LockedOf(arg0 common.Address) (*big.Int, error) {
 	return _UnbondedEvmos.Contract.LockedOf(&_UnbondedEvmos.CallOpts, arg0)
 }
@@ -599,68 +671,6 @@ func (_UnbondedEvmos *UnbondedEvmosCallerSession) Symbol() (string, error) {
 	return _UnbondedEvmos.Contract.Symbol(&_UnbondedEvmos.CallOpts)
 }
 
-// TotalAmount is a free data retrieval call binding the contract method 0x1a39d8ef.
-//
-// Solidity: function totalAmount() view returns(uint256)
-func (_UnbondedEvmos *UnbondedEvmosCaller) TotalAmount(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _UnbondedEvmos.contract.Call(opts, &out, "totalAmount")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// TotalAmount is a free data retrieval call binding the contract method 0x1a39d8ef.
-//
-// Solidity: function totalAmount() view returns(uint256)
-func (_UnbondedEvmos *UnbondedEvmosSession) TotalAmount() (*big.Int, error) {
-	return _UnbondedEvmos.Contract.TotalAmount(&_UnbondedEvmos.CallOpts)
-}
-
-// TotalAmount is a free data retrieval call binding the contract method 0x1a39d8ef.
-//
-// Solidity: function totalAmount() view returns(uint256)
-func (_UnbondedEvmos *UnbondedEvmosCallerSession) TotalAmount() (*big.Int, error) {
-	return _UnbondedEvmos.Contract.TotalAmount(&_UnbondedEvmos.CallOpts)
-}
-
-// TotalShare is a free data retrieval call binding the contract method 0x026c4207.
-//
-// Solidity: function totalShare() view returns(uint256)
-func (_UnbondedEvmos *UnbondedEvmosCaller) TotalShare(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _UnbondedEvmos.contract.Call(opts, &out, "totalShare")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// TotalShare is a free data retrieval call binding the contract method 0x026c4207.
-//
-// Solidity: function totalShare() view returns(uint256)
-func (_UnbondedEvmos *UnbondedEvmosSession) TotalShare() (*big.Int, error) {
-	return _UnbondedEvmos.Contract.TotalShare(&_UnbondedEvmos.CallOpts)
-}
-
-// TotalShare is a free data retrieval call binding the contract method 0x026c4207.
-//
-// Solidity: function totalShare() view returns(uint256)
-func (_UnbondedEvmos *UnbondedEvmosCallerSession) TotalShare() (*big.Int, error) {
-	return _UnbondedEvmos.Contract.TotalShare(&_UnbondedEvmos.CallOpts)
-}
-
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
@@ -742,6 +752,69 @@ func (_UnbondedEvmos *UnbondedEvmosSession) UnbondedEvmosInit(unbondingInterval_
 // Solidity: function __UnbondedEvmos_init(uint256 unbondingInterval_) returns()
 func (_UnbondedEvmos *UnbondedEvmosTransactorSession) UnbondedEvmosInit(unbondingInterval_ *big.Int) (*types.Transaction, error) {
 	return _UnbondedEvmos.Contract.UnbondedEvmosInit(&_UnbondedEvmos.TransactOpts, unbondingInterval_)
+}
+
+// Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
+//
+// Solidity: function approve(address spender, uint256 amount) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactor) Approve(opts *bind.TransactOpts, spender common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.contract.Transact(opts, "approve", spender, amount)
+}
+
+// Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
+//
+// Solidity: function approve(address spender, uint256 amount) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosSession) Approve(spender common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.Approve(&_UnbondedEvmos.TransactOpts, spender, amount)
+}
+
+// Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
+//
+// Solidity: function approve(address spender, uint256 amount) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactorSession) Approve(spender common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.Approve(&_UnbondedEvmos.TransactOpts, spender, amount)
+}
+
+// DecreaseAllowance is a paid mutator transaction binding the contract method 0xa457c2d7.
+//
+// Solidity: function decreaseAllowance(address spender, uint256 subtractedValue) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactor) DecreaseAllowance(opts *bind.TransactOpts, spender common.Address, subtractedValue *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.contract.Transact(opts, "decreaseAllowance", spender, subtractedValue)
+}
+
+// DecreaseAllowance is a paid mutator transaction binding the contract method 0xa457c2d7.
+//
+// Solidity: function decreaseAllowance(address spender, uint256 subtractedValue) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosSession) DecreaseAllowance(spender common.Address, subtractedValue *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.DecreaseAllowance(&_UnbondedEvmos.TransactOpts, spender, subtractedValue)
+}
+
+// DecreaseAllowance is a paid mutator transaction binding the contract method 0xa457c2d7.
+//
+// Solidity: function decreaseAllowance(address spender, uint256 subtractedValue) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactorSession) DecreaseAllowance(spender common.Address, subtractedValue *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.DecreaseAllowance(&_UnbondedEvmos.TransactOpts, spender, subtractedValue)
+}
+
+// IncreaseAllowance is a paid mutator transaction binding the contract method 0x39509351.
+//
+// Solidity: function increaseAllowance(address spender, uint256 addedValue) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactor) IncreaseAllowance(opts *bind.TransactOpts, spender common.Address, addedValue *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.contract.Transact(opts, "increaseAllowance", spender, addedValue)
+}
+
+// IncreaseAllowance is a paid mutator transaction binding the contract method 0x39509351.
+//
+// Solidity: function increaseAllowance(address spender, uint256 addedValue) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosSession) IncreaseAllowance(spender common.Address, addedValue *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.IncreaseAllowance(&_UnbondedEvmos.TransactOpts, spender, addedValue)
+}
+
+// IncreaseAllowance is a paid mutator transaction binding the contract method 0x39509351.
+//
+// Solidity: function increaseAllowance(address spender, uint256 addedValue) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactorSession) IncreaseAllowance(spender common.Address, addedValue *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.IncreaseAllowance(&_UnbondedEvmos.TransactOpts, spender, addedValue)
 }
 
 // Kill is a paid mutator transaction binding the contract method 0xd29a0025.
@@ -828,6 +901,48 @@ func (_UnbondedEvmos *UnbondedEvmosTransactorSession) SupplyUnbondedToken() (*ty
 	return _UnbondedEvmos.Contract.SupplyUnbondedToken(&_UnbondedEvmos.TransactOpts)
 }
 
+// Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
+//
+// Solidity: function transfer(address to, uint256 amount) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactor) Transfer(opts *bind.TransactOpts, to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.contract.Transact(opts, "transfer", to, amount)
+}
+
+// Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
+//
+// Solidity: function transfer(address to, uint256 amount) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosSession) Transfer(to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.Transfer(&_UnbondedEvmos.TransactOpts, to, amount)
+}
+
+// Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
+//
+// Solidity: function transfer(address to, uint256 amount) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactorSession) Transfer(to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.Transfer(&_UnbondedEvmos.TransactOpts, to, amount)
+}
+
+// TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
+//
+// Solidity: function transferFrom(address from, address to, uint256 amount) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactor) TransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.contract.Transact(opts, "transferFrom", from, to, amount)
+}
+
+// TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
+//
+// Solidity: function transferFrom(address from, address to, uint256 amount) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosSession) TransferFrom(from common.Address, to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.TransferFrom(&_UnbondedEvmos.TransactOpts, from, to, amount)
+}
+
+// TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
+//
+// Solidity: function transferFrom(address from, address to, uint256 amount) returns(bool)
+func (_UnbondedEvmos *UnbondedEvmosTransactorSession) TransferFrom(from common.Address, to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.TransferFrom(&_UnbondedEvmos.TransactOpts, from, to, amount)
+}
+
 // TransferOwnership is a paid mutator transaction binding the contract method 0xf2fde38b.
 //
 // Solidity: function transferOwnership(address newOwner) returns()
@@ -849,25 +964,25 @@ func (_UnbondedEvmos *UnbondedEvmosTransactorSession) TransferOwnership(newOwner
 	return _UnbondedEvmos.Contract.TransferOwnership(&_UnbondedEvmos.TransactOpts, newOwner)
 }
 
-// Unlock is a paid mutator transaction binding the contract method 0x6198e339.
+// Unlock is a paid mutator transaction binding the contract method 0xa69df4b5.
 //
-// Solidity: function unlock(uint256 minRepaid) returns()
-func (_UnbondedEvmos *UnbondedEvmosTransactor) Unlock(opts *bind.TransactOpts, minRepaid *big.Int) (*types.Transaction, error) {
-	return _UnbondedEvmos.contract.Transact(opts, "unlock", minRepaid)
+// Solidity: function unlock() returns()
+func (_UnbondedEvmos *UnbondedEvmosTransactor) Unlock(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _UnbondedEvmos.contract.Transact(opts, "unlock")
 }
 
-// Unlock is a paid mutator transaction binding the contract method 0x6198e339.
+// Unlock is a paid mutator transaction binding the contract method 0xa69df4b5.
 //
-// Solidity: function unlock(uint256 minRepaid) returns()
-func (_UnbondedEvmos *UnbondedEvmosSession) Unlock(minRepaid *big.Int) (*types.Transaction, error) {
-	return _UnbondedEvmos.Contract.Unlock(&_UnbondedEvmos.TransactOpts, minRepaid)
+// Solidity: function unlock() returns()
+func (_UnbondedEvmos *UnbondedEvmosSession) Unlock() (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.Unlock(&_UnbondedEvmos.TransactOpts)
 }
 
-// Unlock is a paid mutator transaction binding the contract method 0x6198e339.
+// Unlock is a paid mutator transaction binding the contract method 0xa69df4b5.
 //
-// Solidity: function unlock(uint256 minRepaid) returns()
-func (_UnbondedEvmos *UnbondedEvmosTransactorSession) Unlock(minRepaid *big.Int) (*types.Transaction, error) {
-	return _UnbondedEvmos.Contract.Unlock(&_UnbondedEvmos.TransactOpts, minRepaid)
+// Solidity: function unlock() returns()
+func (_UnbondedEvmos *UnbondedEvmosTransactorSession) Unlock() (*types.Transaction, error) {
+	return _UnbondedEvmos.Contract.Unlock(&_UnbondedEvmos.TransactOpts)
 }
 
 // UpdateConfigs is a paid mutator transaction binding the contract method 0x79564ace.
@@ -952,6 +1067,160 @@ func (_UnbondedEvmos *UnbondedEvmosSession) Receive() (*types.Transaction, error
 // Solidity: receive() payable returns()
 func (_UnbondedEvmos *UnbondedEvmosTransactorSession) Receive() (*types.Transaction, error) {
 	return _UnbondedEvmos.Contract.Receive(&_UnbondedEvmos.TransactOpts)
+}
+
+// UnbondedEvmosApprovalIterator is returned from FilterApproval and is used to iterate over the raw logs and unpacked data for Approval events raised by the UnbondedEvmos contract.
+type UnbondedEvmosApprovalIterator struct {
+	Event *UnbondedEvmosApproval // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *UnbondedEvmosApprovalIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(UnbondedEvmosApproval)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(UnbondedEvmosApproval)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *UnbondedEvmosApprovalIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *UnbondedEvmosApprovalIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// UnbondedEvmosApproval represents a Approval event raised by the UnbondedEvmos contract.
+type UnbondedEvmosApproval struct {
+	Owner   common.Address
+	Spender common.Address
+	Value   *big.Int
+	Raw     types.Log // Blockchain specific contextual infos
+}
+
+// FilterApproval is a free log retrieval operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
+//
+// Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
+func (_UnbondedEvmos *UnbondedEvmosFilterer) FilterApproval(opts *bind.FilterOpts, owner []common.Address, spender []common.Address) (*UnbondedEvmosApprovalIterator, error) {
+
+	var ownerRule []interface{}
+	for _, ownerItem := range owner {
+		ownerRule = append(ownerRule, ownerItem)
+	}
+	var spenderRule []interface{}
+	for _, spenderItem := range spender {
+		spenderRule = append(spenderRule, spenderItem)
+	}
+
+	logs, sub, err := _UnbondedEvmos.contract.FilterLogs(opts, "Approval", ownerRule, spenderRule)
+	if err != nil {
+		return nil, err
+	}
+	return &UnbondedEvmosApprovalIterator{contract: _UnbondedEvmos.contract, event: "Approval", logs: logs, sub: sub}, nil
+}
+
+// WatchApproval is a free log subscription operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
+//
+// Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
+func (_UnbondedEvmos *UnbondedEvmosFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *UnbondedEvmosApproval, owner []common.Address, spender []common.Address) (event.Subscription, error) {
+
+	var ownerRule []interface{}
+	for _, ownerItem := range owner {
+		ownerRule = append(ownerRule, ownerItem)
+	}
+	var spenderRule []interface{}
+	for _, spenderItem := range spender {
+		spenderRule = append(spenderRule, spenderItem)
+	}
+
+	logs, sub, err := _UnbondedEvmos.contract.WatchLogs(opts, "Approval", ownerRule, spenderRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(UnbondedEvmosApproval)
+				if err := _UnbondedEvmos.contract.UnpackLog(event, "Approval", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseApproval is a log parse operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
+//
+// Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
+func (_UnbondedEvmos *UnbondedEvmosFilterer) ParseApproval(log types.Log) (*UnbondedEvmosApproval, error) {
+	event := new(UnbondedEvmosApproval)
+	if err := _UnbondedEvmos.contract.UnpackLog(event, "Approval", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
 }
 
 // UnbondedEvmosInitializedIterator is returned from FilterInitialized and is used to iterate over the raw logs and unpacked data for Initialized events raised by the UnbondedEvmos contract.
@@ -1505,6 +1774,160 @@ func (_UnbondedEvmos *UnbondedEvmosFilterer) WatchSupply(opts *bind.WatchOpts, s
 func (_UnbondedEvmos *UnbondedEvmosFilterer) ParseSupply(log types.Log) (*UnbondedEvmosSupply, error) {
 	event := new(UnbondedEvmosSupply)
 	if err := _UnbondedEvmos.contract.UnpackLog(event, "Supply", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// UnbondedEvmosTransferIterator is returned from FilterTransfer and is used to iterate over the raw logs and unpacked data for Transfer events raised by the UnbondedEvmos contract.
+type UnbondedEvmosTransferIterator struct {
+	Event *UnbondedEvmosTransfer // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *UnbondedEvmosTransferIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(UnbondedEvmosTransfer)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(UnbondedEvmosTransfer)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *UnbondedEvmosTransferIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *UnbondedEvmosTransferIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// UnbondedEvmosTransfer represents a Transfer event raised by the UnbondedEvmos contract.
+type UnbondedEvmosTransfer struct {
+	From  common.Address
+	To    common.Address
+	Value *big.Int
+	Raw   types.Log // Blockchain specific contextual infos
+}
+
+// FilterTransfer is a free log retrieval operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
+//
+// Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
+func (_UnbondedEvmos *UnbondedEvmosFilterer) FilterTransfer(opts *bind.FilterOpts, from []common.Address, to []common.Address) (*UnbondedEvmosTransferIterator, error) {
+
+	var fromRule []interface{}
+	for _, fromItem := range from {
+		fromRule = append(fromRule, fromItem)
+	}
+	var toRule []interface{}
+	for _, toItem := range to {
+		toRule = append(toRule, toItem)
+	}
+
+	logs, sub, err := _UnbondedEvmos.contract.FilterLogs(opts, "Transfer", fromRule, toRule)
+	if err != nil {
+		return nil, err
+	}
+	return &UnbondedEvmosTransferIterator{contract: _UnbondedEvmos.contract, event: "Transfer", logs: logs, sub: sub}, nil
+}
+
+// WatchTransfer is a free log subscription operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
+//
+// Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
+func (_UnbondedEvmos *UnbondedEvmosFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *UnbondedEvmosTransfer, from []common.Address, to []common.Address) (event.Subscription, error) {
+
+	var fromRule []interface{}
+	for _, fromItem := range from {
+		fromRule = append(fromRule, fromItem)
+	}
+	var toRule []interface{}
+	for _, toItem := range to {
+		toRule = append(toRule, toItem)
+	}
+
+	logs, sub, err := _UnbondedEvmos.contract.WatchLogs(opts, "Transfer", fromRule, toRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(UnbondedEvmosTransfer)
+				if err := _UnbondedEvmos.contract.UnpackLog(event, "Transfer", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseTransfer is a log parse operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
+//
+// Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
+func (_UnbondedEvmos *UnbondedEvmosFilterer) ParseTransfer(log types.Log) (*UnbondedEvmosTransfer, error) {
+	event := new(UnbondedEvmosTransfer)
+	if err := _UnbondedEvmos.contract.UnpackLog(event, "Transfer", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

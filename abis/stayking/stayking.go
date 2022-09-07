@@ -30,7 +30,7 @@ var (
 
 // StaykingMetaData contains all meta data concerning the Stayking contract.
 var StaykingMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"totalStaked\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"distributed\",\"type\":\"uint256\"}],\"name\":\"Accrue\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"equity\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"AddPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"}],\"name\":\"AddVault\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"}],\"name\":\"ChangeDelegator\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"killer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"equity\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Kill\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"}],\"name\":\"PositionChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"equity\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"RemovePosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Stake\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Unstake\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minDebtInBase\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"killFactorBps\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reservedBps\",\"type\":\"uint256\"}],\"name\":\"UpdateConfigs\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"}],\"name\":\"UpdateVault\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"delegator_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"uEVMOS_\",\"type\":\"address\"}],\"name\":\"__Stayking_init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"totalStaked\",\"type\":\"uint256\"}],\"name\":\"accrue\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"extraDebtInBase\",\"type\":\"uint256\"}],\"name\":\"addDebt\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"extraEquity\",\"type\":\"uint256\"}],\"name\":\"addEquity\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"equity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"}],\"name\":\"addPosition\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"amountToShare\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_delegator\",\"type\":\"address\"}],\"name\":\"changeDelegator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"int256\",\"name\":\"equityInBaseChanged\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"debtInBaseChanged\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"repaidDebt\",\"type\":\"uint256\"}],\"name\":\"changePosition\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"}],\"name\":\"debtAmountOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"delegator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"totalStaked\",\"type\":\"uint256\"}],\"name\":\"getAccruedValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"positionId\",\"type\":\"uint256\"}],\"name\":\"isKillable\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"healthy\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"positionId\",\"type\":\"uint256\"}],\"name\":\"kill\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"killFactorBps\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"minDebtInBase\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"positionIdOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"}],\"name\":\"positionInfo\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"positionValueInBase\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"positions\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"positionsLengthOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"}],\"name\":\"removePosition\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"repaidDebt\",\"type\":\"uint256\"}],\"name\":\"repayDebt\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"minRepaid\",\"type\":\"uint256\"}],\"name\":\"repayDebtInBase\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"reservedBps\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"reservedPool\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"shareToAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"tokenToVault\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"totalDebtOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalShare\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"uEVMOS\",\"outputs\":[{\"internalType\":\"contractIUnbondedEvmos\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_minDebtInBase\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_killFactorBps\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_reservedBps\",\"type\":\"uint256\"}],\"name\":\"updateConfigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"}],\"name\":\"updateVault\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"vaults\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"whitelistedKiller\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"accrued\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"totalStaked\",\"type\":\"uint256\"}],\"name\":\"Accrue\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"equity\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"AddPosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"}],\"name\":\"AddVault\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"}],\"name\":\"ChangeDelegator\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"killer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"equity\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Kill\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"}],\"name\":\"PositionChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"equity\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"RemovePosition\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Stake\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"delegator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"Unstake\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"minDebtInBase\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reservedBps\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"killFactorBps\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"liquidateDebtFactorBps\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"liquidationFeeBps\",\"type\":\"uint256\"}],\"name\":\"UpdateConfigs\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"}],\"name\":\"UpdateVault\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"delegator_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"uEVMOS_\",\"type\":\"address\"}],\"name\":\"__Stayking_init\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"totalStaked\",\"type\":\"uint256\"}],\"name\":\"accrue\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"equity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"}],\"name\":\"addPosition\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"amountToShare\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_delegator\",\"type\":\"address\"}],\"name\":\"changeDelegator\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"int256\",\"name\":\"equityInBaseChanged\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"debtInBaseChanged\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"repaidDebt\",\"type\":\"uint256\"}],\"name\":\"changePosition\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"}],\"name\":\"debtAmountOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"delegator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\"}],\"name\":\"getAccruedValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"positionId\",\"type\":\"uint256\"}],\"name\":\"isKillable\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"positionId\",\"type\":\"uint256\"}],\"name\":\"kill\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"killFactorBps\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"liquidateDebtFactorBps\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"liquidationFeeBps\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"minDebtInBase\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"positionIdOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"}],\"name\":\"positionInfo\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"positionValueInBase\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debtInBase\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"debt\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"positionId\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"positions\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"positionsLengthOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtToken\",\"type\":\"address\"}],\"name\":\"removePosition\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"reservedBps\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"reservedPool\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"share\",\"type\":\"uint256\"}],\"name\":\"shareToAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"tokenToVault\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"totalDebtOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalShare\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"uEVMOS\",\"outputs\":[{\"internalType\":\"contractIUnbondedEvmos\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_minDebtInBase\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_reservedBps\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_killFactorBps\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_liquidateDebtFactorBps\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_liquidationFeeBps\",\"type\":\"uint256\"}],\"name\":\"updateConfigs\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"vault\",\"type\":\"address\"}],\"name\":\"updateVault\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"killers\",\"type\":\"address[]\"},{\"internalType\":\"bool\",\"name\":\"ok\",\"type\":\"bool\"}],\"name\":\"updateWhitelistedKillerStatus\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"vaults\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"whitelistedKiller\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
 }
 
 // StaykingABI is the input ABI used to generate the binding from.
@@ -274,10 +274,10 @@ func (_Stayking *StaykingCallerSession) Delegator() (common.Address, error) {
 
 // GetAccruedValue is a free data retrieval call binding the contract method 0xe4175aee.
 //
-// Solidity: function getAccruedValue(uint256 totalStaked) view returns(uint256)
-func (_Stayking *StaykingCaller) GetAccruedValue(opts *bind.CallOpts, totalStaked *big.Int) (*big.Int, error) {
+// Solidity: function getAccruedValue(uint256 reward) view returns(uint256)
+func (_Stayking *StaykingCaller) GetAccruedValue(opts *bind.CallOpts, reward *big.Int) (*big.Int, error) {
 	var out []interface{}
-	err := _Stayking.contract.Call(opts, &out, "getAccruedValue", totalStaked)
+	err := _Stayking.contract.Call(opts, &out, "getAccruedValue", reward)
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -291,21 +291,21 @@ func (_Stayking *StaykingCaller) GetAccruedValue(opts *bind.CallOpts, totalStake
 
 // GetAccruedValue is a free data retrieval call binding the contract method 0xe4175aee.
 //
-// Solidity: function getAccruedValue(uint256 totalStaked) view returns(uint256)
-func (_Stayking *StaykingSession) GetAccruedValue(totalStaked *big.Int) (*big.Int, error) {
-	return _Stayking.Contract.GetAccruedValue(&_Stayking.CallOpts, totalStaked)
+// Solidity: function getAccruedValue(uint256 reward) view returns(uint256)
+func (_Stayking *StaykingSession) GetAccruedValue(reward *big.Int) (*big.Int, error) {
+	return _Stayking.Contract.GetAccruedValue(&_Stayking.CallOpts, reward)
 }
 
 // GetAccruedValue is a free data retrieval call binding the contract method 0xe4175aee.
 //
-// Solidity: function getAccruedValue(uint256 totalStaked) view returns(uint256)
-func (_Stayking *StaykingCallerSession) GetAccruedValue(totalStaked *big.Int) (*big.Int, error) {
-	return _Stayking.Contract.GetAccruedValue(&_Stayking.CallOpts, totalStaked)
+// Solidity: function getAccruedValue(uint256 reward) view returns(uint256)
+func (_Stayking *StaykingCallerSession) GetAccruedValue(reward *big.Int) (*big.Int, error) {
+	return _Stayking.Contract.GetAccruedValue(&_Stayking.CallOpts, reward)
 }
 
 // IsKillable is a free data retrieval call binding the contract method 0x5ff02531.
 //
-// Solidity: function isKillable(address debtToken, uint256 positionId) view returns(bool healthy)
+// Solidity: function isKillable(address debtToken, uint256 positionId) view returns(bool)
 func (_Stayking *StaykingCaller) IsKillable(opts *bind.CallOpts, debtToken common.Address, positionId *big.Int) (bool, error) {
 	var out []interface{}
 	err := _Stayking.contract.Call(opts, &out, "isKillable", debtToken, positionId)
@@ -322,14 +322,14 @@ func (_Stayking *StaykingCaller) IsKillable(opts *bind.CallOpts, debtToken commo
 
 // IsKillable is a free data retrieval call binding the contract method 0x5ff02531.
 //
-// Solidity: function isKillable(address debtToken, uint256 positionId) view returns(bool healthy)
+// Solidity: function isKillable(address debtToken, uint256 positionId) view returns(bool)
 func (_Stayking *StaykingSession) IsKillable(debtToken common.Address, positionId *big.Int) (bool, error) {
 	return _Stayking.Contract.IsKillable(&_Stayking.CallOpts, debtToken, positionId)
 }
 
 // IsKillable is a free data retrieval call binding the contract method 0x5ff02531.
 //
-// Solidity: function isKillable(address debtToken, uint256 positionId) view returns(bool healthy)
+// Solidity: function isKillable(address debtToken, uint256 positionId) view returns(bool)
 func (_Stayking *StaykingCallerSession) IsKillable(debtToken common.Address, positionId *big.Int) (bool, error) {
 	return _Stayking.Contract.IsKillable(&_Stayking.CallOpts, debtToken, positionId)
 }
@@ -363,6 +363,68 @@ func (_Stayking *StaykingSession) KillFactorBps() (*big.Int, error) {
 // Solidity: function killFactorBps() view returns(uint256)
 func (_Stayking *StaykingCallerSession) KillFactorBps() (*big.Int, error) {
 	return _Stayking.Contract.KillFactorBps(&_Stayking.CallOpts)
+}
+
+// LiquidateDebtFactorBps is a free data retrieval call binding the contract method 0x52728e4b.
+//
+// Solidity: function liquidateDebtFactorBps() view returns(uint256)
+func (_Stayking *StaykingCaller) LiquidateDebtFactorBps(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _Stayking.contract.Call(opts, &out, "liquidateDebtFactorBps")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// LiquidateDebtFactorBps is a free data retrieval call binding the contract method 0x52728e4b.
+//
+// Solidity: function liquidateDebtFactorBps() view returns(uint256)
+func (_Stayking *StaykingSession) LiquidateDebtFactorBps() (*big.Int, error) {
+	return _Stayking.Contract.LiquidateDebtFactorBps(&_Stayking.CallOpts)
+}
+
+// LiquidateDebtFactorBps is a free data retrieval call binding the contract method 0x52728e4b.
+//
+// Solidity: function liquidateDebtFactorBps() view returns(uint256)
+func (_Stayking *StaykingCallerSession) LiquidateDebtFactorBps() (*big.Int, error) {
+	return _Stayking.Contract.LiquidateDebtFactorBps(&_Stayking.CallOpts)
+}
+
+// LiquidationFeeBps is a free data retrieval call binding the contract method 0xe031a824.
+//
+// Solidity: function liquidationFeeBps() view returns(uint256)
+func (_Stayking *StaykingCaller) LiquidationFeeBps(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _Stayking.contract.Call(opts, &out, "liquidationFeeBps")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// LiquidationFeeBps is a free data retrieval call binding the contract method 0xe031a824.
+//
+// Solidity: function liquidationFeeBps() view returns(uint256)
+func (_Stayking *StaykingSession) LiquidationFeeBps() (*big.Int, error) {
+	return _Stayking.Contract.LiquidationFeeBps(&_Stayking.CallOpts)
+}
+
+// LiquidationFeeBps is a free data retrieval call binding the contract method 0xe031a824.
+//
+// Solidity: function liquidationFeeBps() view returns(uint256)
+func (_Stayking *StaykingCallerSession) LiquidationFeeBps() (*big.Int, error) {
+	return _Stayking.Contract.LiquidationFeeBps(&_Stayking.CallOpts)
 }
 
 // MinDebtInBase is a free data retrieval call binding the contract method 0x178483a7.
@@ -460,10 +522,12 @@ func (_Stayking *StaykingCallerSession) PositionIdOf(arg0 common.Address, arg1 c
 
 // PositionInfo is a free data retrieval call binding the contract method 0x5066f3b5.
 //
-// Solidity: function positionInfo(address user, address debtToken) view returns(uint256 positionValueInBase, uint256 debtInBase)
+// Solidity: function positionInfo(address user, address debtToken) view returns(uint256 positionValueInBase, uint256 debtInBase, uint256 debt, uint256 positionId)
 func (_Stayking *StaykingCaller) PositionInfo(opts *bind.CallOpts, user common.Address, debtToken common.Address) (struct {
 	PositionValueInBase *big.Int
 	DebtInBase          *big.Int
+	Debt                *big.Int
+	PositionId          *big.Int
 }, error) {
 	var out []interface{}
 	err := _Stayking.contract.Call(opts, &out, "positionInfo", user, debtToken)
@@ -471,6 +535,8 @@ func (_Stayking *StaykingCaller) PositionInfo(opts *bind.CallOpts, user common.A
 	outstruct := new(struct {
 		PositionValueInBase *big.Int
 		DebtInBase          *big.Int
+		Debt                *big.Int
+		PositionId          *big.Int
 	})
 	if err != nil {
 		return *outstruct, err
@@ -478,6 +544,8 @@ func (_Stayking *StaykingCaller) PositionInfo(opts *bind.CallOpts, user common.A
 
 	outstruct.PositionValueInBase = *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
 	outstruct.DebtInBase = *abi.ConvertType(out[1], new(*big.Int)).(**big.Int)
+	outstruct.Debt = *abi.ConvertType(out[2], new(*big.Int)).(**big.Int)
+	outstruct.PositionId = *abi.ConvertType(out[3], new(*big.Int)).(**big.Int)
 
 	return *outstruct, err
 
@@ -485,20 +553,24 @@ func (_Stayking *StaykingCaller) PositionInfo(opts *bind.CallOpts, user common.A
 
 // PositionInfo is a free data retrieval call binding the contract method 0x5066f3b5.
 //
-// Solidity: function positionInfo(address user, address debtToken) view returns(uint256 positionValueInBase, uint256 debtInBase)
+// Solidity: function positionInfo(address user, address debtToken) view returns(uint256 positionValueInBase, uint256 debtInBase, uint256 debt, uint256 positionId)
 func (_Stayking *StaykingSession) PositionInfo(user common.Address, debtToken common.Address) (struct {
 	PositionValueInBase *big.Int
 	DebtInBase          *big.Int
+	Debt                *big.Int
+	PositionId          *big.Int
 }, error) {
 	return _Stayking.Contract.PositionInfo(&_Stayking.CallOpts, user, debtToken)
 }
 
 // PositionInfo is a free data retrieval call binding the contract method 0x5066f3b5.
 //
-// Solidity: function positionInfo(address user, address debtToken) view returns(uint256 positionValueInBase, uint256 debtInBase)
+// Solidity: function positionInfo(address user, address debtToken) view returns(uint256 positionValueInBase, uint256 debtInBase, uint256 debt, uint256 positionId)
 func (_Stayking *StaykingCallerSession) PositionInfo(user common.Address, debtToken common.Address) (struct {
 	PositionValueInBase *big.Int
 	DebtInBase          *big.Int
+	Debt                *big.Int
+	PositionId          *big.Int
 }, error) {
 	return _Stayking.Contract.PositionInfo(&_Stayking.CallOpts, user, debtToken)
 }
@@ -931,48 +1003,6 @@ func (_Stayking *StaykingTransactorSession) Accrue(totalStaked *big.Int) (*types
 	return _Stayking.Contract.Accrue(&_Stayking.TransactOpts, totalStaked)
 }
 
-// AddDebt is a paid mutator transaction binding the contract method 0x34c389ef.
-//
-// Solidity: function addDebt(address debtToken, uint256 extraDebtInBase) returns()
-func (_Stayking *StaykingTransactor) AddDebt(opts *bind.TransactOpts, debtToken common.Address, extraDebtInBase *big.Int) (*types.Transaction, error) {
-	return _Stayking.contract.Transact(opts, "addDebt", debtToken, extraDebtInBase)
-}
-
-// AddDebt is a paid mutator transaction binding the contract method 0x34c389ef.
-//
-// Solidity: function addDebt(address debtToken, uint256 extraDebtInBase) returns()
-func (_Stayking *StaykingSession) AddDebt(debtToken common.Address, extraDebtInBase *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.AddDebt(&_Stayking.TransactOpts, debtToken, extraDebtInBase)
-}
-
-// AddDebt is a paid mutator transaction binding the contract method 0x34c389ef.
-//
-// Solidity: function addDebt(address debtToken, uint256 extraDebtInBase) returns()
-func (_Stayking *StaykingTransactorSession) AddDebt(debtToken common.Address, extraDebtInBase *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.AddDebt(&_Stayking.TransactOpts, debtToken, extraDebtInBase)
-}
-
-// AddEquity is a paid mutator transaction binding the contract method 0xef6b2479.
-//
-// Solidity: function addEquity(address debtToken, uint256 extraEquity) payable returns()
-func (_Stayking *StaykingTransactor) AddEquity(opts *bind.TransactOpts, debtToken common.Address, extraEquity *big.Int) (*types.Transaction, error) {
-	return _Stayking.contract.Transact(opts, "addEquity", debtToken, extraEquity)
-}
-
-// AddEquity is a paid mutator transaction binding the contract method 0xef6b2479.
-//
-// Solidity: function addEquity(address debtToken, uint256 extraEquity) payable returns()
-func (_Stayking *StaykingSession) AddEquity(debtToken common.Address, extraEquity *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.AddEquity(&_Stayking.TransactOpts, debtToken, extraEquity)
-}
-
-// AddEquity is a paid mutator transaction binding the contract method 0xef6b2479.
-//
-// Solidity: function addEquity(address debtToken, uint256 extraEquity) payable returns()
-func (_Stayking *StaykingTransactorSession) AddEquity(debtToken common.Address, extraEquity *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.AddEquity(&_Stayking.TransactOpts, debtToken, extraEquity)
-}
-
 // AddPosition is a paid mutator transaction binding the contract method 0xcff07fd1.
 //
 // Solidity: function addPosition(address debtToken, uint256 equity, uint256 debtInBase) payable returns()
@@ -1099,48 +1129,6 @@ func (_Stayking *StaykingTransactorSession) RenounceOwnership() (*types.Transact
 	return _Stayking.Contract.RenounceOwnership(&_Stayking.TransactOpts)
 }
 
-// RepayDebt is a paid mutator transaction binding the contract method 0x79e20bdc.
-//
-// Solidity: function repayDebt(address debtToken, uint256 repaidDebt) returns()
-func (_Stayking *StaykingTransactor) RepayDebt(opts *bind.TransactOpts, debtToken common.Address, repaidDebt *big.Int) (*types.Transaction, error) {
-	return _Stayking.contract.Transact(opts, "repayDebt", debtToken, repaidDebt)
-}
-
-// RepayDebt is a paid mutator transaction binding the contract method 0x79e20bdc.
-//
-// Solidity: function repayDebt(address debtToken, uint256 repaidDebt) returns()
-func (_Stayking *StaykingSession) RepayDebt(debtToken common.Address, repaidDebt *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.RepayDebt(&_Stayking.TransactOpts, debtToken, repaidDebt)
-}
-
-// RepayDebt is a paid mutator transaction binding the contract method 0x79e20bdc.
-//
-// Solidity: function repayDebt(address debtToken, uint256 repaidDebt) returns()
-func (_Stayking *StaykingTransactorSession) RepayDebt(debtToken common.Address, repaidDebt *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.RepayDebt(&_Stayking.TransactOpts, debtToken, repaidDebt)
-}
-
-// RepayDebtInBase is a paid mutator transaction binding the contract method 0xc6918a61.
-//
-// Solidity: function repayDebtInBase(address debtToken, uint256 minRepaid) payable returns()
-func (_Stayking *StaykingTransactor) RepayDebtInBase(opts *bind.TransactOpts, debtToken common.Address, minRepaid *big.Int) (*types.Transaction, error) {
-	return _Stayking.contract.Transact(opts, "repayDebtInBase", debtToken, minRepaid)
-}
-
-// RepayDebtInBase is a paid mutator transaction binding the contract method 0xc6918a61.
-//
-// Solidity: function repayDebtInBase(address debtToken, uint256 minRepaid) payable returns()
-func (_Stayking *StaykingSession) RepayDebtInBase(debtToken common.Address, minRepaid *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.RepayDebtInBase(&_Stayking.TransactOpts, debtToken, minRepaid)
-}
-
-// RepayDebtInBase is a paid mutator transaction binding the contract method 0xc6918a61.
-//
-// Solidity: function repayDebtInBase(address debtToken, uint256 minRepaid) payable returns()
-func (_Stayking *StaykingTransactorSession) RepayDebtInBase(debtToken common.Address, minRepaid *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.RepayDebtInBase(&_Stayking.TransactOpts, debtToken, minRepaid)
-}
-
 // TransferOwnership is a paid mutator transaction binding the contract method 0xf2fde38b.
 //
 // Solidity: function transferOwnership(address newOwner) returns()
@@ -1162,25 +1150,25 @@ func (_Stayking *StaykingTransactorSession) TransferOwnership(newOwner common.Ad
 	return _Stayking.Contract.TransferOwnership(&_Stayking.TransactOpts, newOwner)
 }
 
-// UpdateConfigs is a paid mutator transaction binding the contract method 0x4f9e3805.
+// UpdateConfigs is a paid mutator transaction binding the contract method 0xe5febccb.
 //
-// Solidity: function updateConfigs(uint256 _minDebtInBase, uint256 _killFactorBps, uint256 _reservedBps) returns()
-func (_Stayking *StaykingTransactor) UpdateConfigs(opts *bind.TransactOpts, _minDebtInBase *big.Int, _killFactorBps *big.Int, _reservedBps *big.Int) (*types.Transaction, error) {
-	return _Stayking.contract.Transact(opts, "updateConfigs", _minDebtInBase, _killFactorBps, _reservedBps)
+// Solidity: function updateConfigs(uint256 _minDebtInBase, uint256 _reservedBps, uint256 _killFactorBps, uint256 _liquidateDebtFactorBps, uint256 _liquidationFeeBps) returns()
+func (_Stayking *StaykingTransactor) UpdateConfigs(opts *bind.TransactOpts, _minDebtInBase *big.Int, _reservedBps *big.Int, _killFactorBps *big.Int, _liquidateDebtFactorBps *big.Int, _liquidationFeeBps *big.Int) (*types.Transaction, error) {
+	return _Stayking.contract.Transact(opts, "updateConfigs", _minDebtInBase, _reservedBps, _killFactorBps, _liquidateDebtFactorBps, _liquidationFeeBps)
 }
 
-// UpdateConfigs is a paid mutator transaction binding the contract method 0x4f9e3805.
+// UpdateConfigs is a paid mutator transaction binding the contract method 0xe5febccb.
 //
-// Solidity: function updateConfigs(uint256 _minDebtInBase, uint256 _killFactorBps, uint256 _reservedBps) returns()
-func (_Stayking *StaykingSession) UpdateConfigs(_minDebtInBase *big.Int, _killFactorBps *big.Int, _reservedBps *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.UpdateConfigs(&_Stayking.TransactOpts, _minDebtInBase, _killFactorBps, _reservedBps)
+// Solidity: function updateConfigs(uint256 _minDebtInBase, uint256 _reservedBps, uint256 _killFactorBps, uint256 _liquidateDebtFactorBps, uint256 _liquidationFeeBps) returns()
+func (_Stayking *StaykingSession) UpdateConfigs(_minDebtInBase *big.Int, _reservedBps *big.Int, _killFactorBps *big.Int, _liquidateDebtFactorBps *big.Int, _liquidationFeeBps *big.Int) (*types.Transaction, error) {
+	return _Stayking.Contract.UpdateConfigs(&_Stayking.TransactOpts, _minDebtInBase, _reservedBps, _killFactorBps, _liquidateDebtFactorBps, _liquidationFeeBps)
 }
 
-// UpdateConfigs is a paid mutator transaction binding the contract method 0x4f9e3805.
+// UpdateConfigs is a paid mutator transaction binding the contract method 0xe5febccb.
 //
-// Solidity: function updateConfigs(uint256 _minDebtInBase, uint256 _killFactorBps, uint256 _reservedBps) returns()
-func (_Stayking *StaykingTransactorSession) UpdateConfigs(_minDebtInBase *big.Int, _killFactorBps *big.Int, _reservedBps *big.Int) (*types.Transaction, error) {
-	return _Stayking.Contract.UpdateConfigs(&_Stayking.TransactOpts, _minDebtInBase, _killFactorBps, _reservedBps)
+// Solidity: function updateConfigs(uint256 _minDebtInBase, uint256 _reservedBps, uint256 _killFactorBps, uint256 _liquidateDebtFactorBps, uint256 _liquidationFeeBps) returns()
+func (_Stayking *StaykingTransactorSession) UpdateConfigs(_minDebtInBase *big.Int, _reservedBps *big.Int, _killFactorBps *big.Int, _liquidateDebtFactorBps *big.Int, _liquidationFeeBps *big.Int) (*types.Transaction, error) {
+	return _Stayking.Contract.UpdateConfigs(&_Stayking.TransactOpts, _minDebtInBase, _reservedBps, _killFactorBps, _liquidateDebtFactorBps, _liquidationFeeBps)
 }
 
 // UpdateVault is a paid mutator transaction binding the contract method 0x1b451d28.
@@ -1202,6 +1190,27 @@ func (_Stayking *StaykingSession) UpdateVault(token common.Address, vault common
 // Solidity: function updateVault(address token, address vault) returns()
 func (_Stayking *StaykingTransactorSession) UpdateVault(token common.Address, vault common.Address) (*types.Transaction, error) {
 	return _Stayking.Contract.UpdateVault(&_Stayking.TransactOpts, token, vault)
+}
+
+// UpdateWhitelistedKillerStatus is a paid mutator transaction binding the contract method 0x4b11181b.
+//
+// Solidity: function updateWhitelistedKillerStatus(address[] killers, bool ok) returns()
+func (_Stayking *StaykingTransactor) UpdateWhitelistedKillerStatus(opts *bind.TransactOpts, killers []common.Address, ok bool) (*types.Transaction, error) {
+	return _Stayking.contract.Transact(opts, "updateWhitelistedKillerStatus", killers, ok)
+}
+
+// UpdateWhitelistedKillerStatus is a paid mutator transaction binding the contract method 0x4b11181b.
+//
+// Solidity: function updateWhitelistedKillerStatus(address[] killers, bool ok) returns()
+func (_Stayking *StaykingSession) UpdateWhitelistedKillerStatus(killers []common.Address, ok bool) (*types.Transaction, error) {
+	return _Stayking.Contract.UpdateWhitelistedKillerStatus(&_Stayking.TransactOpts, killers, ok)
+}
+
+// UpdateWhitelistedKillerStatus is a paid mutator transaction binding the contract method 0x4b11181b.
+//
+// Solidity: function updateWhitelistedKillerStatus(address[] killers, bool ok) returns()
+func (_Stayking *StaykingTransactorSession) UpdateWhitelistedKillerStatus(killers []common.Address, ok bool) (*types.Transaction, error) {
+	return _Stayking.Contract.UpdateWhitelistedKillerStatus(&_Stayking.TransactOpts, killers, ok)
 }
 
 // Fallback is a paid mutator transaction binding the contract fallback function.
@@ -1316,14 +1325,14 @@ func (it *StaykingAccrueIterator) Close() error {
 // StaykingAccrue represents a Accrue event raised by the Stayking contract.
 type StaykingAccrue struct {
 	Delegator   common.Address
+	Accrued     *big.Int
 	TotalStaked *big.Int
-	Distributed *big.Int
 	Raw         types.Log // Blockchain specific contextual infos
 }
 
 // FilterAccrue is a free log retrieval operation binding the contract event 0x68f604dad2502091469814ccdd58acac4592d7766a922eee86e6ab9965cfe949.
 //
-// Solidity: event Accrue(address indexed delegator, uint256 totalStaked, uint256 distributed)
+// Solidity: event Accrue(address indexed delegator, uint256 accrued, uint256 totalStaked)
 func (_Stayking *StaykingFilterer) FilterAccrue(opts *bind.FilterOpts, delegator []common.Address) (*StaykingAccrueIterator, error) {
 
 	var delegatorRule []interface{}
@@ -1340,7 +1349,7 @@ func (_Stayking *StaykingFilterer) FilterAccrue(opts *bind.FilterOpts, delegator
 
 // WatchAccrue is a free log subscription operation binding the contract event 0x68f604dad2502091469814ccdd58acac4592d7766a922eee86e6ab9965cfe949.
 //
-// Solidity: event Accrue(address indexed delegator, uint256 totalStaked, uint256 distributed)
+// Solidity: event Accrue(address indexed delegator, uint256 accrued, uint256 totalStaked)
 func (_Stayking *StaykingFilterer) WatchAccrue(opts *bind.WatchOpts, sink chan<- *StaykingAccrue, delegator []common.Address) (event.Subscription, error) {
 
 	var delegatorRule []interface{}
@@ -1382,7 +1391,7 @@ func (_Stayking *StaykingFilterer) WatchAccrue(opts *bind.WatchOpts, sink chan<-
 
 // ParseAccrue is a log parse operation binding the contract event 0x68f604dad2502091469814ccdd58acac4592d7766a922eee86e6ab9965cfe949.
 //
-// Solidity: event Accrue(address indexed delegator, uint256 totalStaked, uint256 distributed)
+// Solidity: event Accrue(address indexed delegator, uint256 accrued, uint256 totalStaked)
 func (_Stayking *StaykingFilterer) ParseAccrue(log types.Log) (*StaykingAccrue, error) {
 	event := new(StaykingAccrue)
 	if err := _Stayking.contract.UnpackLog(event, "Accrue", log); err != nil {
@@ -2955,15 +2964,17 @@ func (it *StaykingUpdateConfigsIterator) Close() error {
 
 // StaykingUpdateConfigs represents a UpdateConfigs event raised by the Stayking contract.
 type StaykingUpdateConfigs struct {
-	MinDebtInBase *big.Int
-	KillFactorBps *big.Int
-	ReservedBps   *big.Int
-	Raw           types.Log // Blockchain specific contextual infos
+	MinDebtInBase          *big.Int
+	ReservedBps            *big.Int
+	KillFactorBps          *big.Int
+	LiquidateDebtFactorBps *big.Int
+	LiquidationFeeBps      *big.Int
+	Raw                    types.Log // Blockchain specific contextual infos
 }
 
-// FilterUpdateConfigs is a free log retrieval operation binding the contract event 0xe032360dc1790b6d0ffbd119645e134124ea15d2ab7d012f101fe1df3016a52c.
+// FilterUpdateConfigs is a free log retrieval operation binding the contract event 0xdd68705b2e0389408b96cc39314a0bdffee1227534144e7b7a81cbbad2067e46.
 //
-// Solidity: event UpdateConfigs(uint256 minDebtInBase, uint256 killFactorBps, uint256 reservedBps)
+// Solidity: event UpdateConfigs(uint256 minDebtInBase, uint256 reservedBps, uint256 killFactorBps, uint256 liquidateDebtFactorBps, uint256 liquidationFeeBps)
 func (_Stayking *StaykingFilterer) FilterUpdateConfigs(opts *bind.FilterOpts) (*StaykingUpdateConfigsIterator, error) {
 
 	logs, sub, err := _Stayking.contract.FilterLogs(opts, "UpdateConfigs")
@@ -2973,9 +2984,9 @@ func (_Stayking *StaykingFilterer) FilterUpdateConfigs(opts *bind.FilterOpts) (*
 	return &StaykingUpdateConfigsIterator{contract: _Stayking.contract, event: "UpdateConfigs", logs: logs, sub: sub}, nil
 }
 
-// WatchUpdateConfigs is a free log subscription operation binding the contract event 0xe032360dc1790b6d0ffbd119645e134124ea15d2ab7d012f101fe1df3016a52c.
+// WatchUpdateConfigs is a free log subscription operation binding the contract event 0xdd68705b2e0389408b96cc39314a0bdffee1227534144e7b7a81cbbad2067e46.
 //
-// Solidity: event UpdateConfigs(uint256 minDebtInBase, uint256 killFactorBps, uint256 reservedBps)
+// Solidity: event UpdateConfigs(uint256 minDebtInBase, uint256 reservedBps, uint256 killFactorBps, uint256 liquidateDebtFactorBps, uint256 liquidationFeeBps)
 func (_Stayking *StaykingFilterer) WatchUpdateConfigs(opts *bind.WatchOpts, sink chan<- *StaykingUpdateConfigs) (event.Subscription, error) {
 
 	logs, sub, err := _Stayking.contract.WatchLogs(opts, "UpdateConfigs")
@@ -3010,9 +3021,9 @@ func (_Stayking *StaykingFilterer) WatchUpdateConfigs(opts *bind.WatchOpts, sink
 	}), nil
 }
 
-// ParseUpdateConfigs is a log parse operation binding the contract event 0xe032360dc1790b6d0ffbd119645e134124ea15d2ab7d012f101fe1df3016a52c.
+// ParseUpdateConfigs is a log parse operation binding the contract event 0xdd68705b2e0389408b96cc39314a0bdffee1227534144e7b7a81cbbad2067e46.
 //
-// Solidity: event UpdateConfigs(uint256 minDebtInBase, uint256 killFactorBps, uint256 reservedBps)
+// Solidity: event UpdateConfigs(uint256 minDebtInBase, uint256 reservedBps, uint256 killFactorBps, uint256 liquidateDebtFactorBps, uint256 liquidationFeeBps)
 func (_Stayking *StaykingFilterer) ParseUpdateConfigs(log types.Log) (*StaykingUpdateConfigs, error) {
 	event := new(StaykingUpdateConfigs)
 	if err := _Stayking.contract.UnpackLog(event, "UpdateConfigs", log); err != nil {

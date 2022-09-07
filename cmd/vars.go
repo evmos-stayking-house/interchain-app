@@ -3,6 +3,7 @@ package cmd
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/crypto"
+	"math/big"
 )
 
 const (
@@ -18,11 +19,16 @@ const (
 var (
 	logDelegateSig   = []byte("Stake(address,address,uint256,uint256)")
 	logUndelegateSig = []byte("Unstake(address,address,uint256,uint256)")
+	logAccrueSig     = []byte("Accrue(address,uint256,uint256)")
 
 	LogDelegateSigHash   = crypto.Keccak256Hash(logDelegateSig)
 	LogUndelegateSigHash = crypto.Keccak256Hash(logUndelegateSig)
+	LogAccrueSigHash     = crypto.Keccak256Hash(logAccrueSig)
 
 	reservedDec     = sdk.NewDecWithPrec(2, 1) // 20%
 	distributionDec = sdk.NewDecWithPrec(5, 1) // 50%
 
+	minAccBalance = big.NewInt(1).Mul(
+		big.NewInt(1_000_000_000_000_000_000),
+		big.NewInt(100)) // 100 tevmos
 )

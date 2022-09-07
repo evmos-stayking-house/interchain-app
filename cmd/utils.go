@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/signing"
@@ -14,6 +14,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/evmos-stayking-house/scheduled-worker-golang/abis/stayking"
 	ethermint "github.com/evmos/ethermint/types"
 	evmtypes "github.com/evmos/ethermint/x/evm/types"
 	flag "github.com/spf13/pflag"
@@ -34,28 +35,24 @@ func getBondDenom(cliCtx client.Context) (string, error) {
 
 func getStakingRewards(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, error) {
 	distrQC := distrtypes.NewQueryClient(cliCtx)
-
 	// get delegator address & validator address
 	delAddr := cliCtx.GetFromAddress()
-	valString, err := flgs.GetString(flagValidator)
-	if err != nil {
-		return nil, err
-	}
-	valAddr, err := sdk.ValAddressFromBech32(valString)
-	if err != nil {
-		return nil, err
-	}
 
 	// construct delegation rewards query request
-	params := &distrtypes.QueryDelegationRewardsRequest{
+
+	params := &distrtypes.QueryDelegationTotalRewardsRequest{
 		DelegatorAddress: delAddr.String(),
-		ValidatorAddress: valAddr.String(),
 	}
-	resp, err := distrQC.DelegationRewards(context.Background(), params)
+	resp, err := distrQC.DelegationTotalRewards(context.Background(), params)
 	if err != nil {
-		return nil, err
+		return sdk.Coins{}, nil
 	}
-	res, _ := resp.GetRewards().TruncateDecimal()
+
+	res := sdk.NewCoins()
+	for _, r := range resp.Rewards {
+		c, _ := r.Reward.TruncateDecimal()
+		res = res.Add(c...)
+	}
 	return res, nil
 }
 
@@ -124,32 +121,23 @@ func getTotalUnbonding(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, er
 	return res, nil
 }
 
-func getTotalBonded(cliCtx client.Context, flgs *flag.FlagSet) (sdk.Coins, error) {
-	// TODO: handle mutliple validators
-	// assume only 1 validator for now
-	// get delegator address & validator address
+func getTotalBonded(cliCtx client.Context, flgs *flag.FlagSet) sdk.Coins {
 	delAddr := cliCtx.GetFromAddress()
-	valString, err := flgs.GetString(flagValidator)
-	if err != nil {
-		return nil, err
-	}
-	valAddr, err := sdk.ValAddressFromBech32(valString)
-	if err != nil {
-		return nil, err
-	}
 
 	// query unbonding entries for the validator(s)
 	stakingQC := stakingtypes.NewQueryClient(cliCtx)
-	req := stakingtypes.QueryDelegationRequest{
+	req := stakingtypes.QueryDelegatorDelegationsRequest{
 		DelegatorAddr: delAddr.String(),
-		ValidatorAddr: valAddr.String(),
 	}
-	resp, err := stakingQC.Delegation(context.Background(), &req)
+	resp, err := stakingQC.DelegatorDelegations(context.Background(), &req)
 	if err != nil {
-		return sdk.Coins{}, err
+		return sdk.Coins{}
 	}
-	res := sdk.NewCoins(resp.DelegationResponse.Balance)
-	return res, nil
+	totalCoins := sdk.NewCoins()
+	for _, d := range resp.DelegationResponses {
+		totalCoins = totalCoins.Add(d.Balance)
+	}
+	return totalCoins
 }
 
 // ConstructEthTx constructs ethereum transaction from the context
@@ -186,15 +174,11 @@ func ConstructEthTx(cliCtx client.Context, flgs *flag.FlagSet, contractAddr stri
 		return nil, err
 	}
 
-	gasPriceStr, err := flgs.GetString(flags.FlagGasPrices)
+	gasPriceUint64, err := flgs.GetUint64(flagEthGasPrice)
 	if err != nil {
 		return nil, err
 	}
-	gasPriceCoin, err := sdk.ParseCoinNormalized(gasPriceStr)
-	if err != nil {
-		return nil, err
-	}
-	gasPrice := gasPriceCoin.Amount.BigInt()
+	gasPrice := sdk.NewIntFromUint64(gasPriceUint64).BigInt()
 
 	evmChainID, err := ethermint.ParseChainID(cliCtx.ChainID)
 	if err != nil {
@@ -228,7 +212,12 @@ func ConstructEthTx(cliCtx client.Context, flgs *flag.FlagSet, contractAddr stri
 	}
 
 	// broadcast to a Tendermint node right away, since ethereum Txs have to be in its own tx
-	res, err := cliCtx.BroadcastTxCommit(txBytes)
+	numRetry, err := flgs.GetUint64(flagMaxRetry)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	res, err := TrySubmitEthTxMaxRetry(numRetry, cliCtx, txBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -244,6 +233,115 @@ func TrySubmitTxMaxRetry(numRetry uint64, cliCtx client.Context, flgs *flag.Flag
 		if err = tx.GenerateOrBroadcastTxCLI(cliCtx, flgs, msgs...); err == nil {
 			return
 		}
+		log.Printf("failed broadcasting tx. Retrying... %d\n", i)
 	}
 	return err
+}
+
+func TrySubmitEthTxMaxRetry(numRetry uint64, cliCtx client.Context, txBytes []byte) (res *sdk.TxResponse, err error) {
+	var i uint64
+	for i = 0; i < numRetry; i++ {
+		time.Sleep(time.Second)
+		if res, err = cliCtx.BroadcastTxCommit(txBytes); err == nil {
+			return
+		}
+		log.Printf("failed broadcasting tx. Retrying... %d\n", i)
+	}
+	return
+}
+
+func withdrawRewards(cliCtx client.Context, flgs *flag.FlagSet) error {
+	// get delegator address & validator address
+	delAddr := cliCtx.GetFromAddress()
+	valString, err := flgs.GetString(flagValidator)
+	if err != nil {
+		return err
+	}
+	valAddr, err := sdk.ValAddressFromBech32(valString)
+	if err != nil {
+		return err
+	}
+
+	// fire the withdraw rewards tx first so it's ready so we can send the rewards to the stayking contract.
+	withdrawMsg := distrtypes.NewMsgWithdrawDelegatorReward(delAddr, valAddr)
+	msgs := []sdk.Msg{withdrawMsg}
+	numRetry, err := flgs.GetUint64(flagMaxRetry)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = TrySubmitTxMaxRetry(numRetry, cliCtx, flgs, msgs...)
+	if err != nil {
+		// just log the error since there might not be any ongoing staking
+		log.Println(err)
+	}
+	return nil
+}
+
+// amt is the *big.Int of the total interest (rewards + leftover asset)
+func accrueAsset(cliCtx client.Context, flgs *flag.FlagSet, amt *big.Int) error {
+	totalStaked := GetStakedAsset(cliCtx, flgs)
+	totalStakedInt := totalStaked.AmountOf(baseDenom)
+	args := totalStakedInt.BigInt()
+
+	contractABI, err := stayking.StaykingMetaData.GetAbi()
+	if err != nil {
+		fmt.Println("1")
+		return err
+	}
+	inputData, err := contractABI.Pack(accrueFuncName, args)
+	if err != nil {
+		fmt.Println("2")
+		return err
+	}
+
+	contractAddr, err := flgs.GetString(flagStaykingContAddr)
+	if err != nil {
+		fmt.Println("3")
+		return err
+	}
+	_, err = ConstructEthTx(cliCtx, flgs, contractAddr, amt, inputData)
+	fmt.Println("4")
+	return err
+}
+
+// deprecated in favor of calling accrue function directly.
+func getDistributionAmt(cliCtx client.Context, flgs *flag.FlagSet, amt sdk.Int) (*big.Int, error) {
+	ethEndPoint, err := flgs.GetString(flagEthEndpoint)
+	if err != nil {
+		return nil, err
+	}
+	ethClient, err := ethclient.Dial(ethEndPoint)
+	if err != nil {
+		return nil, err
+	}
+	contAddrStr, err := flgs.GetString(flagStaykingContAddr)
+	if err != nil {
+		return nil, err
+	}
+	contAddr := common.HexToAddress(contAddrStr)
+	contractABI, err := stayking.StaykingMetaData.GetAbi()
+	if err != nil {
+		return nil, err
+	}
+	inputData, err := contractABI.Pack(getAccruedValueFuncName, amt.BigInt())
+	callMsg := ethereum.CallMsg{
+		From:      common.Address{},
+		To:        &contAddr,
+		Gas:       0,
+		GasPrice:  nil,
+		GasFeeCap: nil,
+		GasTipCap: nil,
+		Value:     nil,
+		Data:      inputData,
+	}
+
+	res, err := ethClient.CallContract(context.Background(), callMsg, nil)
+	if err != nil {
+		return nil, err
+	}
+	unpacked, err := contractABI.Unpack(getAccruedValueFuncName, res)
+	if err != nil {
+		return nil, err
+	}
+	return unpacked[0].(*big.Int), nil
 }

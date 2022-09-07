@@ -9,4 +9,5 @@ var (
 	flagToHeight               = "to-height"
 	flagValidator              = "validator"
 	flagMaxRetry               = "retry"
+	flagEthGasPrice            = "eth-gas-price"
 )
