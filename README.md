@@ -1,11 +1,9 @@
 ##  [Submodule] scheduled worker (with Golang) of StayKing House
 
----
 A collection of commands/services that are run to accommodate the CosmosSDK side of StayKing House
 
 ## Features
 
----
  - End of epoch auto compound (withdraw rewards & delegate to the same validator)
  - Distribute lender rewards & etc
  - Staking event listener
@@ -16,14 +14,12 @@ A collection of commands/services that are run to accommodate the CosmosSDK side
 
 ## Terminologies
 
----
 Delegating = Staking
 
 Unbonding = Unstaking
 
 ## Handlers
 
----
  - Delegation
    - grabs the from address and amount
    - Converts the incoming wrapped EVMOS to EVMOS
@@ -36,7 +32,6 @@ Unbonding = Unstaking
 
 ## Processes
 
----
  - Total EVMOS asset value query & update to contract to get stEVMOS:EVMOS exchange rate
    - Should happen at least once a day
  - Undelegation tracking & processing
@@ -47,7 +42,6 @@ Unbonding = Unstaking
 
 ## Build
 
----
  - Install Golang
  - make clean && make build
  - build/scheduled-worker-golang
@@ -59,7 +53,6 @@ Unbonding = Unstaking
 
 ## Execution
 
----
 `scheduled-worker-golang serve subscribe --from <keyname> --cont-addr <stayking contract addr> --validator <validator addr>` will subscribe to delegation, unbonding, epoch end events.
 
 example (testnet):
