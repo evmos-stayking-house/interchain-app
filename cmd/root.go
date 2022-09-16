@@ -78,7 +78,7 @@ func NewRootCmd() *cobra.Command {
 	return rootCmd
 }
 
-// Execute is a copy of cosmos binary Execute without the server side commands
+// Execute is a copy of cosmos binary Execute without the server side commands ( deprecated )
 func Execute(rootCmd *cobra.Command, defaultHome string) error {
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, client.ClientContextKey, &client.Context{})
