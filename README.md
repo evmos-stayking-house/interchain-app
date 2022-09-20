@@ -2,6 +2,14 @@
 
 A collection of commands/services that are run to accommodate the CosmosSDK side of StayKing House
 
+## Delegator Address
+- [Bech32]
+  - evmos1ln2pgz7wupxzuprg6q99kl0a9r05z7zwg9fhs3
+- [Hex]
+  - 0xFCD4140BCeE04C2E0468d00a5b7DFd28Df41784e
+- Testnet MintScan Explorer for StayKing Delegator
+  - [Check Delegating/UnDelegating Transactions](https://testnet.mintscan.io/evmos-testnet/account/evmos1ln2pgz7wupxzuprg6q99kl0a9r05z7zwg9fhs3)
+
 ## Features
 
  - End of epoch auto compound (withdraw rewards & delegate to the same validator)
