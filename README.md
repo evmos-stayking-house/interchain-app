@@ -1,4 +1,4 @@
-##  [Submodule] scheduled worker (with Golang) of StayKing House
+##  [Submodule] Interchain app between EVMOS and Tendermint
 
 A collection of commands/services that are run to accommodate the CosmosSDK side of StayKing House
 
