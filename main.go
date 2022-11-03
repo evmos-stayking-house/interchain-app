@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/evmos-stayking-house/scheduled-worker-golang/cmd"
+	"github.com/evmos-stayking-house/interchain-app/cmd"
 	"os"
 )
 

@@ -2,9 +2,9 @@ package cmd
 
 import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/evmos-stayking-house/scheduled-worker-golang/abis"
-	"github.com/evmos-stayking-house/scheduled-worker-golang/abis/stayking"
-	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
+	"github.com/evmos-stayking-house/interchain-app/abis"
+	"github.com/evmos-stayking-house/interchain-app/abis/stayking"
+	"github.com/evmos-stayking-house/interchain-app/types"
 	"github.com/evmos/ethermint/rpc/backend"
 	flag "github.com/spf13/pflag"
 	abcitypes "github.com/tendermint/tendermint/abci/types"

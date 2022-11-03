@@ -52,7 +52,7 @@ Unbonding = Unstaking
 
  - Install Golang
  - make clean && make build
- - build/scheduled-worker-golang
+ - build/interchain-app
 
  - Initialize `~/.evmosd` environment through either evmosd command or manual mkdir.
  - configure keyring to `test` through `evmosd config keyring-backend test` to avoid having to enter password for each tx
@@ -61,9 +61,9 @@ Unbonding = Unstaking
 
 ## Execution
 
-`scheduled-worker-golang serve subscribe --from <keyname> --cont-addr <stayking contract addr> --validator <validator addr>` will subscribe to delegation, unbonding, epoch end events.
+`interchain-app serve subscribe --from <keyname> --cont-addr <stayking contract addr> --validator <validator addr>` will subscribe to delegation, unbonding, epoch end events.
 
 example (testnet):
 ```bash
-make clean && make build && build/scheduled-worker-golang serve subscribe --from bob --cont-addr {Deployed StayKing Contarct Address} --uevmos-cont-addr {Deployed uEVMOS Contarct Address} --validator evmosvaloper1qvc6jej73armfs5fadn9lprx768f46d9wpd7d7 --broadcast-mode async  --eth-endpoint http://eth.bd.evmos.dev:8545 --node http://bd-evmos-testnet-state-sync-node-01.bdnodes.net:26657
+make clean && make build && build/interchain-app serve subscribe --from bob --cont-addr {Deployed StayKing Contarct Address} --uevmos-cont-addr {Deployed uEVMOS Contarct Address} --validator evmosvaloper1qvc6jej73armfs5fadn9lprx768f46d9wpd7d7 --broadcast-mode async  --eth-endpoint http://eth.bd.evmos.dev:8545 --node http://bd-evmos-testnet-state-sync-node-01.bdnodes.net:26657
 ```

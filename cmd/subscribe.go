@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/evmos-stayking-house/scheduled-worker-golang/types"
+	"github.com/evmos-stayking-house/interchain-app/types"
 	flag "github.com/spf13/pflag"
 	tmclient "github.com/tendermint/tendermint/rpc/client/http"
 	tmtypes "github.com/tendermint/tendermint/types"
