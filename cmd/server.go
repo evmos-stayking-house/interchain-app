@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
@@ -26,10 +27,14 @@ func NewSubscribeCmd() *cobra.Command {
 		Short: `Subscribes to delegation,epoch end, unbonding events.`,
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			fmt.Println("1here!!!")
+			fmt.Println("1here!!!")
+
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
+			fmt.Println("2here!!!")
 
 			return Subscribe(clientCtx, cmd.Flags())
 		},

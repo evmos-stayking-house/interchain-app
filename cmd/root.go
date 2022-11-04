@@ -18,9 +18,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/evmos/ethermint/encoding"
 	servercfg "github.com/evmos/ethermint/server/config"
-	"github.com/evmos/evmos/v8/app"
-	cmdcfg "github.com/evmos/evmos/v8/cmd/config"
-	evmoskr "github.com/evmos/evmos/v8/crypto/keyring"
+	"github.com/evmos/evmos/v9/app"
+	cmdcfg "github.com/evmos/evmos/v9/cmd/config"
+	evmoskr "github.com/evmos/evmos/v9/crypto/keyring"
 )
 
 const (
@@ -92,7 +92,7 @@ func Execute(rootCmd *cobra.Command, defaultHome string) error {
 
 func initRootCmd(command *cobra.Command) {
 	command.AddCommand(ServeCommand())
-	command.AddCommand(ExecuteCommand())
+	//command.AddCommand(ExecuteCommand())
 }
 
 // initAppConfig helps to override default appConfig template and configs.
